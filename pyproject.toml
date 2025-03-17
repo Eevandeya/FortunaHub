@@ -1,0 +1,53 @@
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+]
+
+[tool.ruff.lint]
+select = [
+    "E", "F", "I",
+    "W",
+    "UP",
+    "N",
+    "B",
+    "A",
+    "C90",
+    "C4",
+    "SIM",
+    "PT",
+    "TCH",
+    "ANN" # flake8-annotations
+]
+ignore = ["E203", "E501"]  # comparable with Black
+
+[tool.ruff.format]
+quote-style = "double"
