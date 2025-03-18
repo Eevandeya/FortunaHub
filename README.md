@@ -150,3 +150,36 @@ pre-commit install
 ```
 
 Теперь `ruff` будет запускаться перед коммитом и блокировать его, если код не пройдет проверку.
+
+## Запуск
+Сначала нужно проделать шаги по **началу работы с проектом**. Пока что можно запустить только все по отдельности.
+
+### MAC / Linux
+#### Backend
+
+```bash
+source backend/.venv/bin/activate
+python3 backend/manage.py runserver
+```
+#### Frontend
+
+```bash
+cd frontend
+npm run dev
+```
+
+### Windows
+#### Backend
+
+Сначала необходимо активировать виртуальное окружение.
+
+```powershell
+.\backend\.venv\Scripts\activate
+python backend\manage.py runserver
+```
+#### Frontend
+
+```powershell
+cd frontend
+npm run dev
+```
