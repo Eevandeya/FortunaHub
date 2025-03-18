@@ -109,8 +109,8 @@
 3. Создаем `.env` файлы:
 
    ```powershell
-   copy backend/.env.example backend/.env
-   copy telegram-bot/.env.example telegram-bot/.env
+   copy backend\.env.example backend\.env
+   copy telegram-bot\.env.example telegram-bot\.env
    ```
 
 4. Заполняем `.env`:
