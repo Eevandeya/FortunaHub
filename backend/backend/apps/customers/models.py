@@ -6,3 +6,6 @@ class Customer(models.Model):
     phone_number = models.CharField(max_length=20)
     last_visit_date = models.DateField()
     number_of_visits = models.PositiveSmallIntegerField()
+
+    def __str__(self) -> str:
+        return self.nickname
