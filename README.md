@@ -157,6 +157,8 @@ pre-commit install
 ### MAC / Linux
 #### Backend
 
+Сначала необходимо активировать виртуальное окружение.
+
 ```bash
 source backend/.venv/bin/activate
 python3 backend/manage.py runserver
