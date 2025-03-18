@@ -1,34 +1,126 @@
 # FortunaHub
 
-## Начало работы
+## Как начать
 
-Сначала склонировать репозиторий:
-```bash
-git clone ...
-cd FortunaHub
-```
-Далее создать виртуальные оркружения (`python venv`) **отдельно** для `/backend` и `/telegram-bot`.
+### MAC / Linux
 
-Установить зависимости с помощью `pip` для `/backend` и `/telegram-bot` по отдельности:
-```bash
-pip install -r requirements.txt
-```
+1. Клонируем репозиторий:
 
-Далее нужно создать файлы окружения `backend/.env` и `telegram-bot/.env`
-по шаблонам `backend/.env.example` и `telegram-bot/.env.example` соответственно.
+   ```bash
+   # Если у вас настроен SSH
+   git clone git@github.com:Eevandeya/FortunaHub.git
+   
+   # Если хотите использовать HTTPS
+   git clone https://github.com/Eevandeya/FortunaHub.git
+   
+   cd FortunaHub
+   ```
 
-**Можно работать!**
+2. Создаем виртуальные окружения python для `backend` и `telegram-bot` и устанавливаем зависимости:
 
-### Линтер перед коммитом (`pre-commit`)
+   ```bash
+   # Backend
+   cd backend
+   python3 -m venv .venv
+   source .venv/bin/activate
+   pip install -r requirements.txt
+   deactivate
+   cd ..
+   
+   # Telegram bot
+   cd telegram-bot
+   python3 -m venv .venv
+   source .venv/bin/activate
+   pip install -r requirements.txt
+   deactivate
+   cd ..
+   ```
 
-Мы используем линтер `ruff` автоматически перед коммитом.
+3. Создаем `.env` файлы:
+
+   ```bash
+   cp backend/.env.example backend/.env
+   cp telegram-bot/.env.example telegram-bot/.env
+   ```
+
+4. Заполняем `.env`:
+    - Указываем конфигурацию `posgreSQL`.
+    - Генерируем `DJANGO_SECRET_KEY` и вставляем его.
+    - Вставляем `BOT_TOKEN`.
+
+   Генерация `DJANGO_SECRET_KEY`:
+
+   ```bash
+   python3 -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+   ```
+
+### Windows
+
+1. Клонируем репозиторий:
+
+   ```powershell
+   # Если у вас настроен SSH
+   git clone git@github.com:Eevandeya/FortunaHub.git
+   
+   # Если хотите использовать HTTPS
+   git clone https://github.com/Eevandeya/FortunaHub.git
+   
+   cd FortunaHub
+   ```
+
+2. Создаем виртуальные окружения python для `backend` и `telegram-bot` и устанавливаем зависимости:
+
+   ```powershell
+   # Backend
+   cd backend
+   python -m venv .venv
+   .\.venv\Scripts\activate
+   pip install -r requirements.txt
+   deactivate
+   cd ..
+   
+   # Telegram bot
+   cd telegram-bot
+   python -m venv .venv
+   .\.venv\Scripts\activate
+   pip install -r requirements.txt
+   deactivate
+   cd ..
+   ```
+
+3. Создаем `.env` файлы:
+
+   ```powershell
+   copy backend/.env.example backend/.env
+   copy telegram-bot/.env.example telegram-bot/.env
+   ```
+
+4. Заполняем `.env`:
+    - Указываем конфигурацию `posgreSQL`.
+    - Генерируем `DJANGO_SECRET_KEY` и вставляем его.
+    - Вставляем `BOT_TOKEN`.
+
+   Генерация `DJANGO_SECRET_KEY`:
+
+   ```powershell
+   python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+   ```
+
+
+**Можно работать!** 🚀
+
+## Линтер перед коммитом
+
+Можно использовать линтер `ruff` автоматически перед коммитом с помощью `pre-commit`.
 
 Для этого нужно установить пакет `pre-commit` через `pip` **глобально**, не в виртуальное окружение:
+
 ```bash
 pip install pre-commit
 ```
 
 Далее нужно зайти в корневую директорию проекта и поставить `pre-commit` в проект:
+
 ```bash
 pre-commit install
 ```
