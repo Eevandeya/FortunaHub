@@ -130,3 +130,81 @@ pre-commit install
 ```
 
 Теперь `ruff` будет запускаться перед коммитом и блокировать его, если код не пройдет проверку.
+
+## Настройка React приложения
+
+### 1. Установка Node.js
+Перед началом работы убедись, что у тебя установлены Node.js и npm (Node Package Manager). Проверь их версии: 
+```bash
+   node -v
+   npm -v
+```
+Если Node.js и npm не установлены, скачай их с [официального сайта](https://nodejs.org/en)
+
+### 2. Создание проекта через Vite
+
+Чтобы создать **React + Vite** приложение выполни эти команды:
+
+#### Шаг.1: Запустите команду создания проекта
+
+```bash
+   cd frontend/my_react
+   npm create vite@latest
+```
+#### Шаг.2: Выберите настройки проекта
+1. Введите имя вашего проекта (например, fortuna_react).
+
+2. Выберите ___React___.
+
+3. Выберите JavaScript + SWC.
+
+#### Шаг.3: Выполните указания в консоли
+
+```bash
+   cd fortuna_react
+   npm install
+   npm run dev
+```
+### Шаг.4: Файл eslint.config.js
+Если что, файл __eslint.config.js__ у меня выглядит так:
+```
+import js from '@eslint/js';
+import globals from 'globals';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import eslintPluginPrettier from 'eslint-plugin-prettier';
+
+export default [
+  { ignores: ['dist'] },
+  {
+    files: ['**/*.{js,jsx}'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        ecmaFeatures: { jsx: true },
+        sourceType: 'module',
+      },
+    },
+    plugins: {
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
+       'prettier' : eslintPluginPrettier,
+    },
+    rules: {
+      ...js.configs.recommended.rules,
+      ...reactHooks.configs.recommended.rules,
+      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
+      'prettier/prettier': 'error',
+    },
+  },
+];
+
+```
+### P.S
+***JavaScript + SWC*** — это современный подход к разработке JavaScript-приложений, где SWC (Speedy Web Compiler) используется как высокопроизводительный компилятор и инструмент для транспиляции и оптимизации кода. SWC написан на Rust и работает значительно быстрее, чем Babel, что делает его отличным выбором для сборки и оптимизации JavaScript- и TypeScript-проектов.
