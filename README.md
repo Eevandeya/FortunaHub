@@ -69,7 +69,7 @@
 
    ```bash
    cd frontend
-   nmp install
+   npm install
    ```
 
 ### Windows
@@ -128,7 +128,7 @@
 
    ```bash
    cd frontend
-   nmp install
+   npm install
    ```
    
 **Можно работать!**
