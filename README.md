@@ -4,7 +4,14 @@
 Пользователи могут узнать о бане на сайте, там же забронировать посещение. Телеграм бот нужен для администраторов бани,
 туда приходят оповещения о бронях, там можно создавать и просматривать их.
 
-## Как начать
+## Как начать работать с проектом ⭐️
+
+### Требования
+Для начала убедитесь, что у вас установлены следующие версии инструментов:
+
+- **Python**: `3.12.6`
+- **Node.js**: `23.3.0`
+- **npm**: `10.9.0`
 
 ### MAC / Linux
 
@@ -57,6 +64,13 @@
    ```bash
    python3 -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
    ```
+   
+5. Устанавливаем зависимости для фронтенда
+
+   ```bash
+   cd frontend
+   nmp install
+   ```
 
 ### Windows
 
@@ -95,8 +109,8 @@
 3. Создаем `.env` файлы:
 
    ```powershell
-   copy backend/.env.example backend/.env
-   copy telegram-bot/.env.example telegram-bot/.env
+   copy backend\.env.example backend\.env
+   copy telegram-bot\.env.example telegram-bot\.env
    ```
 
 4. Заполняем `.env`:
@@ -110,10 +124,16 @@
    python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
    ```
 
+5. Устанавливаем зависимости для фронтенда
 
-**Можно работать!** 🚀
+   ```bash
+   cd frontend
+   nmp install
+   ```
+   
+**Можно работать!**
 
-## Линтер перед коммитом
+## Линтер перед коммитом 🔥
 
 Можно использовать линтер `ruff` автоматически перед коммитом с помощью `pre-commit`.
 
@@ -130,3 +150,38 @@ pre-commit install
 ```
 
 Теперь `ruff` будет запускаться перед коммитом и блокировать его, если код не пройдет проверку.
+
+## Запуск 🚀
+Сначала нужно проделать шаги по **началу работы с проектом**. Пока что можно запустить только все по отдельности.
+
+### MAC / Linux
+#### Backend
+
+Сначала необходимо активировать виртуальное окружение.
+
+```bash
+source backend/.venv/bin/activate
+python3 backend/manage.py runserver
+```
+#### Frontend
+
+```bash
+cd frontend
+npm run dev
+```
+
+### Windows
+#### Backend
+
+Сначала необходимо активировать виртуальное окружение.
+
+```powershell
+.\backend\.venv\Scripts\activate
+python backend\manage.py runserver
+```
+#### Frontend
+
+```powershell
+cd frontend
+npm run dev
+```
