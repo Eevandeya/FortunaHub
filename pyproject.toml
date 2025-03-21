@@ -35,6 +35,7 @@ exclude = [
 [tool.ruff.lint]
 select = [
     "E", "F", "I",
+    "Q",
     "W",
     "UP",
     "N",
