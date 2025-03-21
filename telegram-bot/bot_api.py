@@ -8,7 +8,7 @@ from fastapi import APIRouter, Depends
 
 parsed_url = urlparse(config("BOT_API_URL"))
 bot_api_router = APIRouter(prefix=parsed_url.path)
-bot_depends: Final[Depends] = Depends(lambda _: bot_instance)
+bot_depends: Final[Depends] = Depends(lambda: bot_instance)
 
 @bot_api_router.post("/test")
 async def send_notification(
