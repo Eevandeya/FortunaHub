@@ -1,12 +1,12 @@
 import datetime
 from typing import Any
 
-import validators
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+import backend.apps.bookings.validators as validators
 from backend.apps.customers.models import Customer
 from backend.settings import DEFAULT_SETTINGS
 
@@ -44,10 +44,10 @@ class ContactMethod(models.TextChoices):
 
 class Booking(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT) # not sure about on_delete option, but it seems ok
-    visitors_count = models.PositiveSmallIntegerField(validators=[validators.validate_visitors_count])
     date = models.DateField()
-    start_time = models.DateTimeField(validators=[validators.validate_start_time])
-    end_time = models.DateTimeField(validators=[validators.validate_end_time])
+    start_time = models.DateTimeField(validators=[validators.validate_start_time, validators.validate_time_step])
+    end_time = models.DateTimeField(validators=[validators.validate_end_time, validators.validate_time_step])
+    visitors_count = models.PositiveSmallIntegerField(validators=[validators.validate_visitors_count])
     bathrobes_count = models.PositiveSmallIntegerField(validators=[validators.validate_bathrobes_count])
     brooms_count = models.PositiveSmallIntegerField()
     preferred_contact_method = models.CharField(max_length=10, choices=ContactMethod)
