@@ -4,6 +4,7 @@ from typing import Any
 from django.core.cache import cache
 from django.db import models
 
+from backend.apps.customers.models import Customer
 from backend.settings import DEFAULT_SETTINGS
 
 
@@ -30,3 +31,21 @@ class SaunaConfig(models.Model):
             config = cls.objects.first() or cls.objects.create()
             cache.set("sauna_config", config)
         return config
+
+
+class ContactMethod(models.TextChoices):
+    PHONE = "phone", "Phone"
+    WHATSUP = "whatsup", "WhatsUp"
+    TELEGRAM = "telegram", "Telegram"
+
+
+class Booking(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.PROTECT) # not sure about on_delete option, but it seems ok
+    visitors_count = models.PositiveSmallIntegerField()
+    date = models.DateField()
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    bathrobes_count = models.PositiveSmallIntegerField()
+    brooms_count = models.PositiveSmallIntegerField()
+    preferred_contact_method = models.CharField(max_length=10, choices=ContactMethod)
+    created = models.DateTimeField()
