@@ -1,11 +1,11 @@
 from aiogram import F, Router
 from aiogram.types import Message
-from backend_api import DjangoAPIClient
+from backend_api import FortunaAPIClient
 from bot_instance import bot
 from decouple import config
 
 message_router = Router()
-api_client = DjangoAPIClient(config("DJANGO_API_URL"))
+api_client = FortunaAPIClient(config("FORTUNA_API_URL"))
 
 
 @message_router.message(F.text)
