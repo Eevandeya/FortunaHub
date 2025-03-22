@@ -3,8 +3,9 @@ from typing import Any
 
 from django.core.cache import cache
 from django.db import models
+from pytz import timezone
 
-from backend.settings import DEFAULT_SETTINGS
+from backend.settings import DEFAULT_SETTINGS, TIME_ZONE
 
 
 # when does database clean itself from outdated entries?
@@ -17,7 +18,7 @@ class SaunaConfig(models.Model):
     min_booking_time = models.DurationField(default=DEFAULT_SETTINGS['min_booking_time'])
     min_time_between_bookings = models.DurationField(default=DEFAULT_SETTINGS['min_time_between_bookings'])
     check_30_min_multiplicity = models.BooleanField(default=DEFAULT_SETTINGS['check_30_min_multiplicity'])
-    created = models.DateTimeField(default=datetime.datetime.now())
+    created = models.DateTimeField(default=datetime.datetime.now(tz=timezone(TIME_ZONE)))
 
     def save(self, *args: tuple, **kwargs: dict[str, Any] | None) -> None:
         super().save(*args, **kwargs)
