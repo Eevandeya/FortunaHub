@@ -15,8 +15,8 @@ async def lifespan(_app: FastAPI) -> AsyncGenerator[None, None]:
     dp.include_router(message_router)
     polling_task = asyncio.create_task(dp.start_polling(bot))
     yield
-    await dp.stop_polling()  # Явная остановка
-    await polling_task  # Дождаться завершения
+    await dp.stop_polling()
+    await polling_task  # Waiting for a complete stop
     await bot.session.close()
 
 
