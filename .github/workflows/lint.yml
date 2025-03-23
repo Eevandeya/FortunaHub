@@ -17,13 +17,16 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-            node-version: '23.7'
+            node-version: '20'
 
       - name: Install dependencies
+        working-directory: ./frontend
         run: npm install
 
       - name: Run ESlint
+        working-directory: ./frontend
         run: npx eslint .
 
       - name: Run Prettier
+        working-directory: ./frontend
         run: npx prettier --check .
