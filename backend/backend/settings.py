@@ -18,15 +18,15 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'backend.apps.bookings',
-    'backend.apps.customers',
-    'backend.apps.core',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+    "backend.apps.bookings",
+    "backend.apps.customers",
+    "backend.apps.core",
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
 ]
 
 MIDDLEWARE = [
@@ -99,7 +99,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'Europe/Moscow'
+TIME_ZONE = "Europe/Moscow"
 
 USE_I18N = True
 
@@ -119,12 +119,12 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Default settings for sauna configuration
 
 DEFAULT_CONFIG = {
-    'opening_time': datetime.time(8, tzinfo=timezone(TIME_ZONE)),
-    'closing_time': datetime.time(0, tzinfo=timezone(TIME_ZONE)),
+    "opening_time": datetime.time(8, tzinfo=timezone(TIME_ZONE)),
+    "closing_time": datetime.time(0, tzinfo=timezone(TIME_ZONE)),
     "max_people_count": 4,
-    'bathrobes_count': 4,
-    'min_time_from_now_to_booking': datetime.timedelta(hours=2, minutes=30),
-    'min_booking_time': datetime.timedelta(hours=2),
-    'min_time_between_bookings': datetime.timedelta(hours=1),
-    'check_30_min_multiplicity': True,
+    "bathrobes_count": 4,
+    "min_time_from_now_to_booking": datetime.timedelta(hours=2, minutes=30),
+    "min_booking_time": datetime.timedelta(hours=2),
+    "min_time_between_bookings": datetime.timedelta(hours=1),
+    "check_30_min_multiplicity": True,
 }

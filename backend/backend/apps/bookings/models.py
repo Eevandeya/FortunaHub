@@ -40,16 +40,16 @@ class Booking(models.Model):
         if self.date < self.created.date():
             raise ValidationError(
                 _("The booking day must not be earlier than the booking creation date."),
-                params={'date': self.date,
-                        'created': self.created},
+                params={"date": self.date,
+                        "created": self.created},
                 code="booking_date_before_creation",
             )
 
         if self.start_datetime.date() != self.date:
             raise ValidationError(
                 _("The start date of the booking must match the date of the booking itself."),
-                params={'start_time.date()': self.start_datetime.date(),
-                        'date': self.date},
+                params={"start_time.date()": self.start_datetime.date(),
+                        "date": self.date},
                 code="start_date_mismatch",
             )
 
@@ -58,16 +58,16 @@ class Booking(models.Model):
                 and self.end_datetime.date == self.date + datetime.timedelta(days=1))):
             raise ValidationError(
                 _("The end date of the booking must match the date of the booking itself or 0:00 of the next day."),
-                params={'end_time.date()': self.end_datetime.date(),
-                        'date': self.date},
+                params={"end_time.date()": self.end_datetime.date(),
+                        "date": self.date},
                 code="end_date_mismatch",
             )
 
         if self.start_datetime > self.end_datetime:
             raise ValidationError(
                 _("The a time of the booking must be less than the end time."),
-                params={'start_time': self.start_datetime,
-                        'end_time': self.end_datetime},
+                params={"start_time": self.start_datetime,
+                        "end_time": self.end_datetime},
                 code="start_time_after_end",
             )
 
@@ -75,9 +75,9 @@ class Booking(models.Model):
             raise ValidationError(
                 _(f"There must be at least {sauna_config.min_time_from_now_to_booking} "
                   f"since the booking was created before the start of the booking."),
-                params={'start_time': self.start_datetime,
-                        'created': self.created,
-                        'min_time_from_now_to_booking': sauna_config.min_time_from_now_to_booking},
+                params={"start_time": self.start_datetime,
+                        "created": self.created,
+                        "min_time_from_now_to_booking": sauna_config.min_time_from_now_to_booking},
                 code="min_lead_time_not_met",
 
             )
@@ -85,9 +85,9 @@ class Booking(models.Model):
         if self.end_datetime - self.start_datetime < sauna_config.min_booking_time:
             raise ValidationError(
                 _(f"{sauna_config.min_booking_time} is the minimal booking duration."),
-                params={'end_time': self.end_datetime,
-                        'start_time': self.start_datetime,
-                        'min_booking_time': sauna_config.min_booking_time},
+                params={"end_time": self.end_datetime,
+                        "start_time": self.start_datetime,
+                        "min_booking_time": sauna_config.min_booking_time},
                 code="min_booking_duration_not_met",
             )
 
@@ -99,5 +99,5 @@ class Booking(models.Model):
             )
 
     def __str__(self) -> str:
-        return f'{self.customer} on {self.date} [{self.start_datetime} - {self.end_datetime}]'
+        return f"{self.customer} on {self.date} [{self.start_datetime} - {self.end_datetime}]"
         # may be change Customer.__str__ because there are can be a lot of simular nicknames
