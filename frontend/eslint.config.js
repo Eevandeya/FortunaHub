@@ -20,7 +20,7 @@ export default [
     plugins: {
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
-       'prettier' : eslintPluginPrettier,
+      prettier: eslintPluginPrettier,
     },
     rules: {
       ...js.configs.recommended.rules,
