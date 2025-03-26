@@ -2,6 +2,7 @@ from typing import Any
 
 from django.core.cache import cache
 from django.db import models
+from django.utils import timezone
 
 from backend.settings import DEFAULT_CONFIG
 
@@ -29,3 +30,8 @@ class SaunaConfig(models.Model):
             config = cls.objects.first() or cls.objects.create()
             cache.set("sauna_config", config)
         return config
+
+    def __str__(self) -> str:
+        return f"Config on {self.created
+        .astimezone(timezone.get_default_timezone())
+        .strftime('%d.%m.%Y %H:%M')}"
