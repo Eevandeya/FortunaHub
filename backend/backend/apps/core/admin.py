@@ -1,2 +1,8 @@
+from django.contrib import admin
 
-# Register your models here.
+from .models import SaunaConfig
+
+
+@admin.register(SaunaConfig)
+class SaunaConfigAdmin(admin.ModelAdmin):
+    pass
