@@ -1,3 +1,4 @@
+import datetime
 from pathlib import Path
 
 from decouple import config
@@ -13,10 +14,12 @@ DEBUG = config("DEBUG")
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
+    "backend.apps.bookings",
+    "backend.apps.customers",
+    "backend.apps.core",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -95,7 +98,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Europe/Moscow"
 
 USE_I18N = True
 
@@ -111,3 +114,16 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Default settings for sauna configuration
+
+DEFAULT_CONFIG = {
+    "opening_time": datetime.time(8),
+    "closing_time": datetime.time(0),
+    "max_people_count": 4,
+    "bathrobes_count": 4,
+    "min_time_from_now_to_booking": datetime.timedelta(hours=2, minutes=30),
+    "min_booking_time": datetime.timedelta(hours=2),
+    "min_time_between_bookings": datetime.timedelta(hours=1),
+    "check_30_min_multiplicity": True,
+}
