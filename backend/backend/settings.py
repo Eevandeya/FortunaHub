@@ -2,7 +2,6 @@ import datetime
 from pathlib import Path
 
 from decouple import config
-from pytz import timezone
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -119,8 +118,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Default settings for sauna configuration
 
 DEFAULT_CONFIG = {
-    "opening_time": datetime.time(8, tzinfo=timezone(TIME_ZONE)),
-    "closing_time": datetime.time(0, tzinfo=timezone(TIME_ZONE)),
+    "opening_time": datetime.time(8),
+    "closing_time": datetime.time(0),
     "max_people_count": 4,
     "bathrobes_count": 4,
     "min_time_from_now_to_booking": datetime.timedelta(hours=2, minutes=30),
