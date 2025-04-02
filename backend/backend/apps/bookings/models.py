@@ -26,6 +26,22 @@ class Booking(models.Model):
     preferred_contact_method = models.CharField(max_length=10, choices=ContactMethod)
     created = models.DateTimeField()
 
+    @staticmethod
+    def _convert_to_local(dt: datetime | None) -> datetime | None:
+        if dt is None:
+            return None
+        if timezone.is_naive(dt):
+            raise ValueError("Datetime must be timezone-aware (USE_TZ=True)")
+        return dt.astimezone(timezone.get_current_timezone())
+
+    @property
+    def start_datetime_local(self) -> datetime | None:
+        return self._convert_to_local(self.start_datetime)
+
+    @property
+    def end_datetime_local(self) -> datetime | None:
+        return self._convert_to_local(self.end_datetime)
+
     def is_booking_time_available(self) -> bool:
         buffer_time = SaunaConfig.get().min_time_between_bookings
 
