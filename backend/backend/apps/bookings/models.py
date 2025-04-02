@@ -1,7 +1,8 @@
-import datetime
+from datetime import datetime
 
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 import backend.apps.bookings.validators as validators
@@ -115,5 +116,8 @@ class Booking(models.Model):
             )
 
     def __str__(self) -> str:
-        return f"{self.customer} on {self.date} [{self.start_datetime} - {self.end_datetime}]"
+        return "{customer} on {date} [{start} - {end}]".format(customer=self.customer,
+                                                               date=self.date,
+                                                               start=self.start_datetime_local.strftime("%H:%M"),
+                                                               end=self.end_datetime_local.strftime("%H:%M"))
         # may be change Customer.__str__ because there are can be a lot of simular nicknames
