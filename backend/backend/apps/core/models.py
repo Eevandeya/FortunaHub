@@ -32,6 +32,4 @@ class SaunaConfig(models.Model):
         return config
 
     def __str__(self) -> str:
-        return f"Config on {self.created
-        .astimezone(timezone.get_default_timezone())
-        .strftime('%d.%m.%Y %H:%M')}"
+        return f"Config on {self.created.astimezone(timezone.get_default_timezone()).strftime('%d.%m.%Y %H:%M')}"
