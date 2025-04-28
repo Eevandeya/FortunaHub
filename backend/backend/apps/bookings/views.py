@@ -7,7 +7,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .auth import APIKeyHeaderAuthentication
-from .models import Booking
 
 
 class FreeBookingTime(APIView):
@@ -26,5 +25,6 @@ class FreeBookingTime(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
         # The idea of business logic
+        _ = date_obj
         intervals = []
         return Response({"free_booking_time": intervals})
