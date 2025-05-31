@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     "backend.apps.bookings",
     "backend.apps.customers",
     "backend.apps.core",
+    "backend.apps.core_auth",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
