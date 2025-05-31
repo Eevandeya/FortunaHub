@@ -13,12 +13,12 @@ class FreeBookingTime(APIView):
     permission_classes = [AllowAny]
     authentication_classes = [APIKeyHeaderAuthentication]
 
-    def post(self, request: Request) -> Response:
-        if not request.data:
+    def get(self, request: Request) -> Response:
+        date_str = request.query_params.get("date")
+        if date_str is None:
             return Response({"error": "No data provided"},
                             status=status.HTTP_400_BAD_REQUEST)
         try:
-            date_str = request.data.get("date")
             date_obj = datetime.strptime(date_str, "%Y-%m-%d")  # Format: "2023-10-20"
         except (ValueError, TypeError):
             return Response({"error": "Invalid date format. Use YYYY-MM-DD"},
