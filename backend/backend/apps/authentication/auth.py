@@ -9,4 +9,4 @@ class APIKeyHeaderAuthentication(authentication.BaseAuthentication):
         api_key = request.headers.get("X-API-Key")
         if api_key != config("API_SECRET_KEY"):
             raise AuthenticationFailed("Invalid API key.")
-        return None, None
+        return None, None  # Mr. Fish
