@@ -20,12 +20,14 @@ INSTALLED_APPS = [
     "backend.apps.bookings",
     "backend.apps.customers",
     "backend.apps.core",
+    "backend.apps.authentication",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework"
 ]
 
 MIDDLEWARE = [
