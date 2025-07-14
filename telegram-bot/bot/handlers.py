@@ -1,8 +1,19 @@
+# If there will be too many handlers, we can split them into separate files.
+# With the following approach, the structure will look like this (example):
+#
+# bot/
+#   handlers/
+#       start.py
+#       booking.py
+#       ...
+#   instance.py
+
 from aiogram import F, Router
 from aiogram.types import Message
-from backend_api import FortunaAPIClient
-from bot_instance import bot
+from client.http_client import FortunaAPIClient
 from decouple import config
+
+from bot.instance import bot
 
 message_router = Router()
 api_client = FortunaAPIClient(config("FORTUNA_API_URL"))

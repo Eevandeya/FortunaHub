@@ -3,10 +3,10 @@ from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
 from aiogram import Dispatcher
-from bot_api import bot_api_router
-from bot_instance import bot
+from api.routers import bot_api_router
+from bot.handlers import message_router
+from bot.instance import bot
 from fastapi import FastAPI
-from handlers import message_router
 
 
 @asynccontextmanager
