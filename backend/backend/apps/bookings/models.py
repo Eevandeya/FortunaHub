@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -28,19 +28,17 @@ class Booking(models.Model):
     created = models.DateTimeField()
 
     @staticmethod
-    def _convert_to_local(dt: datetime | None) -> datetime | None:
-        if dt is None:
-            return None
+    def _convert_to_local(dt: datetime.datetime) -> datetime.datetime:
         if timezone.is_naive(dt):
             raise ValueError("Datetime must be timezone-aware (USE_TZ=True)")
         return dt.astimezone(timezone.get_current_timezone())
 
     @property
-    def start_datetime_local(self) -> datetime | None:
+    def start_datetime_local(self) -> datetime:
         return self._convert_to_local(self.start_datetime)
 
     @property
-    def end_datetime_local(self) -> datetime | None:
+    def end_datetime_local(self) -> datetime:
         return self._convert_to_local(self.end_datetime)
 
     def is_booking_time_available(self) -> bool:
