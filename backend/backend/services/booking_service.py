@@ -12,7 +12,7 @@ def get_free_booking_time(booking_date: datetime.date) -> list[tuple[str, str]]:
     Returns a list of time intervals (HH: MM), in which it is possible to create a new reservation.
 
     Rules:
-      1. The interval of the new armor should differ from the existing armor at least in min_time_between_bookings.
+      1. The interval of the new booking should differ from the existing booking at least in min_time_between_bookings.
       2. You can not book earlier than the current time + min_time_from_now_to_booking.
       3. If the bathhouse closes after midnight, we take into account the transition the next day.
     """
