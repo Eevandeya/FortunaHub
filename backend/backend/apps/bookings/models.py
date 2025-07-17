@@ -1,4 +1,4 @@
-import datetime
+import datetime as dt
 
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -28,18 +28,10 @@ class Booking(models.Model):
     created = models.DateTimeField()
 
     @staticmethod
-    def _convert_to_local(dt: datetime.datetime) -> datetime.datetime:
-        if timezone.is_naive(dt):
-            raise ValueError("Datetime must be timezone-aware (USE_TZ=True)")
-        return dt.astimezone(timezone.get_current_timezone())
-
-    @property
-    def start_datetime_local(self) -> datetime:
-        return self._convert_to_local(self.start_datetime)
-
-    @property
-    def end_datetime_local(self) -> datetime:
-        return self._convert_to_local(self.end_datetime)
+    def dt_to_local(value: dt.datetime) -> dt.datetime:
+        if timezone.is_naive(value):
+            raise ValueError("Value [Datetime] must be timezone-aware (USE_TZ=True)")
+        return value.astimezone(timezone.get_current_timezone())
 
     def is_booking_time_available(self) -> bool:
         buffer_time = SaunaConfig.get().min_time_between_bookings
@@ -69,8 +61,8 @@ class Booking(models.Model):
             )
 
         if (self.end_datetime.date() != self.date and
-            not (self.end_datetime.time() == datetime.time(0)
-                and self.end_datetime.date == self.date + datetime.timedelta(days=1))):
+            not (self.end_datetime.time() == dt.time(0)
+                and self.end_datetime.date == self.date + dt.timedelta(days=1))):
             raise ValidationError(
                 _("The end date of the booking must match the date of the booking itself or 0:00 of the next day."),
                 params={"end_time.date()": self.end_datetime.date(),
@@ -114,8 +106,10 @@ class Booking(models.Model):
             )
 
     def __str__(self) -> str:
+        """
+        TODO: may be change Customer.__str__ because there are can be a lot of simular nicknames
+        """
         return "{customer} on {date} [{start} - {end}]".format(customer=self.customer,
                                                                date=self.date,
-                                                               start=self.start_datetime_local.strftime("%H:%M"),
-                                                               end=self.end_datetime_local.strftime("%H:%M"))
-        # may be change Customer.__str__ because there are can be a lot of simular nicknames
+                                                               start=self.dt_to_local(self.start_datetime).strftime("%H:%M"),
+                                                               end=self.dt_to_local(self.end_datetime).strftime("%H:%M"))
