@@ -2,6 +2,8 @@ import datetime as dt
 from collections.abc import Iterator
 from dataclasses import dataclass
 
+from django.utils.timezone import make_aware
+
 from backend.apps.bookings.models import Booking
 from backend.apps.core.models import SaunaConfig
 
@@ -14,40 +16,28 @@ class TimeSlot:
     def duration(self) -> dt.timedelta:
         return self.end - self.start
 
-    def as_dict(self, tz: dt.tzinfo | None = None) -> dict:
-        start = self.start.astimezone(tz) if tz else self.start
-        end = self.end.astimezone(tz) if tz else self.end
-        return {"start": start.strftime("%H:%M"),
-                "end": end.strftime("%H:%M")}
-
 
 @dataclass
 class FreeSlots:
     date: dt.date
-    slots: list[TimeSlot]
+    free_slots: list[TimeSlot]
 
     def add(self, time_slot: TimeSlot) -> None:
-        self.slots.append(time_slot)
+        self.free_slots.append(time_slot)
 
     def is_empty(self) -> bool:
-        return not self.slots
+        return not self.free_slots
 
     def total_duration(self) -> dt.timedelta:
-        return sum((slot.duration() for slot in self.slots), start=dt.timedelta())
-
-    def as_dict(self, tz: dt.tzinfo | None = None) -> dict:
-        return {
-            "date": self.date.isoformat(),
-            "free_slots": [slot.as_dict(tz=tz) for slot in self.slots]
-        }
+        return sum((slot.duration() for slot in self.free_slots), start=dt.timedelta())
 
     def __iter__(self) -> Iterator[TimeSlot]:
-        return iter(self.slots)
+        return iter(self.free_slots)
 
 
 def _get_opening_and_closing(booking_date: dt.date, sauna_config: SaunaConfig) -> tuple[dt.datetime, dt.datetime]:
-    opening = dt.datetime.combine(booking_date, sauna_config.opening_time).replace(tzinfo=dt.UTC)
-    closing = dt.datetime.combine(booking_date, sauna_config.closing_time).replace(tzinfo=dt.UTC)
+    opening = make_aware(dt.datetime.combine(booking_date, sauna_config.opening_time)).astimezone(dt.UTC)
+    closing = make_aware(dt.datetime.combine(booking_date, sauna_config.closing_time)).astimezone(dt.UTC)
     if closing <= opening:
         closing += dt.timedelta(days=1)
     return opening, closing
@@ -75,7 +65,7 @@ def get_free_booking_time(booking_date: dt.date) -> FreeSlots:
     next_time = _get_earliest_start(booking_date, opening, sauna_config)
 
     bookings = Booking.objects.filter(date=booking_date).order_by("start_datetime")
-    free_slots = FreeSlots(booking_date, slots=[])
+    free_slots = FreeSlots(booking_date, free_slots=[])
 
     for booking in bookings:
         start_buf = booking.start_datetime - sauna_config.min_time_between_bookings
@@ -87,6 +77,7 @@ def get_free_booking_time(booking_date: dt.date) -> FreeSlots:
         next_time = max(next_time, end_buf)
 
     if closing - next_time >= sauna_config.min_booking_time:
+
         free_slots.add(TimeSlot(start=next_time, end=closing))
 
     return free_slots
