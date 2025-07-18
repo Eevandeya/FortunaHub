@@ -31,7 +31,7 @@ class Booking(models.Model):
     def dt_to_local(value: dt.datetime) -> dt.datetime:
         if timezone.is_naive(value):
             raise ValueError("Value [Datetime] must be timezone-aware (USE_TZ=True)")
-        return value.astimezone(timezone.get_current_timezone())
+        return value.astimezone(timezone.get_default_timezone())
 
     def is_booking_time_available(self) -> bool:
         buffer_time = SaunaConfig.get().min_time_between_bookings

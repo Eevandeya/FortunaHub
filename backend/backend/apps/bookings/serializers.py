@@ -1,4 +1,4 @@
-from django.utils.timezone import get_current_timezone
+from django.utils.timezone import get_default_timezone
 from rest_framework import serializers
 
 from backend.services.booking_service import TimeSlot
@@ -9,11 +9,11 @@ class TimeSlotSerializer(serializers.Serializer):
     end = serializers.SerializerMethodField()
 
     def get_start(self, obj: TimeSlot) -> str:
-        local_start = obj.start.astimezone(get_current_timezone())
+        local_start = obj.start.astimezone(get_default_timezone())
         return local_start.strftime("%H:%M")
 
     def get_end(self, obj: TimeSlot) -> str:
-        local_end = obj.end.astimezone(get_current_timezone())
+        local_end = obj.end.astimezone(get_default_timezone())
         return local_end.strftime("%H:%M")
 
 
