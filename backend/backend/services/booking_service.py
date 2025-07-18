@@ -43,14 +43,6 @@ def _get_opening_and_closing(booking_date: dt.date, sauna_config: SaunaConfig) -
     return opening, closing
 
 
-def _get_earliest_start(booking_date: dt.date, opening: dt.datetime, sauna_config: SaunaConfig) -> dt.datetime:
-    now = dt.datetime.now(dt.UTC)
-    if booking_date == now.date():
-        earliest = now + sauna_config.min_time_from_now_to_booking
-        return max(opening, earliest)
-    return opening
-
-
 def get_free_booking_time(booking_date: dt.date) -> FreeSlots:
     """
     TODO: BE SURE TO REVIEW
@@ -62,7 +54,7 @@ def get_free_booking_time(booking_date: dt.date) -> FreeSlots:
     """
     sauna_config = SaunaConfig.get()
     opening, closing = _get_opening_and_closing(booking_date, sauna_config)
-    next_time = _get_earliest_start(booking_date, opening, sauna_config)
+    next_time = opening
 
     bookings = Booking.objects.filter(date=booking_date).order_by("start_datetime")
     free_slots = FreeSlots(booking_date, free_slots=[])
