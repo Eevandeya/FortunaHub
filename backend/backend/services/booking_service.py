@@ -35,12 +35,12 @@ class FreeSlots:
 
 def get_free_booking_time(booking_date: dt.date) -> FreeSlots:
     """
-    TODO: BE SURE TO REVIEW
-    Returns a list of time intervals (HH: MM), in which it is possible to create a new reservation.
+    Returns a FreeSlots dataclass instance containing available time intervals
+    (TimeSlot objects) for creating new reservations.
     Rules:
-      1. The interval of the new booking should differ from the existing booking at least in min_time_between_bookings.
-      2. You can not book earlier than the current time + min_time_from_now_to_booking.
-      3. If the bathhouse closes after midnight, we take into account the transition the next day.
+      1. Each available interval must be separated from existing bookings
+         by at least `min_time_between_bookings`.
+      2. If the bathhouse closes after midnight, the closing time is treated as the next day's datetime.
     """
     sauna_config = SaunaConfig.get()
     opening, closing = sauna_config.get_opening_and_closing_dt(booking_date)
