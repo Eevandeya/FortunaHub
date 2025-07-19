@@ -43,7 +43,7 @@ def get_free_booking_time(booking_date: dt.date) -> FreeSlots:
       3. If the bathhouse closes after midnight, we take into account the transition the next day.
     """
     sauna_config = SaunaConfig.get()
-    opening, closing = SaunaConfig.get_opening_and_closing_dt(booking_date)
+    opening, closing = sauna_config.get_opening_and_closing_dt(booking_date)
     next_time = opening
 
     bookings = Booking.objects.filter(date=booking_date).order_by("start_datetime")
@@ -59,7 +59,6 @@ def get_free_booking_time(booking_date: dt.date) -> FreeSlots:
         next_time = max(next_time, end_buf)
 
     if closing - next_time >= sauna_config.min_booking_time:
-
         free_slots.add(TimeSlot(start=next_time, end=closing))
 
     return free_slots
