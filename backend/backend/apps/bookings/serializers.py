@@ -5,16 +5,12 @@ from backend.services.booking_service import TimeSlot
 
 
 class TimeSlotSerializer(serializers.Serializer):
-    start = serializers.SerializerMethodField()
-    end = serializers.SerializerMethodField()
-
-    def get_start(self, obj: TimeSlot) -> str:
-        local_start = obj.start.astimezone(get_default_timezone())
-        return local_start.strftime("%H:%M")
-
-    def get_end(self, obj: TimeSlot) -> str:
-        local_end = obj.end.astimezone(get_default_timezone())
-        return local_end.strftime("%H:%M")
+    def to_representation(self, obj: TimeSlot) -> dict:
+        tz = get_default_timezone()
+        return {
+            "start": obj.start.astimezone(tz=tz).strftime("%H:%M"),
+            "end": obj.end.astimezone(tz=tz).strftime("%H:%M"),
+        }
 
 
 class FreeSlotsResponseSerializer(serializers.Serializer):
