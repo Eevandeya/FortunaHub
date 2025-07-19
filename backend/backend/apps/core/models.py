@@ -33,8 +33,8 @@ class SaunaConfig(models.Model):
         return config
 
     def get_opening_and_closing_dt(self, date: dt.date) -> tuple[dt.datetime, dt.datetime]:
-        opening = timezone.make_aware(dt.datetime.combine(date, self.opening_time)).astimezone(dt.UTC)
-        closing = timezone.make_aware(dt.datetime.combine(date, self.closing_time)).astimezone(dt.UTC)
+        opening = timezone.make_aware(dt.datetime.combine(date, self.opening_time))
+        closing = timezone.make_aware(dt.datetime.combine(date, self.closing_time))
         if closing <= opening:
             closing += dt.timedelta(days=1)
         return opening, closing
