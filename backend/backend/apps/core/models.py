@@ -1,3 +1,4 @@
+import datetime as dt
 from typing import Any
 
 from django.core.cache import cache
@@ -30,6 +31,13 @@ class SaunaConfig(models.Model):
             config = cls.objects.first() or cls.objects.create()
             cache.set("sauna_config", config)
         return config
+
+    def get_opening_and_closing_dt(self, date: dt.date) -> tuple[dt.datetime, dt.datetime]:
+        opening = timezone.make_aware(dt.datetime.combine(date, self.opening_time)).astimezone(dt.UTC)
+        closing = timezone.make_aware(dt.datetime.combine(date, self.closing_time)).astimezone(dt.UTC)
+        if closing <= opening:
+            closing += dt.timedelta(days=1)
+        return opening, closing
 
     def __str__(self) -> str:
         return f"Config on {self.created.astimezone(timezone.get_default_timezone()).strftime('%d.%m.%Y %H:%M')}"

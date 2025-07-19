@@ -2,8 +2,6 @@ import datetime as dt
 from collections.abc import Iterator
 from dataclasses import dataclass
 
-from django.utils.timezone import make_aware
-
 from backend.apps.bookings.models import Booking
 from backend.apps.core.models import SaunaConfig
 
@@ -35,14 +33,6 @@ class FreeSlots:
         return iter(self.free_slots)
 
 
-def _get_opening_and_closing(booking_date: dt.date, sauna_config: SaunaConfig) -> tuple[dt.datetime, dt.datetime]:
-    opening = make_aware(dt.datetime.combine(booking_date, sauna_config.opening_time)).astimezone(dt.UTC)
-    closing = make_aware(dt.datetime.combine(booking_date, sauna_config.closing_time)).astimezone(dt.UTC)
-    if closing <= opening:
-        closing += dt.timedelta(days=1)
-    return opening, closing
-
-
 def get_free_booking_time(booking_date: dt.date) -> FreeSlots:
     """
     TODO: BE SURE TO REVIEW
@@ -53,7 +43,7 @@ def get_free_booking_time(booking_date: dt.date) -> FreeSlots:
       3. If the bathhouse closes after midnight, we take into account the transition the next day.
     """
     sauna_config = SaunaConfig.get()
-    opening, closing = _get_opening_and_closing(booking_date, sauna_config)
+    opening, closing = SaunaConfig.get_opening_and_closing_dt(booking_date)
     next_time = opening
 
     bookings = Booking.objects.filter(date=booking_date).order_by("start_datetime")
