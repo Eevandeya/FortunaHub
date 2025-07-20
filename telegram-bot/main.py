@@ -1,34 +1,27 @@
 import asyncio
-from collections.abc import AsyncGenerator
-from contextlib import asynccontextmanager
+from urllib.parse import urlparse
 
+import uvicorn
 from aiogram import Dispatcher
 from api.routers import bot_api_router
-from bot.handlers import message_router
 from bot.instance import bot
+from decouple import config
 from fastapi import FastAPI
 
-
-@asynccontextmanager
-async def lifespan(_app: FastAPI) -> AsyncGenerator[None, None]:
-    dp = Dispatcher()
-    dp.include_router(message_router)
-    polling_task = asyncio.create_task(dp.start_polling(bot))
-    yield
-    await dp.stop_polling()
-    await polling_task  # Waiting for a complete stop
-    await bot.session.close()
-
-
-app = FastAPI(lifespan=lifespan)
+app = FastAPI()
 app.include_router(bot_api_router)
 
-
-if __name__ == "__main__":
-    from urllib.parse import urlparse
-
-    import uvicorn
-    from decouple import config
+async def start() -> None:
+    dp = Dispatcher()
+    bot_task = asyncio.create_task(dp.start_polling(bot))
 
     parsed_url = urlparse(config("BOT_API_URL"))
-    uvicorn.run(app, host=parsed_url.hostname, port=parsed_url.port)
+    uvicorn_config = uvicorn.Config(app=app, host=parsed_url.hostname, port=parsed_url.port, loop="asyncio")
+
+    server = uvicorn.Server(uvicorn_config)
+    api_task = asyncio.create_task(server.serve())
+
+    await asyncio.gather(bot_task, api_task)
+
+if __name__ == "__main__":
+    asyncio.run(start())
