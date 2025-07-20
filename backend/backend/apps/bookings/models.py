@@ -1,7 +1,8 @@
-import datetime
+import datetime as dt
 
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 import backend.apps.bookings.validators as validators
@@ -25,6 +26,12 @@ class Booking(models.Model):
     brooms_count = models.PositiveSmallIntegerField()
     preferred_contact_method = models.CharField(max_length=10, choices=ContactMethod)
     created = models.DateTimeField()
+
+    @staticmethod
+    def dt_to_local(value: dt.datetime) -> dt.datetime:
+        if timezone.is_naive(value):
+            raise ValueError("Value [Datetime] must be timezone-aware (USE_TZ=True)")
+        return value.astimezone(timezone.get_default_timezone())
 
     def is_booking_time_available(self) -> bool:
         buffer_time = SaunaConfig.get().min_time_between_bookings
@@ -54,8 +61,8 @@ class Booking(models.Model):
             )
 
         if (self.end_datetime.date() != self.date and
-            not (self.end_datetime.time() == datetime.time(0)
-                and self.end_datetime.date == self.date + datetime.timedelta(days=1))):
+            not (self.end_datetime.time() == dt.time(0)
+                and self.end_datetime.date == self.date + dt.timedelta(days=1))):
             raise ValidationError(
                 _("The end date of the booking must match the date of the booking itself or 0:00 of the next day."),
                 params={"end_time.date()": self.end_datetime.date(),
@@ -99,5 +106,10 @@ class Booking(models.Model):
             )
 
     def __str__(self) -> str:
-        return f"{self.customer} on {self.date} [{self.start_datetime} - {self.end_datetime}]"
-        # may be change Customer.__str__ because there are can be a lot of simular nicknames
+        """
+        TODO: may be change Customer.__str__ because there are can be a lot of simular nicknames
+        """
+        return "{customer} on {date} [{start} - {end}]".format(customer=self.customer,
+                                                               date=self.date,
+                                                               start=self.dt_to_local(self.start_datetime).strftime("%H:%M"),
+                                                               end=self.dt_to_local(self.end_datetime).strftime("%H:%M"))
