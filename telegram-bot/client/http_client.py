@@ -1,7 +1,9 @@
 import httpx
 import pydantic
+from logger import get_logger
 from scemas import FreeSlotsResponse
 
+logger = get_logger(__name__)
 
 class APIClient:
     def __init__(self, base_url: str) -> None:
@@ -16,10 +18,10 @@ class APIClient:
                 return FreeSlotsResponse(**data)
 
             except httpx.RequestError as exc:
-                print(f"An error occurred while requesting {exc.request.url!r}.")
+                logger.critical(f"An error occurred while requesting {exc.request.url!r}.")
 
             except pydantic.ValidationError as exc:
-                print(f"An error occurred while validating response data: {exc}.")
+                logger.critical(f"An error occurred while validating response data: {exc}.")
 
             except httpx.HTTPStatusError as exc:
-                print(f"Error response {exc.response.status_code} while requesting {exc.request.url!r}.")
+                logger.critical(f"Error response {exc.response.status_code} while requesting {exc.request.url!r}.")
