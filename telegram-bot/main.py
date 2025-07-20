@@ -2,9 +2,8 @@ import asyncio
 from urllib.parse import urlparse
 
 import uvicorn
-from aiogram import Dispatcher
 from api.routers import bot_api_router
-from bot.instance import bot
+from bot.start import start_bot
 from decouple import config
 from fastapi import FastAPI
 from logger import get_logger
@@ -15,8 +14,7 @@ app = FastAPI()
 app.include_router(bot_api_router)
 
 async def start() -> None:
-    dp = Dispatcher()
-    bot_task = asyncio.create_task(dp.start_polling(bot))
+    bot_task = asyncio.create_task(start_bot())
 
     logger.info("Aiogram bot polling started")
 
