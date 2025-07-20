@@ -3,6 +3,9 @@ from urllib.parse import urlparse
 
 import uvicorn
 from api.routers import bot_api_router
+
+# Register handlers. Temporary solution
+from bot import handlers  # noqa: F401
 from bot.start import start_bot
 from decouple import config
 from fastapi import FastAPI
