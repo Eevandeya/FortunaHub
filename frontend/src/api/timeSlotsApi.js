@@ -3,12 +3,12 @@ import time_handler from './api.js';
 export const getAvailableTimes = async (date) => {
   try {
     const time_response = await time_handler
-      .get('/api/available_time/', {
+      .get('/api/free_slots/', {
         params: {
           date: date, // Передаем дату в URL для поиска времени по дате
         },
       })
-      .then((response) => response['0']?.free_time ?? [])
+      .then((response) => response['free_slots'] ?? [])
       .catch((error) => {
         console.log(`Ошибка в timeSlotsApi ${error}`);
         //return Promise.reject(error.message)
@@ -26,9 +26,9 @@ export const getAvailableTimes = async (date) => {
 export const setTime = async (chosen_date, chosen_time) => {
   try {
     const request = await time_handler.post(
-      '/api/chosen_time/',
+      '/api/booking/',
       {
-        time: chosen_time,
+        free_slots: chosen_time,
         date: chosen_date,
       },
       {

@@ -2,6 +2,16 @@ import { useState, useEffect } from 'react';
 import { getAvailableTimes, setTime } from '../api/timeSlotsApi.js';
 import { useFetching } from './useFetching.js';
 
+function checkTimePermission(availableTimes, chosenTime)
+{
+    for (let i = 0; i < availableTimes.lenght(); i++){
+      if(availableTimes[i].start < chosenTime.start && availableTimes[i].end > chosenTime.end){
+        return true
+      }
+    }
+}
+
+
 export function useAvailableTimes(selectedDate) {
   const [availableTime, setAvailableTime] = useState([]);
   const [fetching, isLoading, error] = useFetching(fetchTimes);
@@ -61,25 +71,17 @@ export function useTimeSlot() {
 
       if (start < now) throw new Error('Нельзя выбрать прошедшее время');
       console.log(`start:\t${start} | end:\t${end}`);
-      const chosenSlots = [];
-      for (
-        let time = start;
-        time <= end;
-        time.setMinutes(time.getMinutes() + 30)
-      ) {
-        const timeStr = time.toLocaleTimeString();
-        chosenSlots.push(timeStr);
-      }
 
-      const isAvailable = chosenSlots.every((slot) =>
-        availableTimes.includes(slot)
-      );
-      console.log(`Свободне время:\t${availableTimes}`);
-      console.log(`Выбранное время:\t${chosenSlots}`);
+      const bookingTime = JSON.stringify({ start: start, end: end });
+
+      const isAvailable = checkTimePermission(availableTimes, bookingTime)
+      console.log(`Свободное время:\t${availableTimes}`);
+      console.log(`Выбранное время:\t${bookingTime}`);
       if (!isAvailable) {
         throw new Error('Выбранное время уже занято');
       }
-      await setTime(selectedDate, chosenSlots)
+
+      await setTime(selectedDate, bookingTime)
         .then(() => setIsBooking(true))
         .catch((error) => {
           console.error(`An unexpected error has occured: ${error.message}`);
