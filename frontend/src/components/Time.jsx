@@ -4,21 +4,35 @@ import Modal from './Modal/Modal.jsx';
 import Cell from './cell/Cell.jsx';
 import Select from './UI/Select.jsx';
 import { useState, useEffect } from 'react';
+import { useConfig } from '../contexts/ConfigContext.js'
 import Loading from './UI/loader/Loading.jsx';
 
-function makeTime() {
-  const date = new Date(1970, 1, 1, 3, 0, 0);
+function makeSheetFromTimes(opening_time, closing_time) {
+  const date = new Date(1970, 1, 1, opening_time, 0, 0);
   const times = [];
-  for (let i = 0; i < 48; i++) {
+  for (let i = opening_time; date.getHours() < closing_time; ) {
     date.setMinutes(date.getMinutes() + 30);
     times.push(date?.toLocaleTimeString());
   }
   return times;
 }
 
-const times = makeTime();
+function checkConditions({
+  min_booking_time,
+  selectedDate,
+  startTime,
+  endTime,
+}) {
+  const start_time = new Date(`${selectedDate}T${startTime}`);
+  const end_time = new Date(`${selectedDate}T${endTime}`);
+  return Math.abs(start_time - end_time) < min_booking_time;
+}
+
+let times = null;
 
 export default function Time({ modalActive, setModalActive }) {
+
+  const [config, error] = useConfig();
   const [date, setDate] = useState('');
   const [availableTime, loading] = useAvailableTimes(date);
   const [bookTimeSlot, isBooking, bookingError] = useTimeSlot();
@@ -26,6 +40,16 @@ export default function Time({ modalActive, setModalActive }) {
     startTime: null,
     endTime: null,
   });
+
+  useEffect(() => {
+    const getOptions = () => {
+      const opening_time = config.opening_time ?? 0;
+      const closing_time = config.closing_time ?? 24;
+      times = makeSheetFromTimes(opening_time, closing_time);
+    }
+
+    getOptions();
+  })
 
   useEffect(() => {
     if (isBooking) {
@@ -58,12 +82,20 @@ export default function Time({ modalActive, setModalActive }) {
 
   const booking = async (e) => {
     e.preventDefault();
-    await bookTimeSlot(
-      borderTime.startTime,
-      borderTime.endTime,
-      date,
-      availableTime
-    );
+    const min_booking_time = config.min_booking_time;
+    const canBooking = checkConditions({
+      min_booking_time,
+      selectedDate,
+      ...borderTime,
+    });
+    if(canBooking) {
+      await bookTimeSlot(
+        borderTime.startTime,
+        borderTime.endTime,
+        date,
+        availableTime
+      );
+    }
   };
 
   return (
