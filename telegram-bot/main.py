@@ -36,4 +36,4 @@ if __name__ == "__main__":
     try:
         asyncio.run(start())
     except (KeyboardInterrupt, SystemExit):
-        logger.info("Bot stopped")
+        logger.info("Bot and FastAPI server stopped")

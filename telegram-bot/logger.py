@@ -1,11 +1,17 @@
 import logging
 import sys
 
+from decouple import config
+
 LOG_FORMAT = "%(asctime)s | %(levelname)-8s | %(name)s | %(message)s"
 
 def get_logger(name: str = "app") -> logging.Logger:
     logger = logging.getLogger(name)
-    logger.setLevel(logging.DEBUG)
+
+    if config("DEBUG", cast=bool):
+        logger.setLevel(logging.DEBUG)
+    else:
+        logger.setLevel(logging.INFO)
 
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setFormatter(logging.Formatter(LOG_FORMAT))
@@ -19,4 +25,3 @@ def get_logger(name: str = "app") -> logging.Logger:
     #
 
     return logger
-
