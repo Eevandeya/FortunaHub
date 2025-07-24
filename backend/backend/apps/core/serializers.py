@@ -10,7 +10,9 @@ class SaunaConfigSerializer(serializers.ModelSerializer):
     opening_time = serializers.TimeField(format=TIME_FORMAT)
     closing_time = serializers.TimeField(format=TIME_FORMAT)
 
-    # Convert durations to string format HH:MM
+    # Convert durations to string format HH:MM.
+    # Because these fields are timedelta, we can't use strftime directly to format them to %H:%M,
+    # so we need to convert them by hand.
     min_time_from_now_to_booking = serializers.SerializerMethodField()
     min_booking_time = serializers.SerializerMethodField()
     min_time_between_bookings = serializers.SerializerMethodField()
