@@ -16,6 +16,8 @@ from decouple import config
 
 from bot.core import dp
 
+# TODO: make it smarter (use singleton or Dependency injection or something else)
+client = APIClient(config("FORTUNA_API_URL"), config("BACKEND_API_SECRET_KEY"))
 
 @dp.message(Command("free_slots"))
 async def command_free_handler(message: Message) -> None:
@@ -36,15 +38,18 @@ async def command_free_handler(message: Message) -> None:
         await message.answer("Invalid date")
         return
 
-    client = APIClient(config("FORTUNA_API_URL"), config("BACKEND_API_SECRET_KEY"))
     response = await client.get_free_slots(date_str)
 
     if response is None:
         await message.answer("Internal error")
         return
 
-    s = ""
-    for slot in response.free_slots:
-        s += f"{slot.start.strftime("%H:%M")} - {slot.end.strftime("%H:%M")}\n"
+    if response.free_slots:
+        free_slots_text = "\n".join(
+            f"{slot.start.strftime('%H:%M')} - {slot.end.strftime('%H:%M')}"
+            for slot in response.free_slots
+        )
+    else:
+        free_slots_text = "No available time slots for this date."
 
-    await message.answer(s)
+    await message.answer(free_slots_text)
