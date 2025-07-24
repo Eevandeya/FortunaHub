@@ -4,7 +4,7 @@ from typing import Final
 from urllib.parse import urlparse
 
 from aiogram import Bot
-from bot.instance import bot
+from bot.core import bot
 from decouple import config
 from fastapi import APIRouter, Depends
 
