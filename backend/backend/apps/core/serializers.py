@@ -10,13 +10,6 @@ class SaunaConfigSerializer(serializers.ModelSerializer):
     opening_time = serializers.TimeField(format=TIME_FORMAT)
     closing_time = serializers.TimeField(format=TIME_FORMAT)
 
-    # Convert durations to string format HH:MM.
-    # Because these fields are timedelta, we can't use strftime directly to format them to %H:%M,
-    # so we need to convert them by hand.
-    min_time_from_now_to_booking = serializers.SerializerMethodField()
-    min_booking_time = serializers.SerializerMethodField()
-    min_time_between_bookings = serializers.SerializerMethodField()
-
     class Meta:
         model = SaunaConfig
         exclude = ["id"]
@@ -28,11 +21,13 @@ class SaunaConfigSerializer(serializers.ModelSerializer):
         minutes = (total_seconds % 3600) // 60
         return f"{hours:02}:{minutes:02}"
 
-    def get_min_time_from_now_to_booking(self, obj: SaunaConfig) -> str:
-        return self.format_duration(obj.min_time_from_now_to_booking)
+    def to_representation(self, instance: SaunaConfig) -> dict:
+        data = super().to_representation(instance)
 
-    def get_min_booking_time(self, obj: SaunaConfig) -> str:
-        return self.format_duration(obj.min_booking_time)
-
-    def get_min_time_between_bookings(self, obj: SaunaConfig) -> str:
-        return self.format_duration(obj.min_time_between_bookings)
+        # Convert durations to string format HH:MM.
+        # Because these fields are timedelta, we can't use strftime directly to format them to %H:%M,
+        # so we need to convert them by hand.
+        data["min_time_from_now_to_booking"] = self.format_duration(instance.min_time_from_now_to_booking)
+        data["min_booking_time"] = self.format_duration(instance.min_booking_time)
+        data["min_time_between_bookings"] = self.format_duration(instance.min_time_between_bookings)
+        return data
