@@ -3,7 +3,9 @@ name = "fortunahub-bot"
 version = "0.1.0"
 description = "Telegram bot for FortunaHub project"
 authors = [
-    {name = "Your Name",email = "you@example.com"}
+    {name = "Egor Shishkin",email = "shishkin.es@edu.spbstu.ru"},
+    {name = "Maxim",email = "maksimalexandrov.2006@gmail.com"},
+    {name = "Eevandeya",email = "eevandeya@gmail.com"},
 ]
 readme = "../README.md"
 requires-python = ">=3.12"
