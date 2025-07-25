@@ -11,7 +11,7 @@ from backend.apps.bookings.serializers import FreeSlotsResponseSerializer
 from backend.services.booking_service import get_free_booking_time
 
 
-class FreeBookingTime(APIView):
+class FreeBookingTimeView(APIView):
     permission_classes = [AllowAny]
     authentication_classes = [APIKeyHeaderAuthentication]
 
