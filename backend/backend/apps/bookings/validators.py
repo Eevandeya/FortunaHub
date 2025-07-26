@@ -35,15 +35,6 @@ def validate_end_time(value: datetime.datetime) -> None:
             code="booking_end_after_closing",
         )
 
-def validate_bathrobes_count(value: int) -> None:
-    if value > sauna_config.max_bathrobes_count:
-        raise ValidationError(
-            _("Bathrobes count should not be greater than max bathrobes count."),
-            params={"bathrobes_count": value,
-                    "max_bathrobes_count": sauna_config.max_bathrobes_count},
-            code="bathrobes_exceed_max",
-        )
-
 def validate_visitors_count(value: int) -> None:
     if value > sauna_config.max_visitors_count:
         raise ValidationError(
