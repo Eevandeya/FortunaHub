@@ -17,8 +17,8 @@ class Booking(models.Model):
         TELEGRAM = "telegram", "Telegram"
 
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT) # not sure about on_delete option, but it seems ok
-    start_datetime = models.DateTimeField(validators=[validators.validate_start_time, validators.validate_time_step])
-    end_datetime = models.DateTimeField(validators=[validators.validate_end_time, validators.validate_time_step])
+    start_datetime = models.DateTimeField()
+    end_datetime = models.DateTimeField()
     visitors_count = models.PositiveSmallIntegerField(validators=[validators.validate_visitors_count])
     bathrobes_count = models.PositiveSmallIntegerField()
     brooms_count = models.PositiveSmallIntegerField()
@@ -68,6 +68,16 @@ class Booking(models.Model):
                         "start_time": self.start_datetime,
                         "min_booking_time": sauna_config.min_booking_time},
                 code="min_booking_duration_not_met",
+            )
+
+        if not sauna_config.is_booking_within_open_hours(self.start_datetime, self.end_datetime):
+            raise ValidationError(
+                _("The booking time goes beyond the opening hours."),
+                params={"end_datetime": self.end_datetime,
+                        "start_datetime": self.start_datetime,
+                        "opening_time": sauna_config.opening_time,
+                        "closing_time": sauna_config.closing_time},
+                code="outside_opening_hours",
             )
 
         if not self.is_booking_time_available():
