@@ -17,7 +17,6 @@ class Booking(models.Model):
         TELEGRAM = "telegram", "Telegram"
 
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT) # not sure about on_delete option, but it seems ok
-    date = models.DateField()
     start_datetime = models.DateTimeField(validators=[validators.validate_start_time, validators.validate_time_step])
     end_datetime = models.DateTimeField(validators=[validators.validate_end_time, validators.validate_time_step])
     visitors_count = models.PositiveSmallIntegerField(validators=[validators.validate_visitors_count])
@@ -42,32 +41,6 @@ class Booking(models.Model):
 
     def clean(self) -> None:
         sauna_config = SaunaConfig.get()
-
-        if self.date < self.created.date():
-            raise ValidationError(
-                _("The booking day must not be earlier than the booking creation date."),
-                params={"date": self.date,
-                        "created": self.created},
-                code="booking_date_before_creation",
-            )
-
-        if self.start_datetime.date() != self.date:
-            raise ValidationError(
-                _("The start date of the booking must match the date of the booking itself."),
-                params={"start_time.date()": self.start_datetime.date(),
-                        "date": self.date},
-                code="start_date_mismatch",
-            )
-
-        if (self.end_datetime.date() != self.date and
-            not (self.end_datetime.time() == dt.time(0)
-                and self.end_datetime.date == self.date + dt.timedelta(days=1))):
-            raise ValidationError(
-                _("The end date of the booking must match the date of the booking itself or 0:00 of the next day."),
-                params={"end_time.date()": self.end_datetime.date(),
-                        "date": self.date},
-                code="end_date_mismatch",
-            )
 
         if self.start_datetime > self.end_datetime:
             raise ValidationError(
@@ -109,6 +82,6 @@ class Booking(models.Model):
         TODO: may be change Customer.__str__ because there are can be a lot of simular nicknames
         """
         return "{customer} on {date} [{start} - {end}]".format(customer=self.customer,
-                                                               date=self.date,
+                                                               date=self.dt_to_local(self.start_datetime).date(),
                                                                start=self.dt_to_local(self.start_datetime).strftime("%H:%M"),
                                                                end=self.dt_to_local(self.end_datetime).strftime("%H:%M"))
