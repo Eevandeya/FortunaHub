@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     "backend.apps.customers",
     "backend.apps.core",
     "backend.apps.authentication",
+    "backend.apps.inventory",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
