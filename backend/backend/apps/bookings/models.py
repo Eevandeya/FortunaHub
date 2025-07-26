@@ -10,13 +10,12 @@ from backend.apps.core.models import SaunaConfig
 from backend.apps.customers.models import Customer
 
 
-class ContactMethod(models.TextChoices):
-    PHONE = "phone", "Phone"
-    WHATSUP = "whatsup", "WhatsUp"
-    TELEGRAM = "telegram", "Telegram"
-
-
 class Booking(models.Model):
+    class ContactMethod(models.TextChoices):
+        PHONE = "phone", "Phone"
+        WHATSUP = "whatsup", "WhatsUp"
+        TELEGRAM = "telegram", "Telegram"
+
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT) # not sure about on_delete option, but it seems ok
     date = models.DateField()
     start_datetime = models.DateTimeField(validators=[validators.validate_start_time, validators.validate_time_step])

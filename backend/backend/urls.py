@@ -21,4 +21,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/bookings/", include("backend.apps.bookings.urls", namespace="bookings")),
     path("api/config/", include("backend.apps.core.urls", namespace="core")),
+    path("api/inventory/", include("backend.apps.inventory.urls", namespace="inventory")),
 ]
