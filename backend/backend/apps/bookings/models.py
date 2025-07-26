@@ -16,7 +16,7 @@ class Booking(models.Model):
         WHATSUP = "whatsup", "WhatsUp"
         TELEGRAM = "telegram", "Telegram"
 
-    customer = models.ForeignKey(Customer, on_delete=models.PROTECT) # not sure about on_delete option, but it seems ok
+    customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
     start_datetime = models.DateTimeField()
     end_datetime = models.DateTimeField()
     visitors_count = models.PositiveSmallIntegerField(validators=[validators.validate_visitors_count])
@@ -40,13 +40,14 @@ class Booking(models.Model):
         ).exclude(id=self.id).exists())
 
     def clean(self) -> None:
+        super().clean()
         sauna_config = SaunaConfig.get()
 
         if self.start_datetime > self.end_datetime:
             raise ValidationError(
-                _("The time of the booking must be less than the end time."),
-                params={"start_time": self.start_datetime,
-                        "end_time": self.end_datetime},
+                _("The start time of the booking must be less than the end time."),
+                params={"start_datetime": self.start_datetime,
+                        "end_datetime": self.end_datetime},
                 code="start_time_after_end",
             )
 
@@ -54,7 +55,7 @@ class Booking(models.Model):
             raise ValidationError(
                 _(f"There must be at least {sauna_config.min_time_from_now_to_booking} "
                   f"since the booking was created before the start of the booking."),
-                params={"start_time": self.start_datetime,
+                params={"start_datetime": self.start_datetime,
                         "created": self.created,
                         "min_time_from_now_to_booking": sauna_config.min_time_from_now_to_booking},
                 code="min_lead_time_not_met",
@@ -64,8 +65,8 @@ class Booking(models.Model):
         if self.end_datetime - self.start_datetime < sauna_config.min_booking_time:
             raise ValidationError(
                 _(f"{sauna_config.min_booking_time} is the minimal booking duration."),
-                params={"end_time": self.end_datetime,
-                        "start_time": self.start_datetime,
+                params={"end_datetime": self.end_datetime,
+                        "start_datetime": self.start_datetime,
                         "min_booking_time": sauna_config.min_booking_time},
                 code="min_booking_duration_not_met",
             )
