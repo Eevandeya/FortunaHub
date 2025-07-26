@@ -1,2 +1,8 @@
+from django.contrib import admin
 
-# Register your models here.
+from .models import InventoryItem
+
+
+@admin.register(InventoryItem)
+class InventoryItemAdmin(admin.ModelAdmin):
+    pass
