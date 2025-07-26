@@ -71,7 +71,7 @@ class Booking(models.Model):
 
         if self.start_datetime > self.end_datetime:
             raise ValidationError(
-                _("The a time of the booking must be less than the end time."),
+                _("The time of the booking must be less than the end time."),
                 params={"start_time": self.start_datetime,
                         "end_time": self.end_datetime},
                 code="start_time_after_end",
