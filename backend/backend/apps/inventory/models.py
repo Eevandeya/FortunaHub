@@ -1,6 +1,8 @@
 from django.core.validators import MinValueValidator
 from django.db import models
 
+from backend.apps.bookings.models import Booking
+
 
 class InventoryItem(models.Model):
     class ItemType(models.TextChoices):
@@ -21,3 +23,12 @@ class InventoryItem(models.Model):
 
     def __str__(self) -> str:
         return f"{self.display_name} ({self.slug})"
+
+
+class BookingItem(models.Model):
+    booking = models.ForeignKey(Booking, related_name="items", on_delete=models.CASCADE)
+    inventory_item = models.ForeignKey(InventoryItem, on_delete=models.PROTECT)
+    quantity = models.PositiveSmallIntegerField()
+
+    def __str__(self) -> str:
+        return f"{self.inventory_item} - {self.quantity}"

@@ -20,8 +20,6 @@ class Booking(models.Model):
     start_datetime = models.DateTimeField()
     end_datetime = models.DateTimeField()
     visitors_count = models.PositiveSmallIntegerField(validators=[validators.validate_visitors_count])
-    bathrobes_count = models.PositiveSmallIntegerField()
-    brooms_count = models.PositiveSmallIntegerField()
     preferred_contact_method = models.CharField(max_length=10, choices=ContactMethod)
     created = models.DateTimeField()
 
