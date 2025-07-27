@@ -2,6 +2,7 @@ import datetime as dt
 from typing import Any
 
 from django.core.cache import cache
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils import timezone
 
@@ -75,3 +76,16 @@ class SaunaConfig(models.Model):
 
     def __str__(self) -> str:
         return f"Config on {self.created.astimezone(timezone.get_default_timezone()).strftime('%d.%m.%Y %H:%M')}"
+
+
+class Pricing(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    description = models.CharField(max_length=255)
+    updated = models.DateTimeField(auto_now=True)
+    price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        validators=[MinValueValidator(0.01)]
+    )
+    def __str__(self) -> str:
+        return f"{self.name} {self.price} RUB"
