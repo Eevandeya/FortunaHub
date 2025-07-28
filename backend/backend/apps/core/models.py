@@ -35,7 +35,7 @@ class SaunaConfig(models.Model):
     @classmethod
     def get(cls) -> "SaunaConfig":
         config = cache.get("sauna_config")
-        if not config:
+        if config is None:
             config = cls.objects.first() or cls.objects.create()
             cache.set("sauna_config", config)
         return config
