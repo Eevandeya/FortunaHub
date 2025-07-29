@@ -52,6 +52,18 @@ files = [
 django = ">=4.2"
 
 [[package]]
+name = "phonenumbers"
+version = "9.0.10"
+description = "Python version of Google's common library for parsing, formatting, storing and validating international phone numbers."
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "phonenumbers-9.0.10-py2.py3-none-any.whl", hash = "sha256:13b12d269be1f2b363c9bc2868656a7e2e8b50f1a1cef629c75005da6c374c6b"},
+    {file = "phonenumbers-9.0.10.tar.gz", hash = "sha256:c2d15a6a9d0534b14a7764f51246ada99563e263f65b80b0251d1a760ac4a1ba"},
+]
+
+[[package]]
 name = "psycopg2"
 version = "2.9.10"
 description = "psycopg2 - Python-PostgreSQL Database Adapter"
@@ -155,4 +167,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12"
-content-hash = "66310d93996069f495f24dc893179b29fe1a3f0570a9ac2e13304ad60a0fcf46"
+content-hash = "068fc81317d04a7c1c181665a35563a4513bf5015244f7ecf3c6467e7cc7b53c"
