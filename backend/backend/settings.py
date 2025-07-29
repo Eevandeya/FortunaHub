@@ -1,4 +1,3 @@
-import datetime
 from pathlib import Path
 
 from decouple import config
@@ -155,14 +154,4 @@ SPECTACULAR_SETTINGS = {
     "DESCRIPTION": "API for banya in Zelenogorsk",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
-}
-
-DEFAULT_CONFIG = {
-    "opening_time": datetime.time(8),
-    "closing_time": datetime.time(0),
-    "max_people_count": 4,
-    "min_time_from_now_to_booking": datetime.timedelta(hours=2, minutes=30),
-    "min_booking_time": datetime.timedelta(hours=2),
-    "min_time_between_bookings": datetime.timedelta(hours=1),
-    "check_30_min_multiplicity": True,
 }
