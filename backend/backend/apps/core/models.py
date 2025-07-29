@@ -29,7 +29,7 @@ class SaunaConfig(models.Model):
     )
     created = models.DateTimeField(auto_now_add=True)
 
-    def save(self, *args: tuple, **kwargs: dict[str, Any] | None) -> None:
+    def save(self, *args: tuple, **kwargs: dict[str, Any]) -> None:
         super().save(*args, **kwargs)
         cache.set("sauna_config", self)
 
@@ -89,7 +89,7 @@ class Pricing(models.Model):
         validators=[MinValueValidator(0.01)]
     )
 
-    def save(self, *args: tuple, **kwargs: dict[str, Any] | None) -> None:
+    def save(self, *args: tuple, **kwargs: dict[str, Any]) -> None:
         super().save(*args, **kwargs)
         if self.name in ("hourly_rent", "prepayment"):
             cache.set("pricing:{self.name}", self)
