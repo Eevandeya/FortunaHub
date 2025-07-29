@@ -7,7 +7,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from backend.apps.authentication.auth import APIKeyHeaderAuthentication
-from backend.apps.bookings.serializers import FreeSlotsResponseSerializer
+from backend.apps.bookings.serializers import (
+    BookingSerializer,
+    FreeSlotsResponseSerializer,
+)
 from backend.services.booking_service import get_free_booking_time
 
 
@@ -32,3 +35,14 @@ class FreeBookingTimeView(APIView):
         free_slots = get_free_booking_time(date_obj)
         serializer = FreeSlotsResponseSerializer(free_slots)
         return Response(serializer.data)
+
+
+class BookingCreateView(APIView):
+    permission_classes = [AllowAny] # TODO: Web client can't access this endpoint
+    authentication_classes = [APIKeyHeaderAuthentication]
+
+    def post(self, request: Request) -> Response:
+        serializer = BookingSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.create(serializer.validated_data)
+        return Response({"message": "Booking created successfully."}, status=status.HTTP_201_CREATED)
