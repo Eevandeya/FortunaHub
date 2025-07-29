@@ -1,4 +1,5 @@
 import datetime as dt
+from decimal import Decimal
 from typing import Any
 
 from django.core.cache import cache
@@ -87,5 +88,23 @@ class Pricing(models.Model):
         decimal_places=2,
         validators=[MinValueValidator(0.01)]
     )
+
+    def save(self, *args: tuple, **kwargs: dict[str, Any] | None) -> None:
+        super().save(*args, **kwargs)
+        if self.name in ("hourly_rent", "prepayment"):
+            cache.set("pricing:{self.name}", self)
+
+    @classmethod
+    def get_hourly_rent_and_prepayment(cls) -> tuple[Decimal, Decimal]:
+        hourly_rent = cache.get("pricing:hourly_rent")
+        if hourly_rent is None:
+            hourly_rent = cls.objects.get(name="hourly_rent")
+            cache.set("pricing:hourly_rent", hourly_rent)
+        prepayment = cache.get("pricing:prepayment")
+        if prepayment is None:
+            prepayment = cls.objects.get(name="prepayment")
+            cache.set("pricing:prepayment", prepayment)
+        return hourly_rent.price, prepayment.price
+
     def __str__(self) -> str:
         return f"{self.name} {self.price} RUB"
