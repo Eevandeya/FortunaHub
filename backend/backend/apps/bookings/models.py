@@ -5,7 +5,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from backend.apps.bookings.validators import validate_visitors_count
+from backend.apps.bookings.validators import validate_time_step, validate_visitors_count
 from backend.apps.core.models import SaunaConfig
 from backend.apps.customers.models import Customer
 
@@ -17,8 +17,8 @@ class Booking(models.Model):
         TELEGRAM = "telegram", "Telegram"
 
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
-    start_datetime = models.DateTimeField()
-    end_datetime = models.DateTimeField()
+    start_datetime = models.DateTimeField(validators=[validate_time_step])
+    end_datetime = models.DateTimeField(validators=[validate_time_step])
     visitors_count = models.PositiveSmallIntegerField(validators=[validate_visitors_count])
     preferred_contact_method = models.CharField(max_length=10, choices=ContactMethod)
     created = models.DateTimeField(auto_now_add=True)
