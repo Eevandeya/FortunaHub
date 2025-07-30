@@ -59,7 +59,7 @@ class Booking(models.Model):
         if self.start_datetime - now < dt.timedelta(seconds=0):
             errors.setdefault("non_field_errors", []).append(
                 DjangoValidationError(
-                    _("Reservation date cannot be in the past."),
+                    _("Booking date cannot be in the past."),
                     params={
                         "start_datetime": self.start_datetime,
                         "now": now,
