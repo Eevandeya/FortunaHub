@@ -7,21 +7,18 @@ def is_inventory_item_available(quantity: int, item_obj: InventoryItem) -> bool:
     if quantity <= 0:
         raise ValueError("Quantity must be greater than zero.")
 
-    if item_obj.item_type == InventoryItem.ItemType.RENTED:
-        return True # Assuming rented items are always available for booking
-    else:
-        return item_obj.quantity >= quantity
+    return item_obj.quantity >= quantity
 
 def add_item_to_booking(booking: Booking, quantity: int, item_obj: InventoryItem) -> (BookingItem, InventoryItem):
     if quantity <= 0:
         raise ValueError("Quantity must be greater than zero.")
 
+    if item_obj.quantity < quantity:
+        raise NotEnoughItemsInStockError(item_obj.slug, quantity, item_obj.quantity)
+
     if item_obj.item_type == InventoryItem.ItemType.CONSUMABLE:
-        if item_obj.quantity < quantity:
-            raise NotEnoughItemsInStockError(item_obj.slug, quantity, item_obj.quantity)
-        else:
-            item_obj.quantity -= quantity
-            item_obj.save(update_fields=["quantity"])
+        item_obj.quantity -= quantity
+        item_obj.save(update_fields=["quantity"])
 
     booking_item = BookingItem.objects.create(
         booking=booking,
