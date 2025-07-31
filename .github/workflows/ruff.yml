@@ -22,8 +22,14 @@ jobs:
       - name: Install Ruff
         run: pip install ruff
 
-      - name: Run Ruff for backend
+      - name: Run Ruff linter for backend
         run: ruff check backend/
 
-      - name: Run Ruff for bot
+      - name: Run Ruff linter for bot
         run: ruff check telegram-bot/
+
+      - name: Run Ruff formatter check for backend
+        run: ruff format --check backend/
+
+      - name: Run Ruff formatter check for bot
+        run: ruff format --check telegram-bot/
