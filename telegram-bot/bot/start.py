@@ -1,6 +1,5 @@
-from logger import get_logger
-
 from bot.core import bot, dp
+from logger import get_logger
 
 logger = get_logger(__name__)
 

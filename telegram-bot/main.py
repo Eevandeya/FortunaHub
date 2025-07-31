@@ -2,13 +2,14 @@ import asyncio
 from urllib.parse import urlparse
 
 import uvicorn
+from decouple import config
+from fastapi import FastAPI
+
 from api.routers import bot_api_router
 
 # Register handlers. Temporary solution
 from bot import handlers  # noqa: F401
 from bot.start import start_bot
-from decouple import config
-from fastapi import FastAPI
 from logger import get_logger
 
 logger = get_logger(__name__)

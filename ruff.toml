@@ -1,4 +1,3 @@
-[tool.ruff]
 line-length = 88
 target-version = "py312"
 
@@ -33,8 +32,7 @@ exclude = [
     "**/migrations",
 ]
 
-[tool.ruff.lint]
-select = [
+lint.select = [
     "E", "F", "I",
     "Q",
     "W",
@@ -49,7 +47,7 @@ select = [
     "TCH",
     "ANN" # flake8-annotations
 ]
-ignore = ["E203", "E501"]  # comparable with Black
+lint.ignore = ["E203", "E501"]  # comparable with Black
 
-[tool.ruff.format]
+[format]
 quote-style = "double"
