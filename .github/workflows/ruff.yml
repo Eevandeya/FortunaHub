@@ -1,4 +1,4 @@
-name: Ruff Lint
+name: Ruff Lint and Format Check
 
 on:
   pull_request:
