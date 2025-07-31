@@ -17,13 +17,16 @@ logger = get_logger(__name__)
 app = FastAPI()
 app.include_router(bot_api_router)
 
+
 async def start() -> None:
     bot_task = asyncio.create_task(start_bot())
 
     logger.info("Aiogram bot polling started")
 
     parsed_url = urlparse(config("BOT_API_URL"))
-    uvicorn_config = uvicorn.Config(app=app, host=parsed_url.hostname, port=parsed_url.port, loop="asyncio")
+    uvicorn_config = uvicorn.Config(
+        app=app, host=parsed_url.hostname, port=parsed_url.port, loop="asyncio"
+    )
     server = uvicorn.Server(uvicorn_config)
     api_task = asyncio.create_task(server.serve())
 
@@ -32,6 +35,7 @@ async def start() -> None:
     logger.info("Starting bot and FastAPI server")
 
     await asyncio.gather(bot_task, api_task)
+
 
 if __name__ == "__main__":
     try:

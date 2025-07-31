@@ -5,6 +5,7 @@ from decouple import config
 
 LOG_FORMAT = "%(asctime)s | %(levelname)-8s | %(name)s | %(message)s"
 
+
 def get_logger(name: str = "app") -> logging.Logger:
     logger = logging.getLogger(name)
 

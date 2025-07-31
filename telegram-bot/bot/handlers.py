@@ -19,6 +19,7 @@ from client.http_client import APIClient
 # TODO: make it smarter (use singleton or Dependency injection or something else)
 client = APIClient(config("FORTUNA_API_URL"), config("BACKEND_API_SECRET_KEY"))
 
+
 @dp.message(Command("free_slots"))
 async def command_free_handler(message: Message) -> None:
     args = message.text.removeprefix("/free_slots").strip().split()
