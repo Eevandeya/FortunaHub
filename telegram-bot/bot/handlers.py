@@ -11,10 +11,10 @@ from datetime import datetime
 
 from aiogram.filters import Command
 from aiogram.types import Message
-from client.http_client import APIClient
 from decouple import config
 
 from bot.core import dp
+from client.http_client import APIClient
 
 # TODO: make it smarter (use singleton or Dependency injection or something else)
 client = APIClient(config("FORTUNA_API_URL"), config("BACKEND_API_SECRET_KEY"))
