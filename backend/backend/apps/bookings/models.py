@@ -19,7 +19,9 @@ class Booking(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
     start_datetime = models.DateTimeField()
     end_datetime = models.DateTimeField()
-    visitors_count = models.PositiveSmallIntegerField(validators=[validators.validate_visitors_count])
+    visitors_count = models.PositiveSmallIntegerField(
+        validators=[validators.validate_visitors_count]
+    )
     preferred_contact_method = models.CharField(max_length=10, choices=ContactMethod)
     created = models.DateTimeField()
 
@@ -32,10 +34,14 @@ class Booking(models.Model):
     def is_booking_time_available(self) -> bool:
         buffer_time = SaunaConfig.get().min_time_between_bookings
 
-        return not (Booking.objects.filter(
-            start_datetime__lt=self.end_datetime + buffer_time,
-            end_datetime__gt=self.start_datetime - buffer_time
-        ).exclude(id=self.id).exists())
+        return not (
+            Booking.objects.filter(
+                start_datetime__lt=self.end_datetime + buffer_time,
+                end_datetime__gt=self.start_datetime - buffer_time,
+            )
+            .exclude(id=self.id)
+            .exists()
+        )
 
     def clean(self) -> None:
         super().clean()
@@ -44,45 +50,61 @@ class Booking(models.Model):
         if self.start_datetime > self.end_datetime:
             raise ValidationError(
                 _("The start time of the booking must be less than the end time."),
-                params={"start_datetime": self.start_datetime,
-                        "end_datetime": self.end_datetime},
+                params={
+                    "start_datetime": self.start_datetime,
+                    "end_datetime": self.end_datetime,
+                },
                 code="start_time_after_end",
             )
 
-        if self.start_datetime - self.created < sauna_config.min_time_from_now_to_booking:
+        if (
+            self.start_datetime - self.created
+            < sauna_config.min_time_from_now_to_booking
+        ):
             raise ValidationError(
-                _(f"There must be at least {sauna_config.min_time_from_now_to_booking} "
-                  f"since the booking was created before the start of the booking."),
-                params={"start_datetime": self.start_datetime,
-                        "created": self.created,
-                        "min_time_from_now_to_booking": sauna_config.min_time_from_now_to_booking},
+                _(
+                    f"There must be at least {sauna_config.min_time_from_now_to_booking} "
+                    f"since the booking was created before the start of the booking."
+                ),
+                params={
+                    "start_datetime": self.start_datetime,
+                    "created": self.created,
+                    "min_time_from_now_to_booking": sauna_config.min_time_from_now_to_booking,
+                },
                 code="min_lead_time_not_met",
-
             )
 
         if self.end_datetime - self.start_datetime < sauna_config.min_booking_time:
             raise ValidationError(
                 _(f"{sauna_config.min_booking_time} is the minimal booking duration."),
-                params={"end_datetime": self.end_datetime,
-                        "start_datetime": self.start_datetime,
-                        "min_booking_time": sauna_config.min_booking_time},
+                params={
+                    "end_datetime": self.end_datetime,
+                    "start_datetime": self.start_datetime,
+                    "min_booking_time": sauna_config.min_booking_time,
+                },
                 code="min_booking_duration_not_met",
             )
 
-        if not sauna_config.is_booking_within_open_hours(self.start_datetime, self.end_datetime):
+        if not sauna_config.is_booking_within_open_hours(
+            self.start_datetime, self.end_datetime
+        ):
             raise ValidationError(
                 _("The booking time goes beyond the opening hours."),
-                params={"end_datetime": self.end_datetime,
-                        "start_datetime": self.start_datetime,
-                        "opening_time": sauna_config.opening_time,
-                        "closing_time": sauna_config.closing_time},
+                params={
+                    "end_datetime": self.end_datetime,
+                    "start_datetime": self.start_datetime,
+                    "opening_time": sauna_config.opening_time,
+                    "closing_time": sauna_config.closing_time,
+                },
                 code="outside_opening_hours",
             )
 
         if not self.is_booking_time_available():
             raise ValidationError(
-                _(f"Bookings overlap with the existing one or there is not enough buffer in "
-                  f"{sauna_config.min_time_between_bookings} between bookings"),
+                _(
+                    f"Bookings overlap with the existing one or there is not enough buffer in "
+                    f"{sauna_config.min_time_between_bookings} between bookings"
+                ),
                 code="unavailable_booking_time",
             )
 
@@ -90,7 +112,9 @@ class Booking(models.Model):
         """
         TODO: may be change Customer.__str__ because there are can be a lot of simular nicknames
         """
-        return "{customer} on {date} [{start} - {end}]".format(customer=self.customer,
-                                                               date=self.dt_to_local(self.start_datetime).date(),
-                                                               start=self.dt_to_local(self.start_datetime).strftime("%H:%M"),
-                                                               end=self.dt_to_local(self.end_datetime).strftime("%H:%M"))
+        return "{customer} on {date} [{start} - {end}]".format(
+            customer=self.customer,
+            date=self.dt_to_local(self.start_datetime).date(),
+            start=self.dt_to_local(self.start_datetime).strftime("%H:%M"),
+            end=self.dt_to_local(self.end_datetime).strftime("%H:%M"),
+        )
