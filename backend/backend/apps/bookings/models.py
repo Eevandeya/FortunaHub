@@ -19,7 +19,9 @@ class Booking(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
     start_datetime = models.DateTimeField(validators=[validate_time_step])
     end_datetime = models.DateTimeField(validators=[validate_time_step])
-    visitors_count = models.PositiveSmallIntegerField(validators=[validate_visitors_count])
+    visitors_count = models.PositiveSmallIntegerField(
+        validators=[validate_visitors_count]
+    )
     preferred_contact_method = models.CharField(max_length=10, choices=ContactMethod)
     created = models.DateTimeField(auto_now_add=True)
 
@@ -32,10 +34,14 @@ class Booking(models.Model):
     def is_booking_time_available(self) -> bool:
         buffer_time = SaunaConfig.get().min_time_between_bookings
 
-        return not (Booking.objects.filter(
-            start_datetime__lt=self.end_datetime + buffer_time,
-            end_datetime__gt=self.start_datetime - buffer_time
-        ).exclude(id=self.id).exists())
+        return not (
+            Booking.objects.filter(
+                start_datetime__lt=self.end_datetime + buffer_time,
+                end_datetime__gt=self.start_datetime - buffer_time,
+            )
+            .exclude(id=self.id)
+            .exists()
+        )
 
     def clean(self) -> None:
         super().clean()
@@ -71,14 +77,16 @@ class Booking(models.Model):
         elif self.start_datetime - now < sauna_config.min_time_from_now_to_booking:
             errors.setdefault("non_field_errors", []).append(
                 DjangoValidationError(
-                    _(f"There must be at least {sauna_config.min_time_from_now_to_booking} "
-                      f"since the booking was created before the start of the booking."),
+                    _(
+                        f"There must be at least {sauna_config.min_time_from_now_to_booking} "
+                        f"since the booking was created before the start of the booking."
+                    ),
                     params={
                         "start_datetime": self.start_datetime,
                         "now": now,
-                        "min_time_from_now_to_booking": sauna_config.min_time_from_now_to_booking
+                        "min_time_from_now_to_booking": sauna_config.min_time_from_now_to_booking,
                     },
-                    code="min_lead_time_not_met"
+                    code="min_lead_time_not_met",
                 )
             )
 
@@ -97,7 +105,9 @@ class Booking(models.Model):
                 )
             )
 
-        if not sauna_config.is_booking_within_open_hours(self.start_datetime, self.end_datetime):
+        if not sauna_config.is_booking_within_open_hours(
+            self.start_datetime, self.end_datetime
+        ):
             errors.setdefault("non_field_errors", []).append(
                 DjangoValidationError(
                     _("The booking time goes beyond the opening hours."),
@@ -134,7 +144,9 @@ class Booking(models.Model):
         """
         TODO: may be change Customer.__str__ because there are can be a lot of simular nicknames
         """
-        return "{customer} on {date} [{start} - {end}]".format(customer=self.customer,
-                                                               date=self.dt_to_local(self.start_datetime).date(),
-                                                               start=self.dt_to_local(self.start_datetime).strftime("%H:%M"),
-                                                               end=self.dt_to_local(self.end_datetime).strftime("%H:%M"))
+        return "{customer} on {date} [{start} - {end}]".format(
+            customer=self.customer,
+            date=self.dt_to_local(self.start_datetime).date(),
+            start=self.dt_to_local(self.start_datetime).strftime("%H:%M"),
+            end=self.dt_to_local(self.end_datetime).strftime("%H:%M"),
+        )

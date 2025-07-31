@@ -37,32 +37,41 @@ class BookingSerializer(serializers.Serializer):
     end_datetime = serializers.DateTimeField(required=True)
     visitors_count = serializers.IntegerField(min_value=1, required=True)
     preferred_contact_method = serializers.ChoiceField(
-        choices=Booking.ContactMethod.choices, required=True # TODO: Add endpoint for contact methods
+        choices=Booking.ContactMethod.choices,
+        required=True,  # TODO: Add endpoint for contact methods
     )
 
     @staticmethod
-    def format_validation_error(e: DjangoValidationError) -> dict[str, list[dict[str, str | int | None] | str]]:
+    def format_validation_error(
+        e: DjangoValidationError,
+    ) -> dict[str, list[dict[str, str | int | None] | str]]:
         # We can move this method to other place if needed
-        formatted: dict[str, list[dict[str, str | int | None] | str]] = {}  # Why should I annotate this...
+        formatted: dict[
+            str, list[dict[str, str | int | None] | str]
+        ] = {}  # Why should I annotate this...
 
         if hasattr(e, "error_dict"):
             for field, errors in e.error_dict.items():
                 formatted[field] = []
                 for err in errors:
-                    formatted[field].append({
-                        "message": str(err.message),
-                        "code": err.code,
-                        "params": getattr(err, "params", None)
-                    })
+                    formatted[field].append(
+                        {
+                            "message": str(err.message),
+                            "code": err.code,
+                            "params": getattr(err, "params", None),
+                        }
+                    )
 
         elif hasattr(e, "error_list"):
             formatted["non_field_errors"] = []
             for err in e.error_list:
-                formatted["non_field_errors"].append({
-                    "message": str(err.message),
-                    "code": err.code,
-                    "params": getattr(err, "params", None)
-                })
+                formatted["non_field_errors"].append(
+                    {
+                        "message": str(err.message),
+                        "code": err.code,
+                        "params": getattr(err, "params", None),
+                    }
+                )
 
         else:
             formatted["non_field_errors"] = [str(e)]
@@ -78,7 +87,9 @@ class BookingSerializer(serializers.Serializer):
             # TODO: Log it
             raise ValueError({"customer": "Customer data is required."})
 
-        customer_obj = handle_customer_visit(customer_data, validated_data["start_datetime"].date())
+        customer_obj = handle_customer_visit(
+            customer_data, validated_data["start_datetime"].date()
+        )
 
         booking = Booking(customer=customer_obj, **validated_data)
 
@@ -92,14 +103,20 @@ class BookingSerializer(serializers.Serializer):
 
         item_errors = {}
         for item_data in items_data:
-            if not is_inventory_item_available(item_data["quantity"], items[item_data["slug"]]):
-                item_errors.setdefault(item_data["slug"], []).append("Not enough stock.")
+            if not is_inventory_item_available(
+                item_data["quantity"], items[item_data["slug"]]
+            ):
+                item_errors.setdefault(item_data["slug"], []).append(
+                    "Not enough stock."
+                )
 
         if item_errors:
             raise serializers.ValidationError({"items": item_errors})
 
         for item_data in items_data:
-            _, item_obj = add_item_to_booking(booking, item_data["quantity"], items[item_data["slug"]])
+            _, item_obj = add_item_to_booking(
+                booking, item_data["quantity"], items[item_data["slug"]]
+            )
             InventoryItem.objects.update_cache(item_obj)
 
         return booking

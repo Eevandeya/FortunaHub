@@ -21,6 +21,7 @@ class InventoryItemManager(models.Manager):
     def clear_cache(self) -> None:
         self._cache = None
 
+
 class InventoryItem(models.Model):
     class ItemType(models.TextChoices):
         RENTED = "rented"

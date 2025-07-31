@@ -12,7 +12,9 @@ class CustomerSerializer(serializers.ModelSerializer):
     def validate_phone_number(self, value: str) -> str:
         try:
             phone = phonenumbers.parse(value, "RU")
-            return phonenumbers.format_number(phone, phonenumbers.PhoneNumberFormat.E164)
+            return phonenumbers.format_number(
+                phone, phonenumbers.PhoneNumberFormat.E164
+            )
         except phonenumbers.NumberParseException:
             # Though this check already exists in the model validator,
             # we raise a validation error here to be safe

@@ -9,7 +9,10 @@ def is_inventory_item_available(quantity: int, item_obj: InventoryItem) -> bool:
 
     return item_obj.quantity >= quantity
 
-def add_item_to_booking(booking: Booking, quantity: int, item_obj: InventoryItem) -> (BookingItem, InventoryItem):
+
+def add_item_to_booking(
+    booking: Booking, quantity: int, item_obj: InventoryItem
+) -> (BookingItem, InventoryItem):
     if quantity <= 0:
         raise ValueError("Quantity must be greater than zero.")
 

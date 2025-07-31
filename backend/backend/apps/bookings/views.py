@@ -38,11 +38,13 @@ class FreeBookingTimeView(APIView):
 
 
 class BookingCreateView(APIView):
-    permission_classes = [AllowAny] # TODO: Web client can't access this endpoint
+    permission_classes = [AllowAny]  # TODO: Web client can't access this endpoint
     authentication_classes = [APIKeyHeaderAuthentication]
 
     def post(self, request: Request) -> Response:
         serializer = BookingSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.create(serializer.validated_data)
-        return Response({"message": "Booking created successfully."}, status=status.HTTP_201_CREATED)
+        return Response(
+            {"message": "Booking created successfully."}, status=status.HTTP_201_CREATED
+        )

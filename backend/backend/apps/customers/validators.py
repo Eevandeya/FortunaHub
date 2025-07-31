@@ -8,7 +8,7 @@ def validate_phone_number(value: str) -> None:
         _("Invalid russian phone number."),
         params={"phone_number": value},
         code="invalid_phone_number",
-        )
+    )
     try:
         phone = phonenumbers.parse(value, "RU")
         if not phonenumbers.is_valid_number(phone):
