@@ -5,12 +5,11 @@ from rest_framework import serializers
 
 from backend.apps.bookings.models import Booking
 from backend.apps.customers.serializers import CustomerSerializer
-from backend.apps.inventory.models import InventoryItem
 from backend.apps.inventory.serializers import BookingItemSerializer
 from backend.services.booking_service import TimeSlot
 from backend.services.customer_service import handle_customer_visit
 from backend.services.inventory_service import (
-    add_item_to_booking,
+    process_booking_items,
 )
 
 
@@ -96,22 +95,8 @@ class BookingSerializer(serializers.Serializer):
         except DjangoValidationError as e:
             raise serializers.ValidationError(self.format_validation_error(e)) from None
 
-        items = InventoryItem.objects.get_cached_items()
-
-        item_errors = {}
-        for item_data in items_data:
-            if not items[item_data["slug"]].is_available(item_data["quantity"]):
-                item_errors.setdefault(item_data["slug"], []).append(
-                    "Not enough stock."
-                )
-
+        item_errors = process_booking_items(booking, items_data)
         if item_errors:
             raise serializers.ValidationError({"items": item_errors})
-
-        for item_data in items_data:
-            _, item_obj = add_item_to_booking(
-                booking, item_data["quantity"], items[item_data["slug"]]
-            )
-            InventoryItem.objects.update_cache(item_obj)
 
         return booking

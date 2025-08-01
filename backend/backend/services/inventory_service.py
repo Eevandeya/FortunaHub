@@ -26,3 +26,26 @@ def add_item_to_booking(
     )
 
     return booking_item, item_obj
+
+
+def process_booking_items(
+    booking: Booking, items_data: list[dict]
+) -> dict[str, list[str]]:
+    # TODO: docstring needed
+    items = InventoryItem.objects.get_cached_items()
+    item_errors = {}
+
+    for item_data in items_data:
+        if not items[item_data["slug"]].is_available(item_data["quantity"]):
+            item_errors.setdefault(item_data["slug"], []).append("Not enough stock.")
+
+    if item_errors:
+        return item_errors
+
+    for item_data in items_data:
+        _, item_obj = add_item_to_booking(
+            booking, item_data["quantity"], items[item_data["slug"]]
+        )
+        InventoryItem.objects.update_cache(item_obj)
+
+    return {}
