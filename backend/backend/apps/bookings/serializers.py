@@ -80,15 +80,13 @@ class BookingSerializer(serializers.Serializer):
 
     @transaction.atomic
     def create(self, validated_data: dict) -> Booking:
-        customer_data = validated_data.pop("customer", {})
+        customer_data = validated_data.pop("customer")
         items_data = validated_data.pop("items", [])
 
-        if not customer_data:
-            # TODO: Log it
-            raise ValueError({"customer": "Customer data is required."})
-
         customer_obj = handle_customer_visit(
-            customer_data, validated_data["start_datetime"].date()
+            customer_data["nickname"],
+            customer_data["phone_number"],
+            validated_data["start_datetime"].date(),
         )
 
         booking = Booking(customer=customer_obj, **validated_data)

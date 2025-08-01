@@ -44,7 +44,7 @@ class BookingCreateView(APIView):
     def post(self, request: Request) -> Response:
         serializer = BookingSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.create(serializer.validated_data)
+        serializer.save()
         return Response(
             {"message": "Booking created successfully."}, status=status.HTTP_201_CREATED
         )
