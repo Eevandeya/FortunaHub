@@ -1,6 +1,7 @@
 import phonenumbers
 from rest_framework import serializers
 
+from backend.apps.customers import validators
 from backend.apps.customers.models import Customer
 
 
@@ -8,6 +9,13 @@ class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
         fields = ["nickname", "phone_number"]
+        extra_kwargs = {
+            "phone_number": {
+                "validators": [
+                    validators.validate_phone_number
+                ],  # excluding the UniqueValidator
+            },
+        }
 
     def validate_phone_number(self, value: str) -> str:
         try:
