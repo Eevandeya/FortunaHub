@@ -1,22 +1,18 @@
+from django.db import transaction
+
 from backend.apps.bookings.models import Booking
 from backend.apps.inventory.exceptions import NotEnoughItemsInStockError
 from backend.apps.inventory.models import BookingItem, InventoryItem
 
 
-def is_inventory_item_available(quantity: int, item_obj: InventoryItem) -> bool:
-    if quantity <= 0:
-        raise ValueError("Quantity must be greater than zero.")
-
-    return item_obj.quantity >= quantity
-
-
+@transaction.atomic
 def add_item_to_booking(
     booking: Booking, quantity: int, item_obj: InventoryItem
 ) -> (BookingItem, InventoryItem):
     if quantity <= 0:
         raise ValueError("Quantity must be greater than zero.")
 
-    if item_obj.quantity < quantity:
+    if not item_obj.is_available(quantity):
         raise NotEnoughItemsInStockError(item_obj.slug, quantity, item_obj.quantity)
 
     if item_obj.item_type == InventoryItem.ItemType.CONSUMABLE:

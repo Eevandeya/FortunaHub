@@ -11,7 +11,6 @@ from backend.services.booking_service import TimeSlot
 from backend.services.customer_service import handle_customer_visit
 from backend.services.inventory_service import (
     add_item_to_booking,
-    is_inventory_item_available,
 )
 
 
@@ -101,9 +100,7 @@ class BookingSerializer(serializers.Serializer):
 
         item_errors = {}
         for item_data in items_data:
-            if not is_inventory_item_available(
-                item_data["quantity"], items[item_data["slug"]]
-            ):
+            if not items[item_data["slug"]].is_available(item_data["quantity"]):
                 item_errors.setdefault(item_data["slug"], []).append(
                     "Not enough stock."
                 )

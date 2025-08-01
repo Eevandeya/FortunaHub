@@ -41,6 +41,12 @@ class InventoryItem(models.Model):
 
     objects = InventoryItemManager()
 
+    def is_available(self, quantity: int) -> bool:
+        if quantity <= 0:
+            raise ValueError("Quantity must be greater than zero.")
+
+        return self.quantity >= quantity
+
     def __str__(self) -> str:
         return f"{self.display_name} ({self.slug})"
 
