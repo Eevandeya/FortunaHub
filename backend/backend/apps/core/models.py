@@ -84,9 +84,7 @@ class Pricing(models.Model):
     description = models.CharField(max_length=255)
     updated = models.DateTimeField(auto_now=True)
     price = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        validators=[MinValueValidator(0.01)]
+        max_digits=10, decimal_places=2, validators=[MinValueValidator(0.01)]
     )
 
     def save(self, *args: tuple, **kwargs: dict[str, Any]) -> None:
@@ -95,7 +93,11 @@ class Pricing(models.Model):
             cache.set("pricing:{self.name}", self)
 
     @classmethod
-    def get_hourly_rent_and_prepayment(cls) -> tuple[Decimal, Decimal]:  # Maybe it is worth dividing into 2 independent methods
+    def get_hourly_rent_and_prepayment(
+        cls,
+    ) -> tuple[
+        Decimal, Decimal
+    ]:  # Maybe it is worth dividing into 2 independent methods
         hourly_rent = cache.get("pricing:hourly_rent")
         if hourly_rent is None:
             hourly_rent = cls.objects.get(name="hourly_rent")
