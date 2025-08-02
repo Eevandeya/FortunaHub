@@ -34,17 +34,23 @@ def get_booking_price(booking: Booking) -> BookingPrice:
     hourly_rent, _ = Pricing.get_hourly_rent_and_prepayment()
 
     duration_hours_time_delta = booking.end_datetime - booking.start_datetime
-    duration_hours_decimal = Decimal(duration_hours_time_delta.total_seconds()) / Decimal("3600")
+    duration_hours_decimal = Decimal(
+        duration_hours_time_delta.total_seconds()
+    ) / Decimal("3600")
 
     base_price = duration_hours_decimal * hourly_rent
-    items_price = sum((
-        Decimal(booking_item.quantity) * Decimal(booking_item.inventory_item.unit_price)
-        for booking_item in booking.items
-    ), start=Decimal("0"))
+    items_price = sum(
+        (
+            Decimal(booking_item.quantity)
+            * Decimal(booking_item.inventory_item.unit_price)
+            for booking_item in booking.items
+        ),
+        start=Decimal("0"),
+    )
 
     return BookingPrice(
         duration_hours=duration_hours_time_delta,
         base_price=_quantize_money(base_price),
         items_price=_quantize_money(items_price),
-        total=_quantize_money(base_price + items_price)
+        total=_quantize_money(base_price + items_price),
     )
