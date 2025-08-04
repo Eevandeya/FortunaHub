@@ -54,17 +54,21 @@ class SaunaConfig(models.Model):
         one_day = dt.timedelta(days=1)
 
         if start_dt.time() < self.opening_time:
-            opening_dt = dt.datetime.combine(
-                start_dt.date() - one_day, self.opening_time
+            opening_dt = timezone.make_aware(
+                dt.datetime.combine(start_dt.date() - one_day, self.opening_time)
             )
         else:
-            opening_dt = dt.datetime.combine(start_dt.date(), self.opening_time)
+            opening_dt = timezone.make_aware(
+                dt.datetime.combine(start_dt.date(), self.opening_time)
+            )
 
         if self.opening_time < self.closing_time:
-            closing_dt = dt.datetime.combine(opening_dt.date(), self.closing_time)
+            closing_dt = timezone.make_aware(
+                dt.datetime.combine(opening_dt.date(), self.closing_time)
+            )
         else:
-            closing_dt = dt.datetime.combine(
-                opening_dt.date() + one_day, self.closing_time
+            closing_dt = timezone.make_aware(
+                dt.datetime.combine(opening_dt.date() + one_day, self.closing_time)
             )
 
         return opening_dt <= start_dt and end_dt <= closing_dt
