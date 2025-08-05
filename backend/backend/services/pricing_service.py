@@ -1,24 +1,45 @@
 import datetime as dt
 from dataclasses import dataclass
 from decimal import ROUND_HALF_UP, Decimal
+from typing import Any
 
-from backend.apps.bookings.models import Booking
 from backend.apps.core.models import Pricing
+from backend.apps.inventory.models import InventoryItem
 
 
 @dataclass(frozen=True)
 class BookingPricingResult:
-    duration_hours: dt.timedelta
+    duration_hours: Decimal
     base_price: Decimal
     items_price: Decimal
     total: Decimal
+
+
+@dataclass(frozen=True)
+class BookingItemInput:
+    item: InventoryItem
+    quantity: int
 
 
 def _quantize_money(value: Decimal) -> Decimal:
     return value.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
 
-def get_booking_price(booking: Booking) -> BookingPricingResult:
+def build_booking_items(raw_items: list[dict[str, Any]]) -> list[BookingItemInput]:
+    return [
+        BookingItemInput(
+            item=InventoryItem.objects.get(slug=entry["slug"]),
+            quantity=entry["quantity"],
+        )
+        for entry in raw_items
+    ]
+
+
+def get_booking_price(
+    start_datetime: dt.datetime,
+    end_datetime: dt.datetime,
+    booking_items: list[BookingItemInput],
+) -> BookingPricingResult:
     """
     Returns a BookingPricingResult dataclass instance containing the calculated cost breakdown
     for a given booking.
@@ -33,7 +54,7 @@ def get_booking_price(booking: Booking) -> BookingPricingResult:
     """
     hourly_rent, _ = Pricing.get_hourly_rent_and_prepayment()
 
-    duration_hours_time_delta = booking.end_datetime - booking.start_datetime
+    duration_hours_time_delta = end_datetime - start_datetime
     duration_hours_decimal = Decimal(
         duration_hours_time_delta.total_seconds()
     ) / Decimal("3600")
@@ -41,15 +62,14 @@ def get_booking_price(booking: Booking) -> BookingPricingResult:
     base_price = duration_hours_decimal * hourly_rent
     items_price = sum(
         (
-            Decimal(booking_item.quantity)
-            * Decimal(booking_item.inventory_item.unit_price)
-            for booking_item in booking.items
+            Decimal(booking_item.quantity) * Decimal(booking_item.item.unit_price)
+            for booking_item in booking_items
         ),
         start=Decimal("0"),
     )
 
     return BookingPricingResult(
-        duration_hours=duration_hours_time_delta,
+        duration_hours=duration_hours_decimal,
         base_price=_quantize_money(base_price),
         items_price=_quantize_money(items_price),
         total=_quantize_money(base_price + items_price),
