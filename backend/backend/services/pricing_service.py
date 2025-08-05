@@ -7,7 +7,7 @@ from backend.apps.core.models import Pricing
 
 
 @dataclass(frozen=True)
-class BookingPrice:
+class BookingPricingResult:
     duration_hours: dt.timedelta
     base_price: Decimal
     items_price: Decimal
@@ -18,9 +18,9 @@ def _quantize_money(value: Decimal) -> Decimal:
     return value.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
 
-def get_booking_price(booking: Booking) -> BookingPrice:
+def get_booking_price(booking: Booking) -> BookingPricingResult:
     """
-    Returns a BookingPrice dataclass instance containing the calculated cost breakdown
+    Returns a BookingPricingResult dataclass instance containing the calculated cost breakdown
     for a given booking.
 
     Calculation rules:
@@ -48,7 +48,7 @@ def get_booking_price(booking: Booking) -> BookingPrice:
         start=Decimal("0"),
     )
 
-    return BookingPrice(
+    return BookingPricingResult(
         duration_hours=duration_hours_time_delta,
         base_price=_quantize_money(base_price),
         items_price=_quantize_money(items_price),
