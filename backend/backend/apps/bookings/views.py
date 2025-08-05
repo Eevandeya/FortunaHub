@@ -9,11 +9,14 @@ from rest_framework.views import APIView
 from backend.apps.authentication.auth import APIKeyHeaderAuthentication
 from backend.apps.bookings.docs import create_booking_schema, get_free_slots_schema
 from backend.apps.bookings.serializers import (
+    BookingCalculationSerializer,
+    BookingPricingResultSerializer,
     BookingCreateSerializer,
     BookingResponseSerializer,
     FreeSlotsResponseSerializer,
 )
 from backend.services.booking_service import get_free_booking_time
+from backend.services.pricing_service import build_booking_items, get_booking_price
 
 
 class FreeBookingTimeView(APIView):
@@ -42,7 +45,8 @@ class FreeBookingTimeView(APIView):
 
 class BookingCreateView(APIView):
     # TODO: maybe optimize with prefetching inventory items and customers?
-    permission_classes = [AllowAny]  # TODO: Web client can't access this endpoint
+    # TODO: Web client can't access this endpoint
+    permission_classes = [AllowAny]
     authentication_classes = [APIKeyHeaderAuthentication]
 
     @create_booking_schema
@@ -52,3 +56,24 @@ class BookingCreateView(APIView):
         booking = request_serializer.save()
         response_serializer = BookingResponseSerializer(booking)
         return Response(response_serializer.data, status=status.HTTP_201_CREATED)
+
+
+class BookingPriceCalculationView(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = [APIKeyHeaderAuthentication]
+
+    def post(self, request: Request) -> Response:
+        input_serializer = BookingCalculationSerializer(data=request.data)
+        input_serializer.is_valid(raise_exception=True)
+
+        data = input_serializer.validated_data
+        booking_items = build_booking_items(data.get("items", []))
+
+        price = get_booking_price(
+            start_datetime=data["start_datetime"],
+            end_datetime=data["end_datetime"],
+            booking_items=booking_items,
+        )
+
+        output_serializer = BookingPricingResultSerializer(price)
+        return Response(output_serializer.data, status=status.HTTP_200_OK)
