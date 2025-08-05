@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import BookingCreateView, FreeBookingTimeView
+from backend.apps.bookings.views import BookingCreateView, FreeBookingTimeView
 
 app_name = "bookings"
 

@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import ConfigView
+from backend.apps.core.views import ConfigView
 
 app_name = "core"
 
