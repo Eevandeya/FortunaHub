@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import SaunaConfig
+from backend.apps.core.models import SaunaConfig
 
 
 @admin.register(SaunaConfig)

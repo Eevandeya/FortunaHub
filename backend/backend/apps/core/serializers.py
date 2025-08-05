@@ -2,7 +2,7 @@ import datetime
 
 from rest_framework import serializers
 
-from .models import SaunaConfig
+from backend.apps.core.models import SaunaConfig
 
 TIME_FORMAT = "%H:%M"
 
