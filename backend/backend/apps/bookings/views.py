@@ -37,7 +37,7 @@ class FreeBookingTimeView(APIView):
 
         free_slots = get_free_booking_time(date_obj)
         serializer = FreeSlotsResponseSerializer(free_slots)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class BookingCreateView(APIView):
