@@ -45,9 +45,13 @@ lint.select = [
     "SIM",
     "PT",
     "TCH",
-    "ANN" # flake8-annotations
+    "ANN",
+    "TID",
 ]
 lint.ignore = ["E203", "E501"]  # comparable with Black
 
 [format]
 quote-style = "double"
+
+[lint.flake8-tidy-imports]
+ban-relative-imports = "all"
