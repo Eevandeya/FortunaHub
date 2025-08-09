@@ -138,13 +138,13 @@ class BookingResponseSerializer(serializers.ModelSerializer):
         ]
 
 
-class BookingCalculationSerializer(serializers.Serializer):
+class BookingPriceRequestSerializer(serializers.Serializer):
     items = BookingItemSerializer(many=True, required=False)
     start_datetime = serializers.DateTimeField(required=True)
     end_datetime = serializers.DateTimeField(required=True)
 
 
-class BookingPricingResultSerializer(serializers.Serializer):
+class BookingPriceResponseSerializer(serializers.Serializer):
     duration_hours = serializers.DecimalField(max_digits=4, decimal_places=2)
     base_price = serializers.DecimalField(max_digits=10, decimal_places=2)
     items_price = serializers.DecimalField(max_digits=10, decimal_places=2)

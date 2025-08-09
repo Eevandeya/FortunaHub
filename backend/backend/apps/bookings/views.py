@@ -9,6 +9,8 @@ from rest_framework.views import APIView
 from backend.apps.authentication.auth import APIKeyHeaderAuthentication
 from backend.apps.bookings.docs import create_booking_schema, get_free_slots_schema
 from backend.apps.bookings.serializers import (
+    BookingPriceRequestSerializer,
+    BookingPriceResponseSerializer,
     BookingCalculationSerializer,
     BookingPricingResultSerializer,
     BookingCreateSerializer,
@@ -63,7 +65,7 @@ class BookingPriceCalculationView(APIView):
     authentication_classes = [APIKeyHeaderAuthentication]
 
     def post(self, request: Request) -> Response:
-        input_serializer = BookingCalculationSerializer(data=request.data)
+        input_serializer = BookingPriceRequestSerializer(data=request.data)
         input_serializer.is_valid(raise_exception=True)
 
         data = input_serializer.validated_data
@@ -75,5 +77,5 @@ class BookingPriceCalculationView(APIView):
             booking_items=booking_items,
         )
 
-        output_serializer = BookingPricingResultSerializer(price)
+        output_serializer = BookingPriceResponseSerializer(price)
         return Response(output_serializer.data, status=status.HTTP_200_OK)
