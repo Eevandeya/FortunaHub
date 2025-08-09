@@ -7,6 +7,8 @@ from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils import timezone
 
+from backend.apps.core.exceptions import MissingInitialDataError
+
 
 class SaunaConfig(models.Model):
     opening_time = models.TimeField()
@@ -26,7 +28,9 @@ class SaunaConfig(models.Model):
     def get(cls) -> "SaunaConfig":
         config = cache.get("sauna_config")
         if config is None:
-            config = cls.objects.first()
+            config = cls.objects.order_by("-created").first()
+            if config is None:
+                raise MissingInitialDataError
             cache.set("sauna_config", config)
         return config
 
