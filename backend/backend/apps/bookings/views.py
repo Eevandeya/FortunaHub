@@ -60,7 +60,7 @@ class BookingCreateView(APIView):
         return Response(response_serializer.data, status=status.HTTP_201_CREATED)
 
 
-class BookingPriceCalculationView(APIView):
+class BookingPriceView(APIView):
     permission_classes = [AllowAny]
     authentication_classes = [APIKeyHeaderAuthentication]
 
