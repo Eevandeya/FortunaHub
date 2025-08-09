@@ -9,7 +9,7 @@ from backend.apps.inventory.models import InventoryItem
 
 @dataclass(frozen=True)
 class BookingPricingResult:
-    duration_hours: Decimal
+    duration: dt.timedelta
     base_price: Decimal
     items_price: Decimal
     total: Decimal
@@ -54,10 +54,10 @@ def get_booking_price(
     """
     hourly_rent, _ = Pricing.get_hourly_rent_and_prepayment()
 
-    duration_hours_time_delta = end_datetime - start_datetime
-    duration_hours_decimal = Decimal(
-        duration_hours_time_delta.total_seconds()
-    ) / Decimal("3600")
+    duration_time_delta = end_datetime - start_datetime
+    duration_hours_decimal = Decimal(duration_time_delta.total_seconds()) / Decimal(
+        "3600"
+    )
 
     base_price = duration_hours_decimal * hourly_rent
     items_price = sum(
@@ -69,7 +69,7 @@ def get_booking_price(
     )
 
     return BookingPricingResult(
-        duration_hours=duration_hours_decimal,
+        duration=duration_time_delta,
         base_price=_quantize_money(base_price),
         items_price=_quantize_money(items_price),
         total=_quantize_money(base_price + items_price),

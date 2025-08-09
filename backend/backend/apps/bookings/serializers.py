@@ -15,6 +15,7 @@ from backend.services.customer_service import handle_customer_visit
 from backend.services.inventory_service import (
     process_booking_items,
 )
+from backend.services.pricing_service import BookingPricingResult
 
 EXTERNAL_NON_FIELD_ERRORS = "non_field_errors"
 
@@ -145,7 +146,13 @@ class BookingPriceRequestSerializer(serializers.Serializer):
 
 
 class BookingPriceResponseSerializer(serializers.Serializer):
-    duration_hours = serializers.DecimalField(max_digits=4, decimal_places=2)
+    duration = serializers.SerializerMethodField()
     base_price = serializers.DecimalField(max_digits=10, decimal_places=2)
     items_price = serializers.DecimalField(max_digits=10, decimal_places=2)
     total = serializers.DecimalField(max_digits=10, decimal_places=2)
+
+    def get_duration(self, obj: BookingPricingResult) -> str:
+        total_seconds = int(obj.duration.total_seconds())
+        hours = total_seconds // 3600
+        minutes = (total_seconds % 3600) // 60
+        return f"{hours:02}:{minutes:02}"
