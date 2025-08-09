@@ -53,7 +53,7 @@ class BookingCreateView(APIView):
         )
 
 
-class BookingPriceCalculationView(APIView):
+class BookingPriceView(APIView):
     permission_classes = [AllowAny]
     authentication_classes = [APIKeyHeaderAuthentication]
 
