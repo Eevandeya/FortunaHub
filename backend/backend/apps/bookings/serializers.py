@@ -118,13 +118,14 @@ class BookingPriceRequestSerializer(serializers.Serializer):
 
 
 class BookingPriceResponseSerializer(serializers.Serializer):
-    duration = serializers.SerializerMethodField()
     base_price = serializers.DecimalField(max_digits=10, decimal_places=2)
     items_price = serializers.DecimalField(max_digits=10, decimal_places=2)
     total = serializers.DecimalField(max_digits=10, decimal_places=2)
 
-    def get_duration(self, obj: BookingPricingResult) -> str:
-        total_seconds = int(obj.duration.total_seconds())
+    def to_representation(self, instance: BookingPricingResult) -> dict[str, str]:
+        data = super().to_representation(instance)
+        total_seconds = int(instance.duration.total_seconds())
         hours = total_seconds // 3600
         minutes = (total_seconds % 3600) // 60
-        return f"{hours:02}:{minutes:02}"
+        data["duration"] = f"{hours:02}:{minutes:02}"
+        return data
