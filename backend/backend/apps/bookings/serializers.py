@@ -1,3 +1,4 @@
+from django.core.exceptions import NON_FIELD_ERRORS
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import transaction
 from django.utils.timezone import get_default_timezone
@@ -11,6 +12,8 @@ from backend.services.customer_service import handle_customer_visit
 from backend.services.inventory_service import (
     process_booking_items,
 )
+
+EXTERNAL_NON_FIELD_ERRORS = "non_field_errors"
 
 
 class TimeSlotSerializer(serializers.Serializer):
@@ -50,6 +53,11 @@ class BookingSerializer(serializers.Serializer):
 
         if hasattr(e, "error_dict"):
             for field, errors in e.error_dict.items():
+                # convert django's "__all__" to our "non_field_errors"
+                field = (
+                    EXTERNAL_NON_FIELD_ERRORS if field == NON_FIELD_ERRORS else field
+                )
+
                 formatted[field] = []
                 for err in errors:
                     formatted[field].append(
@@ -61,9 +69,9 @@ class BookingSerializer(serializers.Serializer):
                     )
 
         elif hasattr(e, "error_list"):
-            formatted["non_field_errors"] = []
+            formatted[EXTERNAL_NON_FIELD_ERRORS] = []
             for err in e.error_list:
-                formatted["non_field_errors"].append(
+                formatted[EXTERNAL_NON_FIELD_ERRORS].append(
                     {
                         "message": str(err.message),
                         "code": err.code,
