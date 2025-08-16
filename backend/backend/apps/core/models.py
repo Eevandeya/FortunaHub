@@ -83,7 +83,7 @@ class Pricing(models.Model):
     def save(self, *args: tuple, **kwargs: dict[str, Any]) -> None:
         super().save(*args, **kwargs)
         if self.name in ("hourly_rent", "prepayment"):
-            cache.set("pricing:{self.name}", self)
+            cache.set(f"pricing:{self.name}", self)
 
     @classmethod
     def get_hourly_rent_and_prepayment(
@@ -94,10 +94,14 @@ class Pricing(models.Model):
         hourly_rent = cache.get("pricing:hourly_rent")
         if hourly_rent is None:
             hourly_rent = cls.objects.get(name="hourly_rent")
+            if hourly_rent is None:
+                raise MissingInitialDataError
             cache.set("pricing:hourly_rent", hourly_rent)
         prepayment = cache.get("pricing:prepayment")
         if prepayment is None:
             prepayment = cls.objects.get(name="prepayment")
+            if prepayment is None:
+                raise MissingInitialDataError
             cache.set("pricing:prepayment", prepayment)
         return hourly_rent.price, prepayment.price
 
