@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.core.validators import MinValueValidator
 from django.db import models
 
@@ -36,7 +38,9 @@ class InventoryItem(models.Model):
     unit_price = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        validators=[MinValueValidator(0.01)],  # Besplatni sir only in mishelovka
+        validators=[
+            MinValueValidator(Decimal("0.01"))
+        ],  # Besplatni sir only in mishelovka
     )
 
     objects = InventoryItemManager()
