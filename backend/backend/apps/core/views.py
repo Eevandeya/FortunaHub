@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from backend.apps.authentication.auth import APIKeyHeaderAuthentication
+from backend.apps.core.docs import get_sauna_config_schema
 from backend.apps.core.models import SaunaConfig
 from backend.apps.core.serializers import SaunaConfigSerializer
 
@@ -12,6 +13,7 @@ class ConfigView(APIView):
     permission_classes = [AllowAny]
     authentication_classes = [APIKeyHeaderAuthentication]
 
+    @get_sauna_config_schema
     def get(self, request: Request) -> Response:
         current_config = SaunaConfig.get()
         serializer = SaunaConfigSerializer(current_config)
