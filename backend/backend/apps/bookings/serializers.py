@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.exceptions import NON_FIELD_ERRORS
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import transaction
@@ -128,4 +129,5 @@ class BookingPriceResponseSerializer(serializers.Serializer):
         hours = total_seconds // 3600
         minutes = (total_seconds % 3600) // 60
         data["duration"] = f"{hours:02}:{minutes:02}"
+        data["code"] = settings.CASH_CURRENCY_CODE
         return data
