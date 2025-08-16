@@ -2,6 +2,8 @@ import datetime as dt
 from collections.abc import Iterator
 from dataclasses import dataclass
 
+from django.utils import timezone
+
 from backend.apps.bookings.models import Booking
 from backend.apps.core.models import SaunaConfig
 
@@ -46,7 +48,16 @@ def get_free_booking_time(booking_date: dt.date) -> FreeSlots:
     opening, closing = sauna_config.get_opening_and_closing_dt(booking_date)
     next_time = opening
 
-    bookings = Booking.objects.filter(date=booking_date).order_by("start_datetime")
+    day_start_datetime = timezone.make_aware(
+        dt.datetime.combine(booking_date, dt.time(0))
+    )
+    day_end_datetime = timezone.make_aware(
+        dt.datetime.combine(booking_date + dt.timedelta(days=1), dt.time(0))
+    )
+
+    bookings = Booking.objects.filter(
+        end_datetime__gt=day_start_datetime, start_datetime__lt=day_end_datetime
+    ).order_by("start_datetime")
     free_slots = FreeSlots(booking_date, free_slots=[])
 
     for booking in bookings:
