@@ -1,6 +1,11 @@
 import datetime as dt
 
-from django.core.exceptions import ValidationError as DjangoValidationError
+from django.core.exceptions import (
+    NON_FIELD_ERRORS,
+)
+from django.core.exceptions import (
+    ValidationError as DjangoValidationError,
+)
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -51,7 +56,7 @@ class Booking(models.Model):
         errors = {}
 
         if self.start_datetime > self.end_datetime:
-            errors.setdefault("non_field_errors", []).append(
+            errors.setdefault(NON_FIELD_ERRORS, []).append(
                 DjangoValidationError(
                     _("The start time must be before the end time."),
                     code="start_time_after_end",
@@ -63,7 +68,7 @@ class Booking(models.Model):
             )
 
         if self.start_datetime - now < dt.timedelta(seconds=0):
-            errors.setdefault("non_field_errors", []).append(
+            errors.setdefault(NON_FIELD_ERRORS, []).append(
                 DjangoValidationError(
                     _("Booking date cannot be in the past."),
                     params={
@@ -75,7 +80,7 @@ class Booking(models.Model):
             )
 
         elif self.start_datetime - now < sauna_config.min_time_from_now_to_booking:
-            errors.setdefault("non_field_errors", []).append(
+            errors.setdefault(NON_FIELD_ERRORS, []).append(
                 DjangoValidationError(
                     _(
                         f"There must be at least {sauna_config.min_time_from_now_to_booking} "
@@ -91,7 +96,7 @@ class Booking(models.Model):
             )
 
         if self.end_datetime - self.start_datetime < sauna_config.min_booking_time:
-            errors.setdefault("non_field_errors", []).append(
+            errors.setdefault(NON_FIELD_ERRORS, []).append(
                 DjangoValidationError(
                     _(
                         f"{sauna_config.min_booking_time} is the minimal booking duration."
@@ -108,7 +113,7 @@ class Booking(models.Model):
         if not sauna_config.is_booking_within_open_hours(
             self.start_datetime, self.end_datetime
         ):
-            errors.setdefault("non_field_errors", []).append(
+            errors.setdefault(NON_FIELD_ERRORS, []).append(
                 DjangoValidationError(
                     _("The booking time goes beyond the opening hours."),
                     code="outside_opening_hours",
@@ -122,7 +127,7 @@ class Booking(models.Model):
             )
 
         if not self.is_booking_time_available():
-            errors.setdefault("non_field_errors", []).append(
+            errors.setdefault(NON_FIELD_ERRORS, []).append(
                 DjangoValidationError(
                     _(
                         f"Bookings overlap with the existing one or there is not enough buffer in "
