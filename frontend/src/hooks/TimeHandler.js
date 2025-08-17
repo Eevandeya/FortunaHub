@@ -1,16 +1,9 @@
 import { useState, useEffect } from 'react';
-import { getAvailableTimes, setTime } from '../api/timeSlotsApi.js';
+import { getAvailableTimes, setTime } from '../../api/timeSlotsApi.js';
 import { useFetching } from './useFetching.js';
-
-function checkTimePermission(availableTimes, chosenTime)
-{
-    for (let i = 0; i < availableTimes.lenght(); i++){
-      if(availableTimes[i].start < chosenTime.start && availableTimes[i].end > chosenTime.end){
-        return true
-      }
-    }
-}
-
+import TimeUtils from '../../utils/time_utils.js';
+import useConfig from './useConfig.js';
+import { parse } from 'date-fns';
 
 export function useAvailableTimes(selectedDate) {
   const [availableTime, setAvailableTime] = useState([]);
@@ -27,8 +20,14 @@ export function useAvailableTimes(selectedDate) {
     }
     const free_time = await getAvailableTimes(selectedDate);
     setAvailableTime(free_time);
-  }
 
+    try {
+      const free_time = await getAvailableTimes(selectedDate);
+      setAvailableTime(free_time);
+    } catch (error) {
+      throw new Error(error?.message);
+    }
+  }
   useEffect(() => {
     fetching();
   }, [selectedDate]);
@@ -39,6 +38,7 @@ export function useAvailableTimes(selectedDate) {
 export function useTimeSlot() {
   const [bookingError, setBookingError] = useState(null);
   const [isBooking, setIsBooking] = useState(false);
+  const { config, error } = useConfig();
 
   const bookTimeSlot = async (
     startTime,
@@ -50,38 +50,31 @@ export function useTimeSlot() {
       if (!startTime || !endTime || !selectedDate) {
         throw new Error('Не выбрано время или дата');
       }
-      let start = new Date(`${selectedDate}T${startTime}`);
-      let end = new Date(`${selectedDate}T${endTime}`);
-      let now = new Date();
+      const parsed_selected_date = parse(
+        selectedDate,
+        'yyyy-MM-dd',
+        new Date()
+      );
+      const start = parse(startTime, 'HH:mm', parsed_selected_date);
+      const end = parse(endTime, 'HH:mm', parsed_selected_date);
 
-      if (start > end) {
-        if (
-          end.toLocaleTimeString('ru-RS', {
-            hour: '2-digit',
-            minute: '2-digit',
-          }) === '00:00'
-        ) {
-          end.setHours(24);
-        } else {
-          let tmp = end;
-          end = start;
-          start = tmp;
-        }
-      }
+      const canBookingFromNow = TimeUtils.isBookingAvailable(
+        start,
+        config.min_time_from_now_to_booking
+      );
 
-      if (start < now) throw new Error('Нельзя выбрать прошедшее время');
-      console.log(`start:\t${start} | end:\t${end}`);
+      if (!canBookingFromNow) throw new Error('Нельзя выбрать прошедшее время');
 
-      const bookingTime = JSON.stringify({ start: start, end: end });
-
-      const isAvailable = checkTimePermission(availableTimes, bookingTime)
-      console.log(`Свободное время:\t${availableTimes}`);
-      console.log(`Выбранное время:\t${bookingTime}`);
+      const isAvailable = TimeUtils.isTimeSlotAvailable(
+        availableTimes,
+        { start, end },
+        selectedDate
+      );
       if (!isAvailable) {
         throw new Error('Выбранное время уже занято');
       }
 
-      await setTime(selectedDate, bookingTime)
+      await setTime(selectedDate, { start: startTime, end: endTime })
         .then(() => setIsBooking(true))
         .catch((error) => {
           console.error(`An unexpected error has occured: ${error.message}`);
@@ -89,7 +82,6 @@ export function useTimeSlot() {
           setIsBooking(false);
         });
     } catch (error) {
-      console.error(`An unexpected error has occured: ${error.message}`);
       setBookingError(error.message);
       setIsBooking(false);
     }
