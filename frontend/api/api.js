@@ -40,6 +40,9 @@ time_handler.interceptors.response.use(
   },
   (error) => {
     const status = error.response?.status;
+    if (status === 404) {
+      console.log('Неверный путь');
+    }
     if (status === 401) {
       console.log('Устаревший токен');
       //FIXME: Нужно проверять на валдиность токен и если его время истекло, обновлять
