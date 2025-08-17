@@ -1,6 +1,6 @@
 import { useState, Fragment } from 'react';
 import 'bulma/css/bulma.css';
-import Time from './components/Time.jsx';
+import Time from './components/features/TimeBookingPopup/Time.jsx';
 
 function App() {
   const [modalActive, setModalActive] = useState(false);
