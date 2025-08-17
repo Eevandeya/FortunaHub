@@ -6,10 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "eslint src",
+    "lint": "eslint src utils api",
     "preview": "vite preview",
-    "format": "prettier --write src",
-    "lint:fix": "eslint src --fix"
+    "format": "prettier --write \"{utils,src,api}/**/*.{js,jsx}\"",
+    "lint:fix": "eslint src utils api --fix"
   },
   "dependencies": {
     "axios": "^1.11.0",
