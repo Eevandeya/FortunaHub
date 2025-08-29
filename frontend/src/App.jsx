@@ -1,6 +1,7 @@
 import { useState, Fragment } from 'react';
 import 'bulma/css/bulma.css';
 import Time from './components/features/TimeBookingPopup/Time.jsx';
+import BookingProvider from './context/BookingContext.jsx';
 
 function App() {
   const [modalActive, setModalActive] = useState(false);
@@ -11,7 +12,7 @@ function App() {
   };
 
   return (
-    <>
+    <BookingProvider>
       <div className="container-fluid">
         <nav className="block navbar is-white">
           <header>
@@ -30,7 +31,7 @@ function App() {
         </button>
       </div>
       <Time modalActive={modalActive} setModalActive={setModalActive} />
-    </>
+    </BookingProvider>
   );
 }
 

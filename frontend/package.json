@@ -19,7 +19,8 @@
     "eslint-plugin-prettier": "^5.2.3",
     "prettier": "^3.5.3",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-hook-form": "^7.62.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

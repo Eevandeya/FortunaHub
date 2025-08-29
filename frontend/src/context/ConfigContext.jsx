@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import getSaunaConfig from '../../api/saunaConfig.js';
-import { ConfigContext } from './Context.js';
+import getSaunaConfig from '@root.api/saunaConfig.js';
+import { ConfigContext } from '@context/Context.js';
 
 export function ConfigProvider({ children }) {
   const [config, setConfig] = useState(null);
