@@ -1,13 +1,17 @@
-import { useAvailableTimes, useTimeSlot } from '../../../hooks/TimeHandler.js';
-import ArrayDate from '../../../../consts/ArrayDate.js';
-import Modal from '../Modal/Modal.jsx';
-import Cell from '../../common/cell/Cell.jsx';
-import Select from '../../common/Select.jsx';
-import { useState, useEffect } from 'react';
-import useConfig from '../../../hooks/useConfig.js';
-import { parse, format, addMinutes, isWithinInterval } from 'date-fns';
-import TimeUtils from '../../../../utils/time_utils.js';
-import Loading from '../../common/loader/Loading.jsx';
+import { useAvailableTimes, useTimeSlot } from '@hooks/TimeHandler.js';
+import ArrayDate from '@root.consts/ArrayDate.js';
+import Modal from '@components.features/Modal/Modal.jsx';
+import Cell from '@components.common/cell/Cell.jsx';
+import Select from '@components.common/select/Select.jsx';
+import { useEffect, useState } from 'react';
+import useConfig from '@hooks/useConfig.js';
+import { addMinutes, format, isWithinInterval, parse } from 'date-fns';
+import TimeUtils from '@root.utils/time_utils.js';
+import Loading from '@components.common/loader/Loading.jsx';
+import { requestErrorInterceptor, responseErrorInterceptor } from '@root.api/apiErrorHandler.js';
+import api_handler from '@root.api/api.js';
+import { useErrorBoundary } from '@context/Context.js';
+
 
 const isTimeAvailable = (time, availableSlots) => {
   const checkTime = parse(time, 'HH:mm', new Date());
@@ -58,12 +62,19 @@ function checkConditions({ min_booking_time, start, end }) {
 }
 
 export default function Time({ modalActive, setModalActive }) {
-  const { config, error } = useConfig();
+  const config = useConfig();
   const [times, setTimes] = useState(null);
   const [date, setDate] = useState('');
   const [availableTime, loading] = useAvailableTimes(date);
-  const [bookTimeSlot, isBooking, bookingError] = useTimeSlot();
+  const [bookTimeSlot, isBooking] = useTimeSlot();
   const [borderTime, setBorderTime] = useState({ start: null, end: null });
+  const { addError } = useErrorBoundary()
+
+  useEffect(() => {
+
+    requestErrorInterceptor(api_handler, addError)
+    responseErrorInterceptor(api_handler, addError)
+  }, [addError])
 
   useEffect(() => {
     if (isBooking) {
@@ -81,7 +92,6 @@ export default function Time({ modalActive, setModalActive }) {
         closing_time,
         date
       );
-
       setTimes(time_interval);
     };
     if (config) {
@@ -156,8 +166,6 @@ export default function Time({ modalActive, setModalActive }) {
         />
       </div>
 
-      {bookingError && <p style={{ color: 'red' }}>{bookingError}</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
       {loading ? (
         <Loading />
       ) : (

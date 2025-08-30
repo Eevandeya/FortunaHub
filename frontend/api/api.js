@@ -1,15 +1,16 @@
 import axios from 'axios';
 
+
 const getCSRFToken = () => {
   return document.cookie.match(/csrftoken=[^;]*/)?.[1];
 };
 
-const time_handler = axios.create({
+const api_handler = axios.create({
   //создали кастомный axios
   baseURL: import.meta.env.VITE_DJANGO_API_URL, // Берем URL из файла. Позволяет указывать только путь
 });
-
-time_handler.interceptors.request.use(
+/*
+api_handler.interceptors.request.use(
   function (config) {
     const method = config.method?.toLowerCase() || '';
     try {
@@ -34,7 +35,7 @@ time_handler.interceptors.request.use(
   }
 );
 
-time_handler.interceptors.response.use(
+api_handler.interceptors.response.use(
   (response) => {
     return response?.data;
   },
@@ -57,5 +58,5 @@ time_handler.interceptors.response.use(
     return Promise.reject(error); // Пробрасываем ошибку дальше
   }
 );
-
-export default time_handler;
+*/
+export default api_handler;

@@ -1,11 +1,10 @@
-import time_handler from './api.js';
+import api_handler from './api.js';
 
 export default async function getSaunaConfig() {
   try {
-    const sauna_config_info = await time_handler.get('/api/config');
-
+    const sauna_config_info = await api_handler.get('/api/config/');
     return sauna_config_info;
   } catch (error) {
-    return Promise.reject(error.message);
+    return Promise.reject(new Error(error.message));
   }
 }

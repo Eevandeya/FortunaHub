@@ -1,13 +1,14 @@
-import { useState, useEffect } from 'react';
-import { useInventory } from '../../../hooks/useInventory.jsx';
-import Modal from '../Modal/Modal.jsx';
-import Loading from '../../common/loader/Loading.jsx';
-import ItemHandler from '../../common/goods/itemHandler.jsx';
+import { useEffect, useState } from 'react';
+import { useInventory } from '@hooks/useInventory.jsx';
+import Modal from '@components.features/Modal/Modal.jsx';
+import ItemHandler from '@components.common/goods/itemHandler.jsx';
+import { useErrorHandler } from '@hooks/useErrorHandler.js';
 
 const AccesoriesRental = ({modalActive, setModalActive}) => {
     const [rentalError, setRentalError] = useState('');
     const [inventory, isLoading, requestError, reserve] = useInventory();
     const [items, setItems] = useState(null);
+    const { handleApiError } = useErrorHandler();
 
     useEffect(() => {
         function setInventory() {
@@ -35,7 +36,7 @@ const AccesoriesRental = ({modalActive, setModalActive}) => {
         try {
             await reserve(items);
         } catch(error) {
-            setRentalError(error);
+            handleApiError(error, {at : "AccessoriesRental"})
         }
     }
 

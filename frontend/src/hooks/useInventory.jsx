@@ -1,11 +1,13 @@
 import { useState} from 'react';
 import { getItemsQuantity, setReservedItems } from '../../api/rentingItemsApi.js';
 import { useFetching } from './useFetching.js';
+import {useErrorHandler} from "./useErrorHandler.js"
 
 export const useInventory = () => {
     const [inventory, setInventory] = useState([])
-    const [fetchingAvailableItems, isLoading, error] =
-        useFetching(getSelectedItems);
+    const [fetchingAvailableItems, isLoading] = useFetching(getSelectedItems);
+    const {handleHookError} = useErrorHandler()
+
 
     async function getSelectedItems() {
         try {
@@ -17,7 +19,7 @@ export const useInventory = () => {
             }
             setInventory(data);
         } catch (error) {
-            return Promise.reject(error);
+            handleHookError(error, "useInventory", { action : "getSelectedItems"})
         }
     }
 
@@ -36,14 +38,11 @@ export const useInventory = () => {
             const itemsObject = inventory.map((item, index) => {
                     return ({quantity: item.quantity, slug: item.slug })
                 });
-
-            await setReservedItems(itemsObject).catch(
-              (error) => Promise.reject(error)
-            );
+            await setReservedItems(itemsObject)
         } catch(error) {
-            return Promise.reject(error.message)
+            handleHookError(error, "useInventory", { action : "reserve"})
         }
     }
 
-    return [inventory, isLoading, error, reserve];
+    return [inventory, isLoading, reserve];
 };

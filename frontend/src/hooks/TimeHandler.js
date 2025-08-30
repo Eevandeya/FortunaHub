@@ -4,41 +4,48 @@ import { useFetching } from './useFetching.js';
 import TimeUtils from '../../utils/time_utils.js';
 import useConfig from './useConfig.js';
 import { parse } from 'date-fns';
+import { useErrorHandler } from './useErrorHandler.js';
 
 export function useAvailableTimes(selectedDate) {
   const [availableTime, setAvailableTime] = useState([]);
-  const [fetching, isLoading, error] = useFetching(fetchTimes);
+  const [fetching, isLoading] = useFetching(fetchTimes);
+  const {handleHookError, handleApiError} = useErrorHandler()
 
   async function fetchTimes() {
-    if (!selectedDate) {
-      throw new Error(
-        'Не выбрана дата бронирования. Вернитесь и выберите дату'
-      );
+    try{
+      if (!selectedDate) {
+        throw new Error(
+          'Не выбрана дата бронирования. Вернитесь и выберите дату'
+        );
+      }
+      if (isNaN(Date.parse(selectedDate))) {
+        throw new Error('Неверный формат даты.');
+      }
+    } catch(error) {
+      handleHookError(error, "useAvailableTimes")
     }
-    if (isNaN(Date.parse(selectedDate))) {
-      throw new Error('Неверный формат даты.');
-    }
-    const free_time = await getAvailableTimes(selectedDate);
-    setAvailableTime(free_time);
 
     try {
       const free_time = await getAvailableTimes(selectedDate);
       setAvailableTime(free_time);
     } catch (error) {
-      throw new Error(error?.message);
+      handleApiError(error, {type : "api_operation", action : "fetchTimes"})
     }
   }
   useEffect(() => {
-    fetching();
+    if(selectedDate) {
+      fetching();
+    }
   }, [selectedDate]);
 
-  return [availableTime, isLoading, error];
+  return [availableTime, isLoading];
 }
 
 export function useTimeSlot() {
-  const [bookingError, setBookingError] = useState(null);
+
+  const {handleHookError, handleApiError} = useErrorHandler()
   const [isBooking, setIsBooking] = useState(false);
-  const { config, error } = useConfig();
+  const config = useConfig();
 
   const bookTimeSlot = async (
     startTime,
@@ -73,19 +80,18 @@ export function useTimeSlot() {
       if (!isAvailable) {
         throw new Error('Выбранное время уже занято');
       }
-
-      await setTime(selectedDate, { start: startTime, end: endTime })
-        .then(() => setIsBooking(true))
-        .catch((error) => {
-          console.error(`An unexpected error has occured: ${error.message}`);
-          setBookingError(error.message);
+      } catch (error) {
+        handleHookError(error, "useTimeSlot")
+        setIsBooking(false);
+      }
+      try {
+        await setTime(selectedDate, { start: startTime, end: endTime })
+        setIsBooking(true)
+      } catch(error) {
+          handleApiError(error, { type: "api_operation", action: "setTime" })
           setIsBooking(false);
-        });
-    } catch (error) {
-      setBookingError(error.message);
-      setIsBooking(false);
-    }
+      }
   };
 
-  return [bookTimeSlot, isBooking, bookingError];
+  return [bookTimeSlot, isBooking];
 }
