@@ -7,8 +7,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from backend.apps.authentication.auth import APIKeyHeaderAuthentication
+from backend.apps.bookings.docs import create_booking_schema, get_free_slots_schema
 from backend.apps.bookings.serializers import (
-    BookingSerializer,
+    BookingCreateSerializer,
+    BookingResponseSerializer,
     FreeSlotsResponseSerializer,
 )
 from backend.services.booking_service import get_free_booking_time
@@ -18,6 +20,7 @@ class FreeBookingTimeView(APIView):
     permission_classes = [AllowAny]
     authentication_classes = [APIKeyHeaderAuthentication]
 
+    @get_free_slots_schema
     def get(self, request: Request) -> Response:
         date_str = request.query_params.get("date")
         if date_str is None:
@@ -38,13 +41,14 @@ class FreeBookingTimeView(APIView):
 
 
 class BookingCreateView(APIView):
+    # TODO: maybe optimize with prefetching inventory items and customers?
     permission_classes = [AllowAny]  # TODO: Web client can't access this endpoint
     authentication_classes = [APIKeyHeaderAuthentication]
 
+    @create_booking_schema
     def post(self, request: Request) -> Response:
-        serializer = BookingSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(
-            {"message": "Booking created successfully."}, status=status.HTTP_201_CREATED
-        )
+        request_serializer = BookingCreateSerializer(data=request.data)
+        request_serializer.is_valid(raise_exception=True)
+        booking = request_serializer.save()
+        response_serializer = BookingResponseSerializer(booking)
+        return Response(response_serializer.data, status=status.HTTP_201_CREATED)

@@ -15,7 +15,8 @@ dependencies = [
     "pytz (>=2025.2,<2026.0)",
     "psycopg2 (>=2.9.10,<3.0.0)",
     "python-decouple (>=3.8,<4.0)",
-    "phonenumbers (>=9.0.10,<10.0.0)"
+    "phonenumbers (>=9.0.10,<10.0.0)",
+    "drf-spectacular (>=0.28.0,<0.29.0)"
 ]
 
 [tool.poetry]

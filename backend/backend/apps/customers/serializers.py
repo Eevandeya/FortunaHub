@@ -8,7 +8,7 @@ from backend.apps.customers.models import Customer
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
-        fields = ["nickname", "phone_number"]
+        fields = ["id", "nickname", "phone_number"]
         extra_kwargs = {
             "phone_number": {
                 "validators": [
@@ -16,6 +16,7 @@ class CustomerSerializer(serializers.ModelSerializer):
                 ],  # excluding the UniqueValidator
             },
         }
+        read_only_fields = ["id"]
 
     def validate_phone_number(self, value: str) -> str:
         try:

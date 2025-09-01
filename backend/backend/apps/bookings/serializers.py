@@ -6,7 +6,10 @@ from rest_framework import serializers
 
 from backend.apps.bookings.models import Booking
 from backend.apps.customers.serializers import CustomerSerializer
-from backend.apps.inventory.serializers import BookingItemSerializer
+from backend.apps.inventory.serializers import (
+    BookingItemRequestSerializer,
+    BookingItemResponseSerializer,
+)
 from backend.services.booking_service import TimeSlot
 from backend.services.customer_service import handle_customer_visit
 from backend.services.inventory_service import (
@@ -17,6 +20,10 @@ EXTERNAL_NON_FIELD_ERRORS = "non_field_errors"
 
 
 class TimeSlotSerializer(serializers.Serializer):
+    # These fields are declared for openAPI schemas
+    start = serializers.TimeField(format="%H:%M", read_only=True)
+    end = serializers.TimeField(format="%H:%M", read_only=True)
+
     def to_representation(self, obj: TimeSlot) -> dict:
         tz = get_default_timezone()
         return {
@@ -30,9 +37,12 @@ class FreeSlotsResponseSerializer(serializers.Serializer):
     free_slots = TimeSlotSerializer(many=True)
 
 
-class BookingSerializer(serializers.Serializer):
+class BookingCreateSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    created = serializers.DateTimeField(read_only=True)
+
     customer = CustomerSerializer(required=True)
-    items = BookingItemSerializer(many=True, required=False)
+    items = BookingItemRequestSerializer(many=True, required=False, write_only=True)
 
     start_datetime = serializers.DateTimeField(required=True)
     end_datetime = serializers.DateTimeField(required=True)
@@ -108,3 +118,21 @@ class BookingSerializer(serializers.Serializer):
             raise serializers.ValidationError({"items": item_errors})
 
         return booking
+
+
+class BookingResponseSerializer(serializers.ModelSerializer):
+    customer = CustomerSerializer()
+    items = BookingItemResponseSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Booking
+        fields = [
+            "id",
+            "created",
+            "customer",
+            "start_datetime",
+            "end_datetime",
+            "visitors_count",
+            "preferred_contact_method",
+            "items",
+        ]
