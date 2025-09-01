@@ -18,7 +18,7 @@ from backend.apps.customers.models import Customer
 class Booking(models.Model):
     class ContactMethod(models.TextChoices):
         PHONE = "phone", "Phone"
-        WHATSUP = "whatsapp", "WhatsApp"
+        WHATSAPP = "whatsapp", "WhatsApp"
         TELEGRAM = "telegram", "Telegram"
 
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
