@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-
 const getCSRFToken = () => {
-  return document.cookie.match(/csrftoken=[^;]*/)?.[1];
+    return document.cookie.match(/csrftoken=[^;]*/)?.[1];
 };
 
 const api_handler = axios.create({
-  //создали кастомный axios
-  baseURL: import.meta.env.VITE_DJANGO_API_URL, // Берем URL из файла. Позволяет указывать только путь
+    //создали кастомный axios
+    baseURL: import.meta.env.VITE_DJANGO_API_URL, // Берем URL из файла. Позволяет указывать только путь
+    headers: { 'X-API-KEY': 'api-secret-key' },
 });
 /*
 api_handler.interceptors.request.use(
