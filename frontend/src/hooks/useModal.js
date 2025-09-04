@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 
 const useModal = () => {
-    const [modals, setModals] = useState({})
+    const [modals, setModals] = useState({});
 
     const openModal = useCallback((modalName, props = {}) => {
         setModals((prev) => ({
@@ -18,9 +18,9 @@ const useModal = () => {
     }, []);
 
     const closeAllModals = useCallback(() => {
-        setModals({})
+        setModals({});
     }, []);
 
     return [modals, openModal, closeModal, closeAllModals];
-}
+};
 export default useModal;
