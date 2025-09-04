@@ -19,7 +19,9 @@
     "eslint-plugin-prettier": "^5.2.3",
     "prettier": "^3.5.3",
     "react": "^19.0.0",
+    "react-datepicker": "^8.7.0",
     "react-dom": "^19.0.0",
+    "react-error-boundary": "^6.0.0",
     "react-hook-form": "^7.62.0"
   },
   "devDependencies": {
