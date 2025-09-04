@@ -1,103 +1,176 @@
 import { useBooking } from '@hooks/useBooking.js';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useErrorHandler } from '@hooks/useErrorHandler.js';
 import { useForm } from 'react-hook-form';
 import Select from '@components.common/select/Select.jsx';
 import bookingHandler from '@root.api/bookingHandler.js';
 import Modal from '@components.features/Modal/Modal.jsx';
+import { VisitorsCountDisplay } from '@components.common/display/numberDisplay.jsx';
+import TransparentButton from '@components.common/button/transparentButton.jsx';
 
-
-const BookingConfirm = ({modalActive, setModalActive}) =>
-{
-
-    const { getBookingData, setCustomerInfo, setVisitorsCount, setPreferredContactMethod, visitors_count, preferred_contact_method } = useBooking();
-    const { handleApiError } = useErrorHandler();
-    const { register, handleSubmit, formState: {errors, isSubmitting, isValid}} = useForm(
-      {
-          defaultValues : {
-              nickname : '',
-              phone_number: ''
-          }
-      })
+const BookingConfirm = ({ modalActive, setModalActive }) => {
+    const [visitors, setVisitors] = useState(0);
+    const {
+        getBookingData,
+        setCustomerInfo,
+        setVisitorsCount,
+        setPreferredContactMethod,
+        visitors_count,
+        preferred_contact_method,
+    } = useBooking();
+    const { handleApiError, handleError } = useErrorHandler();
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting, isValid },
+    } = useForm({
+        defaultValues: { nickname: undefined, phone_number: undefined },
+    });
 
     useEffect(() => {
-
-        if(isSubmitting && isValid) { setModalActive()}
-    }, [isSubmitting])
-
-    const bookingSubmitHandler = async (data) => {
-        if (isValid) {
-            setCustomerInfo({nickname: data.nickname, phone_number : data.phone_number})
-            try {
-                const {customer, items, timeSlot, visitors_count, preferred_contact_method} = getBookingData();
-                await bookingHandler(customer, items, timeSlot, visitors_count, preferred_contact_method)
-
-            } catch(error) {
-                handleApiError(error, {at : "BookingConfirm"})
-            }
+        if (isSubmitting && isValid) {
+            setModalActive();
         }
-    }
+    }, [isSubmitting]);
 
-    const onError = (errors, e) => {
-        console.log(errors)
-    }
+    const bookingSubmitHandler = useCallback(
+        async (data) => {
+            if (isValid) {
+                const {
+                    customer,
+                    items,
+                    timeSlot,
+                    visitors_count,
+                    preferred_contact_method,
+                } = getBookingData();
+                const customerData = {
+                    nickname: data.nickname ?? customer.nickname,
+                    phone_number: data.phone_number ?? customer.phone_number, //TODO resolve problem with silly fields in BookingContext(customer and visitors_count are unused)
+                };
+                setCustomerInfo(customerData);
+                setVisitorsCount(visitors);
+                try {
+                    await bookingHandler(
+                        customerData,
+                        items,
+                        timeSlot,
+                        visitors,
+                        preferred_contact_method
+                    );
+                } catch (error) {
+                    handleApiError(error, { at: 'BookingConfirm' });
+                }
+            }
+        },
+        [
+            getBookingData,
+            handleApiError,
+            isValid,
+            setCustomerInfo,
+            setVisitorsCount,
+            visitors,
+        ]
+    );
+
+    const onError = (errors) => {
+        handleError(errors, 'component', { at: 'onError', type: 'validate' });
+    };
 
     return (
-      <Modal active={modalActive} setActive={setModalActive}>
-          <h1>Оформление заказа</h1>
-          <form onSubmit={handleSubmit(bookingSubmitHandler, onError)}>
-              <div className="field">
-                  <label className="label">Имя</label>
-                  <div className="control">
-                      <input {...register("nickname",
-                        { required : "Имя обязательно",
+        <Modal active={modalActive} setActive={setModalActive}>
+            <h1>Оформление заказа</h1>
+            <form onSubmit={handleSubmit(bookingSubmitHandler, onError)}>
+                <div className='field'>
+                    <label className='label' htmlFor='name'>
+                        Имя
+                    </label>
+                    <div className='control'>
+                        <input
+                            {...register('nickname', {
+                                required: 'Имя обязательно',
                                 validate: (value) => {
-                            if(!/[a-z]+/ig.test(value))
-                                return "Неккоректное имя"
-                        }})} placeholder="Введите имя" type="text" className="input"/>
-                  </div>
-              </div>
-              {errors.nickname && <div className="field"><p className="has-text-danger">{errors.nickname?.message}</p></div>}
-              <div className="field">
-                  <label className="label">Номер телефона</label>
-                  <div className="control">
-                      <input {...register("phone_number",
-                        { required: "Номер телефона обязателен",
-                                validate: (value) => {
-                            if(!/[78]\d{10}/.test(value))
-                                return "Неккоректный номер телефона"
-                        }})}
-                             type="text" className="input" placeholder="Введите номер телефона"/>
-                  </div>
-              </div>
-              {errors.phone_number && <div className="field"><p className="has-text-danger">{errors.phone_number?.message}</p></div>}
-              <div className="field">
-                  <label className='label'>Выберите способ связи</label>
-                  <Select options={['Whatsapp', 'Telegram', 'Phone']} value={preferred_contact_method} onChange={setPreferredContactMethod}
-                            defaultValue={'Метод связи'}
+                                    if (!/[a-z]+/gi.test(value))
+                                        return 'Неккоректное имя';
+                                },
+                            })}
+                            placeholder='Введите имя'
+                            type='text'
+                            className='input'
+                            id='name'
                         />
-              </div>
-              <div className='field is-grouped is-left'>
-                  <div className="control">
-                      <button type="button" onClick={() => setVisitorsCount(visitors_count - 1)}>&#8212;</button>
-                  </div>
-                  <p style={{backgroundColor: "gray", minWidth: "50px", borderRadius: "30px", color: "white", display: "grid", justifyContent : "center"}}>{visitors_count}</p>
-                  <div className="control">
-                      <button type="button" onClick={() => setVisitorsCount(visitors_count + 1)}>&#43;</button>
-                  </div>
-              </div>
-              <div className='field is-grouped is-right'>
-                  <div className='control'>
-                      <input type='reset' className='button is-danger'/>
-                  </div>
-                  <div className="control">
-                      <input type='submit' className='button is-success'/>
-                  </div>
-            </div>
-
-          </form>
-      </Modal>
-    )
-}
+                    </div>
+                </div>
+                {errors.nickname && (
+                    <div className='field'>
+                        <p className='has-text-danger'>
+                            {errors.nickname?.message}
+                        </p>
+                    </div>
+                )}
+                <div className='field'>
+                    <label className='label' htmlFor='phone_number'>
+                        Номер телефона
+                    </label>
+                    <div className='control'>
+                        <input
+                            {...register('phone_number', {
+                                required: 'Номер телефона обязателен',
+                                validate: (value) => {
+                                    if (!/[78]\d{10}/.test(value))
+                                        return 'Неккоректный номер телефона';
+                                },
+                            })}
+                            type='text'
+                            className='input'
+                            placeholder='Введите номер телефона'
+                            id='phone_number'
+                        />
+                    </div>
+                </div>
+                {errors.phone_number && (
+                    <div className='field'>
+                        <p className='has-text-danger'>
+                            {errors.phone_number?.message}
+                        </p>
+                    </div>
+                )}
+                <div className='field'>
+                    <label className='label'>Выберите способ связи</label>
+                    <Select
+                        options={['whatsapp', 'telegram', 'phone']}
+                        value={preferred_contact_method}
+                        onChange={setPreferredContactMethod}
+                        defaultValue={'Метод связи'}
+                    />
+                </div>
+                <div className='field is-grouped is-left'>
+                    <div className='control'>
+                        <TransparentButton
+                            onClick={() => setVisitors(visitors - 1)}
+                            disabled={visitors <= 0}>
+                            &#8212;
+                        </TransparentButton>
+                    </div>
+                    <VisitorsCountDisplay data={visitors} />
+                    <div className='control'>
+                        <TransparentButton
+                            onClick={() => setVisitors(visitors + 1)}
+                            disabled={false}>
+                            &#43;
+                        </TransparentButton>
+                    </div>
+                </div>
+                <div className='field is-grouped is-right'>
+                    <div className='control'>
+                        <input type='reset' className='button is-danger' />
+                    </div>
+                    <div className='control'>
+                        <input type='submit' className='button is-success' />
+                    </div>
+                </div>
+            </form>
+        </Modal>
+    );
+};
 
 export default BookingConfirm;
