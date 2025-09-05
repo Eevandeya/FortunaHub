@@ -146,16 +146,22 @@ class BookingPriceRequestSerializer(serializers.Serializer):
     end_datetime = serializers.DateTimeField(required=True)
 
 
+class CurrencySerializer(serializers.Serializer):
+    code = serializers.SerializerMethodField(read_only=True)
+
+    def get_code(self, _obj: BookingPricingResult) -> str:
+        return settings.CASH_CURRENCY_CODE
+
+
 class BookingPriceResponseSerializer(serializers.Serializer):
     base_price = serializers.DecimalField(max_digits=10, decimal_places=2)
     items_price = serializers.DecimalField(max_digits=10, decimal_places=2)
     total = serializers.DecimalField(max_digits=10, decimal_places=2)
+    currency = CurrencySerializer(source="*")
+    duration = serializers.SerializerMethodField()
 
-    def to_representation(self, instance: BookingPricingResult) -> dict[str, str]:
-        data = super().to_representation(instance)
-        total_seconds = int(instance.duration.total_seconds())
+    def get_duration(self, obj: BookingPricingResult) -> str:
+        total_seconds = int(obj.duration.total_seconds())
         hours = total_seconds // 3600
         minutes = (total_seconds % 3600) // 60
-        data["duration"] = f"{hours:02}:{minutes:02}"
-        data["code"] = settings.CASH_CURRENCY_CODE
-        return data
+        return f"{hours:02}:{minutes:02}"
