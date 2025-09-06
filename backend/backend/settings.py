@@ -109,10 +109,9 @@ CORS_ALLOW_HEADERS = [
     "user-agent",
     "x-csrftoken",
     "x-requested-with",
-    "x-api-key",  # Добавляем ваш кастомный заголовок
+    "x-api-key",
 ]
 
-# Разрешаем preflight-запросы
 CORS_ALLOW_METHODS = [
     "DELETE",
     "GET",
