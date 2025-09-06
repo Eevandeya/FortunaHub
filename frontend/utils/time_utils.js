@@ -20,6 +20,7 @@ export default class TimeUtils {
     try {
       const normal_date_value = parse(value, format, new Date());
       return this.getMinutesSinceMidnight(normal_date_value);
+      // eslint-disable-next-line no-unused-vars
     } catch (error) {
       return new Error(
         `Неверный формат переданных данных. Необходимо передать данные в формате: ${format}`

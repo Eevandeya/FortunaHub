@@ -38,7 +38,8 @@ export function useAvailableTimes(selectedDate) {
 export function useTimeSlot() {
   const [bookingError, setBookingError] = useState(null);
   const [isBooking, setIsBooking] = useState(false);
-  const { config, error } = useConfig();
+
+  const { config } = useConfig();
 
   const bookTimeSlot = async (
     startTime,

@@ -70,7 +70,7 @@ export default function Time({ modalActive, setModalActive }) {
       setModalActive(false);
       setBorderTime({ start: null, end: null });
     }
-  }, [isBooking]);
+  }, [isBooking, setModalActive]);
 
   useEffect(() => {
     const getOptions = () => {
