@@ -1,41 +1,36 @@
 import datetime as dt
+from decimal import Decimal
 from typing import Any
 
 from django.core.cache import cache
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils import timezone
 
-from backend.settings import DEFAULT_CONFIG
+from backend.apps.core.exceptions import MissingInitialDataError
 
 
-# when does database clean itself from outdated entries?
 class SaunaConfig(models.Model):
-    opening_time = models.TimeField(default=DEFAULT_CONFIG["opening_time"])
-    closing_time = models.TimeField(default=DEFAULT_CONFIG["closing_time"])
-    max_visitors_count = models.PositiveSmallIntegerField(
-        default=DEFAULT_CONFIG["max_people_count"]
-    )
-    min_time_from_now_to_booking = models.DurationField(
-        default=DEFAULT_CONFIG["min_time_from_now_to_booking"]
-    )
-    min_booking_time = models.DurationField(default=DEFAULT_CONFIG["min_booking_time"])
-    min_time_between_bookings = models.DurationField(
-        default=DEFAULT_CONFIG["min_time_between_bookings"]
-    )
-    check_30_min_multiplicity = models.BooleanField(
-        default=DEFAULT_CONFIG["check_30_min_multiplicity"]
-    )
+    opening_time = models.TimeField()
+    closing_time = models.TimeField()
+    max_visitors_count = models.PositiveSmallIntegerField()
+    min_time_from_now_to_booking = models.DurationField()
+    min_booking_time = models.DurationField()
+    min_time_between_bookings = models.DurationField()
+    check_30_min_multiplicity = models.BooleanField()
     created = models.DateTimeField(auto_now_add=True)
 
-    def save(self, *args: tuple, **kwargs: dict[str, Any] | None) -> None:
+    def save(self, *args: tuple, **kwargs: dict[str, Any]) -> None:
         super().save(*args, **kwargs)
         cache.set("sauna_config", self)
 
     @classmethod
     def get(cls) -> "SaunaConfig":
         config = cache.get("sauna_config")
-        if not config:
-            config = cls.objects.first() or cls.objects.create()
+        if config is None:
+            config = cls.objects.order_by("-created").first()
+            if config is None:
+                raise MissingInitialDataError
             cache.set("sauna_config", config)
         return config
 
@@ -75,3 +70,40 @@ class SaunaConfig(models.Model):
 
     def __str__(self) -> str:
         return f"Config on {self.created.astimezone(timezone.get_default_timezone()).strftime('%d.%m.%Y %H:%M')}"
+
+
+class Pricing(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    description = models.CharField(max_length=255)
+    updated = models.DateTimeField(auto_now=True)
+    price = models.DecimalField(
+        max_digits=10, decimal_places=2, validators=[MinValueValidator(0.01)]
+    )
+
+    def save(self, *args: tuple, **kwargs: dict[str, Any]) -> None:
+        super().save(*args, **kwargs)
+        if self.name in ("hourly_rent", "prepayment"):
+            cache.set(f"pricing:{self.name}", self)
+
+    @classmethod
+    def get_hourly_rent_and_prepayment(
+        cls,
+    ) -> tuple[
+        Decimal, Decimal
+    ]:  # Maybe it is worth dividing into 2 independent methods
+        hourly_rent = cache.get("pricing:hourly_rent")
+        if hourly_rent is None:
+            hourly_rent = cls.objects.get(name="hourly_rent")
+            if hourly_rent is None:
+                raise MissingInitialDataError
+            cache.set("pricing:hourly_rent", hourly_rent)
+        prepayment = cache.get("pricing:prepayment")
+        if prepayment is None:
+            prepayment = cls.objects.get(name="prepayment")
+            if prepayment is None:
+                raise MissingInitialDataError
+            cache.set("pricing:prepayment", prepayment)
+        return hourly_rent.price, prepayment.price
+
+    def __str__(self) -> str:
+        return f"{self.name} {self.price} RUB"

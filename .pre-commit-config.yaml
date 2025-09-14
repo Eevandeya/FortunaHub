@@ -1,6 +1,21 @@
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.12.7
+    rev: v0.12.11
     hooks:
       - id: ruff-check
+        name: ruff lint check (all but migrations)
+        exclude: '(^|.*/)migrations(/|$)'
+
+      - id: ruff-check
+        name: ruff lint check (data migrations)
+        files: '(^|.*/)migrations/.*_data\.py$'
+
       - id: ruff-format
+        name: ruff lint check (all but migrations)
+        exclude: '(^|.*/)migrations(/|$)'
+        args: [ --check ]
+
+      - id: ruff-format
+        name: ruff format check (data migrations)
+        files: '(^|.*/)migrations/.*_data\.py$'
+        args: [ --check ]

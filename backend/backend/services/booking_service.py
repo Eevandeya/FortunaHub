@@ -8,7 +8,7 @@ from backend.apps.bookings.models import Booking
 from backend.apps.core.models import SaunaConfig
 
 
-@dataclass
+@dataclass(frozen=True)
 class TimeSlot:
     start: dt.datetime
     end: dt.datetime
@@ -17,7 +17,7 @@ class TimeSlot:
         return self.end - self.start
 
 
-@dataclass
+@dataclass(frozen=True)
 class FreeSlots:
     date: dt.date
     free_slots: list[TimeSlot]

@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.exceptions import NON_FIELD_ERRORS
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import transaction
@@ -15,6 +16,7 @@ from backend.services.customer_service import handle_customer_visit
 from backend.services.inventory_service import (
     process_booking_items,
 )
+from backend.services.pricing_service import BookingPricingResult
 
 EXTERNAL_NON_FIELD_ERRORS = "non_field_errors"
 
@@ -136,3 +138,30 @@ class BookingResponseSerializer(serializers.ModelSerializer):
             "preferred_contact_method",
             "items",
         ]
+
+
+class BookingPriceRequestSerializer(serializers.Serializer):
+    items = BookingItemRequestSerializer(many=True, required=False)
+    start_datetime = serializers.DateTimeField(required=True)
+    end_datetime = serializers.DateTimeField(required=True)
+
+
+class CurrencySerializer(serializers.Serializer):
+    code = serializers.SerializerMethodField(read_only=True)
+
+    def get_code(self, _obj: BookingPricingResult) -> str:
+        return settings.CASH_CURRENCY_CODE
+
+
+class BookingPriceResponseSerializer(serializers.Serializer):
+    base_price = serializers.DecimalField(max_digits=10, decimal_places=2)
+    items_price = serializers.DecimalField(max_digits=10, decimal_places=2)
+    total = serializers.DecimalField(max_digits=10, decimal_places=2)
+    currency = CurrencySerializer(source="*")
+    duration = serializers.SerializerMethodField()
+
+    def get_duration(self, obj: BookingPricingResult) -> str:
+        total_seconds = int(obj.duration.total_seconds())
+        hours = total_seconds // 3600
+        minutes = (total_seconds % 3600) // 60
+        return f"{hours:02}:{minutes:02}"
