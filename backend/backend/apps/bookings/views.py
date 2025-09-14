@@ -9,11 +9,9 @@ from rest_framework.views import APIView
 from backend.apps.authentication.auth import APIKeyHeaderAuthentication
 from backend.apps.bookings.docs import create_booking_schema, get_free_slots_schema
 from backend.apps.bookings.serializers import (
+    BookingCreateSerializer,
     BookingPriceRequestSerializer,
     BookingPriceResponseSerializer,
-    BookingCalculationSerializer,
-    BookingPricingResultSerializer,
-    BookingCreateSerializer,
     BookingResponseSerializer,
     FreeSlotsResponseSerializer,
 )

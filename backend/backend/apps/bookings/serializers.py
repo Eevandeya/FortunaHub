@@ -141,7 +141,7 @@ class BookingResponseSerializer(serializers.ModelSerializer):
 
 
 class BookingPriceRequestSerializer(serializers.Serializer):
-    items = BookingItemSerializer(many=True, required=False)
+    items = BookingItemRequestSerializer(many=True, required=False)
     start_datetime = serializers.DateTimeField(required=True)
     end_datetime = serializers.DateTimeField(required=True)
 
