@@ -1,24 +1,16 @@
-import apiHandler from './api.js';
+import baseApi from './api.js';
 
-/**
- * Fetches available booking time slots for a specific date
- * @param {string|Date} date - Date to get available slots for (ISO string or Date object)
- * @returns {Promise<Array>} Promise resolving to array of free time slots
- * @throws {Promise<string>} Promise rejecting with error message if request fails
- * @example
- * // Get available slots for today
- * getAvailableTimes(new Date())
- *   .then(slots => console.log(slots))
- *   .catch(error => console.error(error));
- */
-export const getAvailableTimes = async (date) => {
-    try {
-        const timeResponse = await apiHandler.get('/api/bookings/free-slots/', {
-            params: { date: date },
-        });
+const timesApi = baseApi.injectEndpoints({
+    endpoints: (build) => ({
+        getAvailableTimes: build.query({
+            query: (times) => ({
+                url: 'bookings/free-slots/',
+                params: { date: times.date },
+            }),
+            providesTags: ['Booking'],
+        }),
+    }),
+    overrideExisting: true,
+});
 
-        return timeResponse.data?.free_slots ?? [];
-    } catch (error) {
-        return Promise.reject(error.message);
-    }
-};
+export const { useGetAvailableTimesQuery } = timesApi;
