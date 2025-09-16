@@ -1,103 +1,67 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { getAvailableTimes } from '@root.api/timeSlotsApi.js';
-import TimeUtils from '@root.utils/timeUtils.js';
-import useConfig from '@hooks/useConfig.js';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import TimeUtils from '@root.utils/time_utils.js';
 import { format } from 'date-fns';
 import { useErrorHandler } from '@hooks/useErrorHandler.js';
-import { useBooking } from '@hooks/useBooking';
-import { useDebouncedCallback } from '@hooks/useDebouncedCallback.js';
+import { setTimeSlot } from '@store/bookingSlice.js';
+import { useDispatch } from 'react-redux';
+import { useGetSaunaConfigQuery } from '../../api/saunaConfig.js';
+import { useGetAvailableTimesQuery } from '../../api/timeSlotsApi.js';
+import { skipToken } from '@reduxjs/toolkit/query';
 
 export function useAvailableTimes(selectedDate) {
-    const [availableTime, setAvailableTime] = useState([]);
+    const [freeSlots, setFreeSlots] = useState([]);
     const { handleHookError, handleApiError } = useErrorHandler();
-    const [isLoading, setIsLoading] = useState(false);
-    const prevData = useRef();
+    const { data: slots, isLoading } = useGetAvailableTimesQuery({
+        date: format(selectedDate, 'yyyy-MM-dd') ?? skipToken,
+    });
 
-    const fetchTimes = useCallback(
-        async (date) => {
-            try {
-                setIsLoading(true);
-                if (!selectedDate) {
-                    throw new Error(
-                        'The booking date has not been selected. Please go back and select a date.'
-                    );
-                }
-                const formattedSelectedDate = format(date, 'yyyy-MM-dd');
-
-                if (prevData.current === formattedSelectedDate) {
-                    setIsLoading(false);
-                    return;
-                }
-
-                try {
-                    const freeTime = await getAvailableTimes(
-                        formattedSelectedDate
-                    );
-                    setAvailableTime(freeTime);
-                    prevData.current = formattedSelectedDate;
-                } catch (error) {
-                    handleApiError(error, {
-                        type: 'api_operation',
-                        action: 'fetchTimes',
-                    });
-                }
-            } catch (error) {
-                handleHookError(error, 'useAvailableTimes');
-            } finally {
-                setIsLoading(false);
+    const fetchTimes = useCallback(() => {
+        try {
+            if (!selectedDate) {
+                throw new Error(
+                    'Не выбрана дата бронирования. Вернитесь и выберите дату'
+                );
             }
-        },
-        [handleApiError, selectedDate]
-    );
-
-    const debouncedCallback = useDebouncedCallback(fetchTimes, 300);
-
-    useEffect(() => {
-        if (selectedDate) {
-            debouncedCallback(selectedDate);
-        } else {
-            setAvailableTime([]);
+            setFreeSlots(slots.free_slots);
+        } catch (error) {
+            handleHookError(error, 'useAvailableTimes');
         }
-    }, [selectedDate, debouncedCallback]);
+    }, [handleApiError, selectedDate]);
 
     useEffect(() => {
-        return () => {
-            debouncedCallback.cancel();
-        };
-    }, [debouncedCallback]);
+        if (selectedDate && slots) {
+            fetchTimes(selectedDate);
+        }
+    }, [selectedDate, slots]);
 
-    return [availableTime, isLoading];
+    return [freeSlots, isLoading];
 }
 
 export function useTimeSlot() {
     const { handleHookError } = useErrorHandler();
     const [isBooking, setIsBooking] = useState(false);
-    const { config } = useConfig();
-    const { setTimeSlot } = useBooking();
+    const { data: config, isLoading } = useGetSaunaConfigQuery();
+    const dispatch = useDispatch();
 
-    const configRef = useRef(config);
     const handleHookErrorRef = useRef(handleHookError);
-    const setTimeSlotRef = useRef(setTimeSlot);
 
     useEffect(() => {
-        configRef.current = config;
         handleHookErrorRef.current = handleHookError;
-        setTimeSlotRef.current = setTimeSlot;
-    }, [config, handleHookError, setTimeSlot]);
+    }, [handleHookError]);
 
     const bookTimeSlot = (start, end, selectedDate, availableTimes) => {
         try {
             if (!start || !end || !selectedDate) {
-                throw new Error('No time or date selected');
+                throw new Error('Не выбрано время или дата');
             }
 
             const canBookingFromNow = TimeUtils.isBookingAvailable(
                 start,
-                configRef.current.min_time_from_now_to_booking
+                config.min_time_from_now_to_booking
             );
 
             if (!canBookingFromNow)
-                throw new Error("You can't select the past tense");
+                throw new Error('Нельзя выбрать прошедшее время');
 
             const isAvailable = TimeUtils.isTimeSlotAvailable(
                 availableTimes,
@@ -105,12 +69,13 @@ export function useTimeSlot() {
                 selectedDate
             );
             if (!isAvailable) {
-                throw new Error('The selected time is already taken.');
+                throw new Error('Выбранное время уже занято');
             }
 
-            const [startISOS, endISOS] = TimeUtils.formatToIso([start, end]);
+            const [startISOS, endISOS] = TimeUtils.formatToIsos([start, end]);
+            const timeSlot = { start: startISOS, end: endISOS };
 
-            setTimeSlot({ start: startISOS, end: endISOS });
+            dispatch(setTimeSlot({ timeSlot }));
             setIsBooking(true);
             return { success: undefined };
         } catch (error) {
@@ -119,5 +84,5 @@ export function useTimeSlot() {
         }
     };
 
-    return [bookTimeSlot, setIsBooking, isBooking];
+    return [bookTimeSlot, setIsBooking, isBooking, isLoading];
 }
