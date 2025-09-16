@@ -1,12 +1,12 @@
-import { useAvailableTimes, useTimeSlot } from '@hooks/timeHandler.js';
-import Modal from '@components.features/Modal/Modal.jsx';
+import { useAvailableTimes, useTimeSlot } from '@hooks/TimeHandler.js';
+import Modal from '@components.common/Modal/Modal.jsx';
 import Cell from '@components.common/cell/Cell.jsx';
 import { useEffect, useState, useMemo, useCallback } from 'react';
-import useConfig from '@hooks/useConfig.js';
 import { addMinutes, format, isWithinInterval, parse } from 'date-fns';
-import TimeUtils from '@root.utils/timeUtils.js';
+import TimeUtils from '@root.utils/time_utils.js';
 import Loading from '@components.common/loader/Loading.jsx';
 import CloseButton from '@components.common/button/closeButton.jsx';
+import { useGetSaunaConfigQuery } from '../../../../api/saunaConfig.js';
 
 const checkConditions = ({ minBookingTime, start, end }) => {
     const format = 'HH:mm';
@@ -21,7 +21,7 @@ const checkConditions = ({ minBookingTime, start, end }) => {
 };
 
 export function Time({ modalActive, setModalActive, date }) {
-    const { config } = useConfig();
+    const { data: config } = useGetSaunaConfigQuery();
     const [availableTime, loading] = useAvailableTimes(date);
     const [bookTimeSlot, setIsBooking, isBooking] = useTimeSlot();
     const [borderTime, setBorderTime] = useState({ start: null, end: null });

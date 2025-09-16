@@ -1,6 +1,6 @@
 import { useEffect, useState, useId, useMemo, useCallback } from 'react';
 import { useInventory } from '@hooks/useInventory.jsx';
-import Modal from '@components.features/Modal/Modal.jsx';
+import Modal from '@components.common/Modal/Modal.jsx';
 import ItemHandler from '@components.common/goods/itemHandler.jsx';
 import { useErrorHandler } from '@hooks/useErrorHandler.js';
 import { Time } from '@components.features/TimeBookingPopup/Time.jsx';
@@ -8,19 +8,22 @@ import useModal from '@hooks/useModal.js';
 import DateSelector from '@components.common/date_picker/DatePicker.jsx';
 import { startOfDay } from 'date-fns';
 import BookingConfirm from '@components.features/BookingPopup/BookingConfirm.jsx';
-import { useBooking } from '@hooks/useBooking.js';
-import { ITEM_TYPE } from '@root.consts/constants.js';
+import { useSelector } from 'react-redux';
+import CountPriceUtils from '@root.utils/count_price_utils.js';
 
 const BookingDetail = ({ modalActive, setModalActive }) => {
     const [inventory, isLoading, reserve] = useInventory();
     const [items, setItems] = useState(null);
     const { handleApiError } = useErrorHandler();
-    const [modals, openModal, closeModal] = useModal();
+    const [modals, openModal, closeModal, closeAllModals] = useModal();
     const [date, setDate] = useState(new Date());
     const uniqueId = useId();
-    const { timeSlot } = useBooking();
+    const { timeSlot } = useSelector((state) => state.booking.order);
 
     const parsedInventory = useMemo(() => {
+        if (isLoading || !inventory) {
+            return;
+        }
         const itemsObject = inventory.map((item) => {
             return {
                 total: item.quantity ?? 0,
@@ -37,10 +40,16 @@ const BookingDetail = ({ modalActive, setModalActive }) => {
     }, [inventory]);
 
     useEffect(() => {
-        if (parsedInventory.length ?? 0 > 0) {
+        if (parsedInventory) {
             setItems(parsedInventory);
         }
     }, [parsedInventory]);
+
+    const resetItems = () => {
+        setItems((currentItems) =>
+            currentItems.map((item) => ({ ...item, quantity: 0 }))
+        );
+    };
 
     const handleIncrement = (item) => {
         setItems((prevItems) =>
@@ -66,6 +75,7 @@ const BookingDetail = ({ modalActive, setModalActive }) => {
         try {
             if (items) {
                 reserve(items);
+                resetItems();
             }
         } catch (error) {
             handleApiError(error, { at: 'AccessoriesRental' });
@@ -92,7 +102,9 @@ const BookingDetail = ({ modalActive, setModalActive }) => {
                             item={item}
                             count={item.quantity}
                             total={item.total}
-                            itemType={ITEM_TYPE[`${item.itemType}`]}
+                            itemType={
+                                CountPriceUtils.ITEM_TYPE[`${item.item_type}`]
+                            }
                             onIncrement={() => handleIncrement(item)}
                             onDecrement={() => handleDecrement(item)}
                         />
@@ -120,7 +132,7 @@ const BookingDetail = ({ modalActive, setModalActive }) => {
                         disabled={
                             !timeSlot?.start &&
                             !timeSlot?.end &&
-                            items?.every((item) => item.isAvailable())
+                            items?.every((item) => item.is_available())
                         }>
                         Забронировать
                     </button>
@@ -136,6 +148,7 @@ const BookingDetail = ({ modalActive, setModalActive }) => {
         <BookingConfirm
             modalActive={modals.bookingConfirm?.isActive}
             setModalActive={() => closeModal('bookingConfirm')}
+            closeAllModals={closeAllModals}
             key={`${uniqueId}-booking`}
         />,
     ];
