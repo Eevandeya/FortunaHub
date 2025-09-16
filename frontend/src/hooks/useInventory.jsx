@@ -1,36 +1,30 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { getItemsQuantity } from '@root.api/rentingItemsApi.js';
-import { useFetching } from '@hooks/useFetching.js';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useErrorHandler } from '@hooks/useErrorHandler.js';
-import { useBooking } from '@hooks/useBooking.js';
+import { addItem } from '@store/bookingSlice.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { reloadItems } from '@store/itemsSlice.js';
+import { useGetItemsQuantityQuery } from '../../api/rentingItemsApi.js';
+import { selectReload } from '@store/itemsSlice.js';
 
 export const useInventory = () => {
-    const [inventory, setInventory] = useState([]);
-    const [fetching, isLoading] = useFetching(getSelectedItems);
+    const {
+        data: inventoryData,
+        isLoading,
+        error,
+        isError,
+    } = useGetItemsQuantityQuery();
+    const reload = useSelector((state) => selectReload(state));
+    const [inventory, setInventory] = useState();
     const { handleHookError } = useErrorHandler();
-    const { addItem } = useBooking();
-    const isMountedRef = useRef(true);
+    const dispatch = useDispatch();
+    const isReloadRef = useRef(reload);
 
-    async function getSelectedItems() {
-        if (isLoading || !isMountedRef.current) return;
+    function getSelectedItems() {
+        if (isLoading) return;
 
-        try {
-            const data = await getItemsQuantity();
+        setInventory(inventoryData);
 
-            if (!Array.isArray(data))
-                throw new Error('Inventory data must be an array');
-            if (
-                !data.every(
-                    (item) =>
-                        typeof item === 'object' &&
-                        item !== null &&
-                        !Array.isArray(item)
-                )
-            ) {
-                throw new Error('Incorrect data in inventory');
-            }
-            setInventory(data);
-        } catch (error) {
+        if (isError) {
             handleHookError(error, 'useInventory', {
                 action: 'getSelectedItems',
             });
@@ -38,11 +32,12 @@ export const useInventory = () => {
     }
 
     useEffect(() => {
-        if (isMountedRef.current) {
-            fetching();
-            isMountedRef.current = false;
+        if (isReloadRef.current && inventoryData) {
+            getSelectedItems();
+            dispatch(reloadItems());
+            isReloadRef.current = reload;
         }
-    }, [fetching]);
+    }, [dispatch, getSelectedItems]);
 
     const reserve = useCallback(
         (items) => {
@@ -56,14 +51,14 @@ export const useInventory = () => {
                             !Array.isArray(item)
                     )
                 ) {
-                    throw new Error('Error in bath accessories');
+                    throw new Error('Ошибка в банных принадлежностях');
                 }
                 const selectItems = items.map((item) => ({
                     quantity: item.quantity,
                     slug: item.slug,
                 }));
 
-                addItem(selectItems);
+                dispatch(addItem({ items: selectItems }));
             } catch (error) {
                 handleHookError(error, 'useInventory', { action: 'reserve' });
             }
