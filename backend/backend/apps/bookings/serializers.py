@@ -145,6 +145,13 @@ class BookingPriceRequestSerializer(serializers.Serializer):
     start_datetime = serializers.DateTimeField(required=True)
     end_datetime = serializers.DateTimeField(required=True)
 
+    def validate(self, attrs: dict) -> dict:
+        if attrs["end_datetime"] <= attrs["start_datetime"]:
+            raise serializers.ValidationError(
+                {"end_datetime": "End datetime must be greater than start datetime."}
+            )
+        return attrs
+
 
 class CurrencySerializer(serializers.Serializer):
     code = serializers.SerializerMethodField(read_only=True)
