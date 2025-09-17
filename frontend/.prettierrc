@@ -5,7 +5,7 @@
     "bracketSpacing": true,
     "bracketSameLine": true,
     "trailingComma": "es5",
-    "objectWrap": "collapse",
+    "objectWrap" : "collapse",
     "proseWrap": "always",
     "tabWidth": 4
 }
