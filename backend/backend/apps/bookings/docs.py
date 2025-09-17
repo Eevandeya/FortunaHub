@@ -225,7 +225,7 @@ calculate_booking_price_schema = extend_schema(
     tags=[BOOKINGS_TAG],
     description=(
         "Calculates the booking price (no payment).\n\n"
-        "The response contains: total price, base price, items price, booking duration, and currency code. "
+        "The response contains: total price, base price, items price, booking duration, and currency code.\n\n"
         "`total` = `base_price` + `items_price`."
     ),
     request=BookingPriceRequestSerializer,
