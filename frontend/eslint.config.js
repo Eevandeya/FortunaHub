@@ -30,6 +30,11 @@ export default [
         'warn',
         { allowConstantExport: true },
       ],
+      'camelcase': ['error', {
+      properties: 'always',
+      ignoreDestructuring: true,
+      ignoreImports: true
+    }],
       'prettier/prettier': 'error',
     },
   },
