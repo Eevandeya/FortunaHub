@@ -8,7 +8,5 @@
     "objectWrap" : "collapse",
     "proseWrap": "always",
     "tabWidth": 4,
-    "rules": {
-      "camelcase": ["error", { "properties": "always" }]
-    }
+
 }
