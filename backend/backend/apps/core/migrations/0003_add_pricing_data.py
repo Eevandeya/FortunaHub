@@ -6,7 +6,7 @@ from django.db.backends.base.schema import BaseDatabaseSchemaEditor
 
 
 def create_default_pricing(apps: Apps, _: BaseDatabaseSchemaEditor) -> None:
-    pricing_model = apps.get_model("sauna", "Pricing")
+    pricing_model = apps.get_model("core", "Pricing")
 
     defaults = [
         {
