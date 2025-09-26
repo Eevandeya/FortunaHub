@@ -15,7 +15,7 @@ const BookingDetail = ({ modalActive, setModalActive }) => {
     const [inventory, isLoading, reserve] = useInventory();
     const [items, setItems] = useState(null);
     const { handleApiError } = useErrorHandler();
-    const [modals, openModal, closeModal, closeAllModal] = useModal();
+    const [modals, openModal, closeModal] = useModal();
     const [date, setDate] = useState(new Date());
     const uniqueId = useId();
     const { timeSlot } = useBooking();

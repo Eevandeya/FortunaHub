@@ -72,7 +72,7 @@ export function useAvailableTimes(selectedDate) {
 export function useTimeSlot() {
     const { handleHookError } = useErrorHandler();
     const [isBooking, setIsBooking] = useState(false);
-    const { config, error } = useConfig();
+    const { config } = useConfig();
     const { setTimeSlot } = useBooking();
 
     const configRef = useRef(config);

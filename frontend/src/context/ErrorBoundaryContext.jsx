@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { ErrorBoundaryContext } from './Context.js';
 
 export const ErrorBoundaryProvider = ({ children }) => {

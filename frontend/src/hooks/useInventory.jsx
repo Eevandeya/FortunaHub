@@ -8,7 +8,7 @@ export const useInventory = () => {
     const [inventory, setInventory] = useState([]);
     const [fetching, isLoading] = useFetching(getSelectedItems);
     const { handleHookError } = useErrorHandler();
-    const { addItem, removeItem } = useBooking();
+    const { addItem } = useBooking();
     const isMountedRef = useRef(true);
 
     async function getSelectedItems() {

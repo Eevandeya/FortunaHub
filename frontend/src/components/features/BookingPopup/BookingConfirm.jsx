@@ -15,7 +15,6 @@ const BookingConfirm = ({ modalActive, setModalActive }) => {
         setCustomerInfo,
         setVisitorsCount,
         setPreferredContactMethod,
-        visitors_count,
         preferred_contact_method,
     } = useBooking();
     const { handleApiError, handleError } = useErrorHandler();
@@ -36,13 +35,8 @@ const BookingConfirm = ({ modalActive, setModalActive }) => {
     const bookingSubmitHandler = useCallback(
         async (data) => {
             if (isValid) {
-                const {
-                    customer,
-                    items,
-                    timeSlot,
-                    visitors_count,
-                    preferred_contact_method,
-                } = getBookingData();
+                const { customer, items, timeSlot, preferred_contact_method } =
+                    getBookingData();
                 const customerData = {
                     nickname: data.nickname ?? customer.nickname,
                     phone_number: data.phone_number ?? customer.phone_number, //TODO resolve problem with silly fields in BookingContext(customer and visitors_count are unused)

@@ -8,7 +8,7 @@ import BookingDetail from '@components.features/BookingDetailPopup/BookingDetail
 import AxiosInterceptorsSetup from '@components.features/AxiosInterceptorsSetup.jsx';
 
 function App() {
-    const [modals, openModal, closeModal, closeAllModal] = useModal();
+    const [modals, openModal, closeModal] = useModal();
 
     return (
         <ErrorBoundaryProvider>

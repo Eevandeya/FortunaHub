@@ -25,7 +25,7 @@ class TimeUtils {
                 }
             });
         } catch (error) {
-            throw new Error('Ошибка преобразования даты');
+            throw new Error(`Ошибка преобразования даты: ${error}`);
         }
     }
     static convertToMinutes({ value, format }) {
@@ -34,7 +34,7 @@ class TimeUtils {
             return this.getMinutesSinceMidnight(normal_date_value);
         } catch (error) {
             return new Error(
-                `Неверный формат переданных данных. Необходимо передать данные в формате: ${format}`
+                `Неверный формат переданных данных ${error}. Необходимо передать данные в формате: ${format}`
             );
         }
     }

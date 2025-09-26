@@ -1,9 +1,6 @@
 import { ErrorBoundary } from 'react-error-boundary';
-import { useErrorBoundary } from '@context/Context.js';
 
 const ErrorFallback = ({ error, resetErrorBoundary }) => {
-    const { addError } = useErrorBoundary();
-
     return (
         <div
             role='alert'

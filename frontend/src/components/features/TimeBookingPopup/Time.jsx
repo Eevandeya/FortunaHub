@@ -6,7 +6,6 @@ import useConfig from '@hooks/useConfig.js';
 import { addMinutes, format, isWithinInterval, parse } from 'date-fns';
 import TimeUtils from '@root.utils/time_utils.js';
 import Loading from '@components.common/loader/Loading.jsx';
-import { useErrorBoundary } from '@context/Context.js';
 import CloseButton from '@components.common/button/closeButton.jsx';
 
 const checkConditions = ({ min_booking_time, start, end }) => {
@@ -22,11 +21,10 @@ const checkConditions = ({ min_booking_time, start, end }) => {
 };
 
 export function Time({ modalActive, setModalActive, date }) {
-    const { config, error } = useConfig();
+    const { config } = useConfig();
     const [availableTime, loading] = useAvailableTimes(date);
     const [bookTimeSlot, setIsBooking, isBooking] = useTimeSlot();
     const [borderTime, setBorderTime] = useState({ start: null, end: null });
-    const { addError } = useErrorBoundary();
 
     useEffect(() => {
         if (!modalActive) {
