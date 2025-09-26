@@ -1,22 +1,21 @@
-.loader
-{
+.loader {
     border-radius: 50%;
     aspect-ratio: 1/1;
     width: 30px;
     border: dashed 2px black;
-    animation: rotate 1s infinite linear ;
+    animation: rotate 1s infinite linear;
 }
 
 @keyframes rotate {
-    from{
+    from {
         transform: rotate(0) scale(1);
     }
 
-    50%{
-        transform: rotate(180deg) scale(1.2)
+    50% {
+        transform: rotate(180deg) scale(1.2);
     }
 
-    to{
-        transform: rotate(360deg) scale(1)
+    to {
+        transform: rotate(360deg) scale(1);
     }
 }

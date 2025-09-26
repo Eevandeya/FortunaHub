@@ -1,6 +1,4 @@
-
-.modal{
-
+.modal {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -15,27 +13,25 @@
     transition: opacity 0.5s ease;
     pointer-events: none;
 
-    &.active{
-      opacity: 1;
-      pointer-events: all;
+    &.active {
+        opacity: 1;
+        pointer-events: all;
     }
 
-  &-content{
-    background-color: white;
-    position: sticky;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    gap: 15px 15px;
-    width: 30vw;
-    padding: 10px;
-    transform: scale(0);
-    transition: transform 0.5s ease;
+    &-content {
+        background-color: white;
+        position: sticky;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        gap: 15px 15px;
+        width: 30vw;
+        padding: 10px;
+        transform: scale(0);
+        transition: transform 0.5s ease;
 
-    &.active{
-      transform: scale(1);
+        &.active {
+            transform: scale(1);
+        }
     }
-
-  }
-
 }
