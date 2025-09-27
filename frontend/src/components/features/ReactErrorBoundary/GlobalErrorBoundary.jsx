@@ -21,7 +21,7 @@ const ErrorFallback = ({ error, resetErrorBoundary }) => {
 
 export const GlobalErrorBoundary = ({ children }) => {
     const onError = (error, info) => {
-        console.error('Error Boundary поймал ошибку:', error, info);
+        console.error('Error Boundary catch an error:', error, info);
     };
 
     return (

@@ -7,7 +7,7 @@ export default function useConfig() {
     const { handleHookError } = useErrorHandler();
     try {
         if (!response) {
-            throw new Error('Ошибка загрузки конфига');
+            throw new Error('Error loading config');
         }
         return { config: response.config?.data, error: response.error };
     } catch (error) {

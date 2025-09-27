@@ -18,7 +18,7 @@ export const useInventory = () => {
             const data = await getItemsQuantity();
 
             if (!Array.isArray(data))
-                throw new Error('Данные инвентаря должны быть массивом');
+                throw new Error('Inventory data must be an array');
             if (
                 !data.every(
                     (item) =>
@@ -27,7 +27,7 @@ export const useInventory = () => {
                         !Array.isArray(item)
                 )
             ) {
-                throw new Error('Неверные данные в инвентаре');
+                throw new Error('Incorrect data in inventory');
             }
             setInventory(data);
         } catch (error) {
@@ -56,7 +56,7 @@ export const useInventory = () => {
                             !Array.isArray(item)
                     )
                 ) {
-                    throw new Error('Ошибка в банных принадлежностях');
+                    throw new Error('Error in bath accessories');
                 }
                 const select_items = items.map((item) => ({
                     quantity: item.quantity,

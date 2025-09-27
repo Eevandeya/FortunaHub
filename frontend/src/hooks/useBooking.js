@@ -8,7 +8,7 @@ export const useBooking = () => {
 
     try {
         if (!bookingContext) {
-            throw new Error('Нет данных в bookings');
+            throw new Error('No data in bookings');
         }
         return bookingContext;
     } catch (error) {

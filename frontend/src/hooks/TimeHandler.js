@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { getAvailableTimes } from '@root.api/timeSlotsApi.js';
-import TimeUtils from '@root.utils/time_utils.js';
+import TimeUtils from '@root.utils/timeUtils.js';
 import useConfig from '@hooks/useConfig.js';
 import { format } from 'date-fns';
 import { useErrorHandler } from '@hooks/useErrorHandler.js';
@@ -19,7 +19,7 @@ export function useAvailableTimes(selectedDate) {
                 setIsLoading(true);
                 if (!selectedDate) {
                     throw new Error(
-                        'Не выбрана дата бронирования. Вернитесь и выберите дату'
+                        'The booking date has not been selected. Please go back and select a date.'
                     );
                 }
                 const formatted_selected_date = format(date, 'yyyy-MM-dd');
@@ -88,7 +88,7 @@ export function useTimeSlot() {
     const bookTimeSlot = (start, end, selectedDate, availableTimes) => {
         try {
             if (!start || !end || !selectedDate) {
-                throw new Error('Не выбрано время или дата');
+                throw new Error('No time or date selected');
             }
 
             const canBookingFromNow = TimeUtils.isBookingAvailable(
@@ -97,7 +97,7 @@ export function useTimeSlot() {
             );
 
             if (!canBookingFromNow)
-                throw new Error('Нельзя выбрать прошедшее время');
+                throw new Error("You can't select the past tense");
 
             const isAvailable = TimeUtils.isTimeSlotAvailable(
                 availableTimes,
@@ -105,7 +105,7 @@ export function useTimeSlot() {
                 selectedDate
             );
             if (!isAvailable) {
-                throw new Error('Выбранное время уже занято');
+                throw new Error('The selected time is already taken.');
             }
 
             const [startISOS, endISOS] = TimeUtils.formatToIsos([start, end]);
