@@ -55,9 +55,7 @@ class TimeUtils {
             const normal_date_value = parse(value, format, new Date());
             return this.getMinutesSinceMidnight(normal_date_value);
         } catch (error) {
-            throw new Error(
-                `${error}.\n Expected format: ${format}`
-            );
+            throw new Error(`${error}.\n Expected format: ${format}`);
         }
     }
 
@@ -132,7 +130,7 @@ class TimeUtils {
                     start: free_start_time,
                     end: free_end_time,
                 })
-            )
+            );
         }
     }
 }

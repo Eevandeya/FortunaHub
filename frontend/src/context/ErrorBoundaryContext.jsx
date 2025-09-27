@@ -7,7 +7,7 @@ export const ErrorBoundaryProvider = ({ children }) => {
     const addError = (error, level = 'component', context = {}) => {
         const errorEntry = {
             id: Date.now(),
-            timeStamp: Date.now().toLocaleString(),
+            timeStamp: new Date().toLocaleString(),
             level,
             error: error instanceof Error ? error : new Error(String(error)),
             context,
@@ -18,7 +18,7 @@ export const ErrorBoundaryProvider = ({ children }) => {
     };
 
     const clearError = (id) => {
-        setErrors(errors.filter((error) => error.id === id));
+        setErrors(errors.filter((error) => error.id !== id));
     };
     const clearAllErrors = () => {
         setErrors([]);

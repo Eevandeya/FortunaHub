@@ -15,14 +15,14 @@ export const useErrorHandler = () => {
         (error, context = {}) => {
             addError(error, 'api', context);
         },
-        [handleError]
+        [addError]
     );
 
     const handleHookError = useCallback(
         (error, hookName, context = {}) => {
             addError(error, 'hook', { ...context, hook: hookName });
         },
-        [handleError]
+        [addError]
     );
 
     return { handleError, handleApiError, handleHookError };

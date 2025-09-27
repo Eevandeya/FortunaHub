@@ -4,7 +4,7 @@ import Cell from '@components.common/cell/Cell.jsx';
 import { useEffect, useState, useMemo, useCallback } from 'react';
 import useConfig from '@hooks/useConfig.js';
 import { addMinutes, format, isWithinInterval, parse } from 'date-fns';
-import TimeUtils from '@root.utils/time_utils.js';
+import TimeUtils from '@root.utils/timeUtils.js';
 import Loading from '@components.common/loader/Loading.jsx';
 import CloseButton from '@components.common/button/closeButton.jsx';
 

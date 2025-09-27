@@ -1,4 +1,3 @@
-// utils/useDebouncedCallback.js
 import { useRef, useCallback, useEffect } from 'react';
 
 export function useDebouncedCallback(callback, delay) {
@@ -22,7 +21,6 @@ export function useDebouncedCallback(callback, delay) {
         [delay]
     );
 
-    // Функция для отмены
     debouncedCallback.cancel = () => {
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);

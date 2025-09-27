@@ -83,7 +83,7 @@ const BookingConfirm = ({ modalActive, setModalActive }) => {
                             {...register('nickname', {
                                 required: 'Имя обязательно',
                                 validate: (value) => {
-                                    if (!/[a-z]+/gi.test(value))
+                                    if (!/[a-zA-zа-яА-я]+/gi.test(value))
                                         return 'Неккоректное имя';
                                 },
                             })}
