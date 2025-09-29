@@ -5,7 +5,19 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import eslintPluginPrettier from 'eslint-plugin-prettier';
 
 export default [
-  { ignores: ['dist'] },
+  {
+    ignores: [
+      'package-lock.json',
+      'vite.config.*',
+      '*.config.js',
+      '*.config.ts',
+      'dist',
+      'build',
+      '.coverage/',
+      '.env',
+      '.env.local',
+      '.env.example'
+    ] },
   {
     files: ['**/*.{js,jsx}'],
     languageOptions: {
@@ -36,6 +48,10 @@ export default [
       ignoreImports: true
     }],
       'prettier/prettier': 'error',
+      "no-console": ["error", { "allow": ["warn", "error"] }],
+      "no-debugger": "error",
+      "no-inline-comments": "error",
+      "no-warning-comments": ["error", { "terms": ["todo", "fixme"], "location": "anywhere" }]
     },
   },
 ];
