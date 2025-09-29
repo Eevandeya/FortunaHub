@@ -25,7 +25,7 @@ jobs:
 
       - name: Run ESlint
         working-directory: ./frontend
-        run: npx eslint .
+        run: npx eslint . --quiet
 
       - name: Run Prettier
         working-directory: ./frontend
