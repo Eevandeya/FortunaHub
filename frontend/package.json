@@ -14,6 +14,7 @@
   "dependencies": {
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.3",
+    "normalize.css": "^8.0.1",
     "prettier": "^3.5.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
