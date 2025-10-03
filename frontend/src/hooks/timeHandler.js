@@ -108,7 +108,7 @@ export function useTimeSlot() {
                 throw new Error('The selected time is already taken.');
             }
 
-            const [startISOS, endISOS] = TimeUtils.formatToIsos([start, end]);
+            const [startISOS, endISOS] = TimeUtils.formatToIso([start, end]);
 
             setTimeSlot({ start: startISOS, end: endISOS });
             setIsBooking(true);

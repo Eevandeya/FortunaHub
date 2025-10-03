@@ -1,5 +1,3 @@
-import { addMinutes } from 'date-fns';
-
 /**
  * Utility class for price calculations including rental and item pricing
  */
@@ -15,11 +13,8 @@ class CountPriceUtils {
     static calculateRentDate(dates, price_per_30 = 500) {
         const start_time = dates.start;
         const end_time = dates.end;
-        let total_price = 0;
-        for (let tm = start_time; tm < end_time; ) {
-            total_price += price_per_30;
-            tm = addMinutes(tm, 30);
-        }
+        const total_price =
+            (Math.abs(end_time - start_time) / (30 * 60 * 1000)) * price_per_30;
         return total_price;
     }
 

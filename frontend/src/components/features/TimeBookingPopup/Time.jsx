@@ -1,4 +1,4 @@
-import { useAvailableTimes, useTimeSlot } from '@hooks/TimeHandler.js';
+import { useAvailableTimes, useTimeSlot } from '@hooks/timeHandler.js';
 import Modal from '@components.features/Modal/Modal.jsx';
 import Cell from '@components.common/cell/Cell.jsx';
 import { useEffect, useState, useMemo, useCallback } from 'react';

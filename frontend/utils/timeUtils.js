@@ -31,7 +31,7 @@ class TimeUtils {
      * @returns {string[]} Array of strings in "yyyy-MM-dd'T'HH:mm:ss" format
      * @throws {Error} If date conversion fails
      */
-    static formatToIsos(datetime) {
+    static formatToIso(datetime) {
         try {
             return datetime.map((time) => {
                 if (time instanceof Date) {
