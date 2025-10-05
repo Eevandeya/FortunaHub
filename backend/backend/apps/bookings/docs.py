@@ -241,7 +241,7 @@ calculate_booking_price_schema = extend_schema(
                         "base_price": "25000.00",
                         "items_price": "3000.00",
                         "total": "28000.00",
-                        "currency": {"code": "RUB"},
+                        "currency": "RUB",
                     },
                 ),
             ],
