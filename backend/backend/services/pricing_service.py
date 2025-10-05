@@ -55,6 +55,9 @@ def get_booking_price(
     hourly_rent, _ = Pricing.get_hourly_rent_and_prepayment()
 
     duration_time_delta = end_datetime - start_datetime
+    if duration_time_delta <= dt.timedelta(0):
+        raise ValueError("End datetime must be greater than start datetime.")
+
     duration_hours_decimal = Decimal(duration_time_delta.total_seconds()) / Decimal(
         "3600"
     )

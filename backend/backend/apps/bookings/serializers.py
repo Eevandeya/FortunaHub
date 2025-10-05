@@ -92,7 +92,7 @@ class BookingCreateSerializer(serializers.Serializer):
                 )
 
         else:
-            formatted["non_field_errors"] = [str(e)]
+            formatted[EXTERNAL_NON_FIELD_ERRORS] = [str(e)]
 
         return formatted
 
@@ -145,19 +145,23 @@ class BookingPriceRequestSerializer(serializers.Serializer):
     start_datetime = serializers.DateTimeField(required=True)
     end_datetime = serializers.DateTimeField(required=True)
 
-
-class CurrencySerializer(serializers.Serializer):
-    code = serializers.SerializerMethodField(read_only=True)
-
-    def get_code(self, _obj: BookingPricingResult) -> str:
-        return settings.CASH_CURRENCY_CODE
+    def validate(self, attrs: dict) -> dict:
+        if attrs["end_datetime"] <= attrs["start_datetime"]:
+            raise serializers.ValidationError(
+                {
+                    EXTERNAL_NON_FIELD_ERRORS: [
+                        "End datetime must be greater than start datetime."
+                    ]
+                }
+            )
+        return attrs
 
 
 class BookingPriceResponseSerializer(serializers.Serializer):
     base_price = serializers.DecimalField(max_digits=10, decimal_places=2)
     items_price = serializers.DecimalField(max_digits=10, decimal_places=2)
     total = serializers.DecimalField(max_digits=10, decimal_places=2)
-    currency = CurrencySerializer(source="*")
+    currency = serializers.SerializerMethodField()
     duration = serializers.SerializerMethodField()
 
     def get_duration(self, obj: BookingPricingResult) -> str:
@@ -165,3 +169,6 @@ class BookingPriceResponseSerializer(serializers.Serializer):
         hours = total_seconds // 3600
         minutes = (total_seconds % 3600) // 60
         return f"{hours:02}:{minutes:02}"
+
+    def get_currency(self, _obj: BookingPricingResult) -> str:
+        return settings.CASH_CURRENCY_CODE
