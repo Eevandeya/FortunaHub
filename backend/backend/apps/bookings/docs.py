@@ -249,7 +249,7 @@ calculate_booking_price_schema = extend_schema(
         ),
         status.HTTP_400_BAD_REQUEST: OpenApiResponse(
             description="Validation error",
-            response=OpenApiTypes.OBJECT,
+            response=VALIDATION_ERROR_SCHEMA,
             examples=[
                 OpenApiExample(
                     name="Missing required field + wrong datetime format",
