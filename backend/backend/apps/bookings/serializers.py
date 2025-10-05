@@ -92,7 +92,7 @@ class BookingCreateSerializer(serializers.Serializer):
                 )
 
         else:
-            formatted["non_field_errors"] = [str(e)]
+            formatted[EXTERNAL_NON_FIELD_ERRORS] = [str(e)]
 
         return formatted
 
@@ -148,7 +148,13 @@ class BookingPriceRequestSerializer(serializers.Serializer):
     def validate(self, attrs: dict) -> dict:
         if attrs["end_datetime"] <= attrs["start_datetime"]:
             raise serializers.ValidationError(
-                {"end_datetime": "End datetime must be greater than start datetime."}
+                {
+                    EXTERNAL_NON_FIELD_ERRORS: [
+                        {
+                            "end_datetime": "End datetime must be greater than start datetime."
+                        }
+                    ]
+                }
             )
         return attrs
 
