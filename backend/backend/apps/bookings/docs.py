@@ -243,7 +243,6 @@ calculate_booking_price_schema = extend_schema(
                         "total": "28000.00",
                         "currency": {"code": "RUB"},
                     },
-                    response_only=True,
                 ),
             ],
         ),
