@@ -150,9 +150,7 @@ class BookingPriceRequestSerializer(serializers.Serializer):
             raise serializers.ValidationError(
                 {
                     EXTERNAL_NON_FIELD_ERRORS: [
-                        {
-                            "end_datetime": "End datetime must be greater than start datetime."
-                        }
+                        "End datetime must be greater than start datetime."
                     ]
                 }
             )
