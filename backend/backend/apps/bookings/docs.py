@@ -261,7 +261,6 @@ calculate_booking_price_schema = extend_schema(
                             "YYYY-MM-DDThh:mm[:ss[.uuuuuu]][+HH:MM|-HH:MM|Z]."
                         ],
                     },
-                    response_only=True,
                 ),
                 OpenApiExample(
                     name="End before start",
@@ -271,13 +270,11 @@ calculate_booking_price_schema = extend_schema(
                             "End datetime must be greater than start datetime."
                         ]
                     },
-                    response_only=True,
                 ),
                 OpenApiExample(
                     name="Unknown inventory item",
                     description="One of the provided `slug` values does not exist.",
                     value={"items": [{"slug": ["Inventory item does not exist."]}, {}]},
-                    response_only=True,
                 ),
                 OpenApiExample(
                     name="Negative quantity",
@@ -292,7 +289,6 @@ calculate_booking_price_schema = extend_schema(
                             {},
                         ]
                     },
-                    response_only=True,
                 ),
             ],
         ),
