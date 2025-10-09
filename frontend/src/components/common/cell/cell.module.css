@@ -1,0 +1,22 @@
+.cell {
+    min-width: 20px;
+    min-height: 10px;
+    width: 5vw;
+    background-color: white;
+    border: 1px solid black;
+}
+
+.cell:hover {
+    background-color: #4f5b69;
+}
+
+.cell .cell__body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+@font-face {
+}
+.cell .cell_text {
+    font-weight: normal;
+}
