@@ -1,4 +1,4 @@
-import api_handler from './api.js';
+import apiHandler from './api.js';
 
 /**
  * Handles booking creation by sending booking data to the server
@@ -7,8 +7,8 @@ import api_handler from './api.js';
  * @param {Object} timeSlot - Time slot object for the booking
  * @param {string} timeSlot.start - Booking start datetime
  * @param {string} timeSlot.end - Booking end datetime
- * @param {number} visitors_count - Number of visitors
- * @param {string} preferred_contact_method - Preferred contact method
+ * @param {number} visitorsCount - Number of visitors
+ * @param {string} preferredContactMethod - Preferred contact method
  * @returns {Promise<Object>} Promise resolving to the API response object
  * @throws {Promise<Error>} Promise rejecting with error if booking creation fails
  * @example
@@ -26,19 +26,21 @@ const bookingHandler = async (
     customer,
     items,
     timeSlot,
-    visitors_count,
-    preferred_contact_method
+    visitorsCount,
+    preferredContactMethod
 ) => {
     try {
-        const request = await api_handler.post(
+        const request = await apiHandler.post(
             'api/bookings/create/',
             {
                 customer,
                 items,
+                // eslint-disable-next-line camelcase
                 start_datetime: timeSlot.start,
+                // eslint-disable-next-line camelcase
                 end_datetime: timeSlot.end,
-                visitors_count,
-                preferred_contact_method,
+                visitorsCount,
+                preferredContactMethod,
             },
             { headers: { 'Content-Type': 'application/json' } }
         );

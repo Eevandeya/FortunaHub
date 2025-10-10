@@ -27,8 +27,8 @@ const BookingDetail = ({ modalActive, setModalActive }) => {
                 name: item.display_name,
                 quantity: 0,
                 slug: item.slug,
-                item_type: item.item_type,
-                is_available() {
+                itemType: item.itemType,
+                isAvailable() {
                     return this.total > 0;
                 },
             };
@@ -92,7 +92,7 @@ const BookingDetail = ({ modalActive, setModalActive }) => {
                             item={item}
                             count={item.quantity}
                             total={item.total}
-                            itemType={ITEM_TYPE[`${item.item_type}`]}
+                            itemType={ITEM_TYPE[`${item.itemType}`]}
                             onIncrement={() => handleIncrement(item)}
                             onDecrement={() => handleDecrement(item)}
                         />
@@ -120,7 +120,7 @@ const BookingDetail = ({ modalActive, setModalActive }) => {
                         disabled={
                             !timeSlot?.start &&
                             !timeSlot?.end &&
-                            items?.every((item) => item.is_available())
+                            items?.every((item) => item.isAvailable())
                         }>
                         Забронировать
                     </button>
