@@ -32,7 +32,7 @@ def process_booking_items(
     booking: Booking, items_data: list[dict]
 ) -> dict[str, list[str]]:
     # TODO: docstring needed
-    items = InventoryItem.objects.get_cached_items()
+    items = {item.slug: item for item in InventoryItem.objects.all()}
     item_errors = {}
 
     for item_data in items_data:
@@ -46,6 +46,5 @@ def process_booking_items(
         _, item_obj = add_item_to_booking(
             booking, item_data["quantity"], items[item_data["slug"]]
         )
-        InventoryItem.objects.update_cache(item_obj)
 
     return {}
