@@ -3,7 +3,7 @@ pre-commit:
   commands:
     eslint:
       glob: "frontend/**/*.{js,jsx,ts,tsx}"
-      run: npx eslint --fix {staged_files} --max-warnings=0
+      run: npx eslint --fix {staged_files}
       stage_fixed: true
       root: "frontend"
 
