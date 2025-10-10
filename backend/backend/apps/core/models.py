@@ -20,18 +20,11 @@ class SaunaConfig(models.Model):
     check_30_min_multiplicity = models.BooleanField()
     created = models.DateTimeField(auto_now_add=True)
 
-    def save(self, *args: tuple, **kwargs: dict[str, Any]) -> None:
-        super().save(*args, **kwargs)
-        cache.set("sauna_config", self)
-
     @classmethod
     def get(cls) -> "SaunaConfig":
-        config = cache.get("sauna_config")
-        if config is None:
-            config = cls.objects.order_by("-created").first()
-            if config is None:
-                raise MissingInitialDataError
-            cache.set("sauna_config", config)
+        config = cls.objects.order_by("-created").first()
+        if not config:
+            raise MissingInitialDataError(cls, "sauna_config") from None
         return config
 
     def get_opening_and_closing_dt(
