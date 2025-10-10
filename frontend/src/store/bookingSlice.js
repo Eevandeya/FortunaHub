@@ -1,38 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-/*
-export const fetchBooking = createAsyncThunk(
-    'booking/fetchBooking',
-    async function (_, { rejectWithValue, getState, dispatch }) {
-        const { booking : { order : {customer, items, timeSlot, visitors_count, preferred_contact_method}}} = getState();
-        try {
-            await api_handler.post(
-                'api/bookings/create/',
-                {
-                    customer,
-                    items,
-                    start_datetime: timeSlot.start,
-                    end_datetime: timeSlot.end,
-                    visitors_count,
-                    preferred_contact_method,
-                },
-                { headers: { 'Content-Type': 'application/json' } }
-            );
-            dispatch(resetBookings());
-        } catch (error) {
-            return rejectWithValue(error.message);
-        }
-    }
-);*/
 const bookingSlice = createSlice({
     name: 'booking',
     initialState: {
         order: {
-            customer: { nickname: '', phone_number: '' },
+            customer: { nickname: '', phoneNumber: '' },
             items: [],
             timeSlot: null,
-            visitors_count: 0,
-            preferred_contact_method: 'whatsapp',
+            visitorsCount: 0,
+            preferredContactMethod: 'whatsapp',
         },
         reload: true,
     },
@@ -42,8 +18,8 @@ const bookingSlice = createSlice({
     },
     reducers: {
         setCustomerInfo(state, action) {
-            const customer_data = action.payload.customer;
-            state.order.customer = { ...state.customer, ...customer_data };
+            const customerData = action.payload.customer;
+            state.order.customer = { ...state.customer, ...customerData };
         },
         addItem(state, action) {
             state.order.items = action.payload.items;
@@ -57,19 +33,19 @@ const bookingSlice = createSlice({
             state.order.timeSlot = action.payload.timeSlot;
         },
         setVisitorsCount(state, action) {
-            state.order.visitors_count = action.payload.visitors_count;
+            state.order.visitorsCount = action.payload.visitorsCount;
         },
         setPreferredContactMethod(state, action) {
-            state.order.preferred_contact_method =
-                action.payload.preferred_contact_method;
+            state.order.preferredContactMethod =
+                action.payload.preferredContactMethod;
         },
         resetBookings(state) {
             state.order = {
-                customer: { nickname: '', phone_number: '' },
+                customer: { nickname: '', phoneNumber: '' },
                 items: [],
                 timeSlot: null,
-                visitors_count: 0,
-                preferred_contact_method: 'whatsapp',
+                visitorsCount: 0,
+                preferredContactMethod: 'whatsapp',
             };
         },
     },

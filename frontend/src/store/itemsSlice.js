@@ -1,37 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-
-/*
-export const fetchItems = createAsyncThunk(
-    'items/fetchItems',
-    async function (_, { rejectWithValue }) {
-        try {
-            const response = await getItemsQuantity();
-            if (response.statusText != 'OK') {
-                throw new Error(response.message);
-            }
-            const inventory = response.data?.map((item) => ({
-                ...item,
-                unit_price: parseFloat(item?.unit_price),
-            }));
-            if (!Array.isArray(inventory))
-                throw new Error('Данные инвентаря должны быть массивом');
-            if (
-                !inventory.every(
-                    (item) =>
-                        typeof item === 'object' &&
-                        item !== null &&
-                        !Array.isArray(item)
-                )
-            ) {
-                throw new Error('Неверные данные в инвентаре');
-            }
-            return inventory;
-        } catch (error) {
-            return rejectWithValue(error.message);
-        }
-    }
-);
-*/
+import { createSlice } from '@reduxjs/toolkit';
 
 const itemsSlice = createSlice({
     name: 'items',
