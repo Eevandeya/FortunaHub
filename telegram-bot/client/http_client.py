@@ -13,7 +13,7 @@ class APIClient:
 
     async def get_free_slots(self, date_str: str) -> FreeSlotsResponse | None:
         async with httpx.AsyncClient(base_url=self.base_url) as client:
-            response = await client.get("/free-slots/", params={"date": date_str})
+            response = await client.get("bookings/free-slots/", params={"date": date_str})
             try:
                 response.raise_for_status()
             except httpx.HTTPStatusError as exc:
