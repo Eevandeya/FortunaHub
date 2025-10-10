@@ -1,0 +1,13 @@
+pre-commit:
+  parallel: true
+  commands:
+    eslint:
+      glob: "frontend/**/*.{js,jsx,ts,tsx}"
+      run: npx eslint --fix {staged_files} --max-warnings=0
+      stage_fixed: true
+      root: "frontend"
+
+    prettier:
+      glob: "frontend/**/*.{js,jsx,ts,tsx,css,html,json,md}"
+      run: npx pretty-quick --staged
+      root: "frontend"

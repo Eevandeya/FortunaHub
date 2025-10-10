@@ -1,0 +1,17 @@
+vite.config.*
+package.json
+eslint.config.js
+*.config.js
+
+
+*.log
+.npm
+
+
+.env
+.env.local
+.env*.local
+
+
+package-lock.json
+
