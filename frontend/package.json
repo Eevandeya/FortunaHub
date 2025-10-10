@@ -36,8 +36,8 @@
         "eslint-plugin-react-hooks": "^5.1.0",
         "eslint-plugin-react-refresh": "^0.4.19",
         "globals": "^15.15.0",
-        "lefthook": "^1.12.3",
-        "lint-staged": "^16.1.6",
+        "lefthook": "^1.13.6",
+        "lint-staged": "^16.2.3",
         "pretty-quick": "^4.2.2",
         "vite": "^6.2.0"
     }
