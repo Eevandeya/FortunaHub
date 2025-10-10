@@ -2,11 +2,11 @@ import { useReducer } from 'react';
 import { BookingContext } from '@context/Context.js';
 
 const initialState = {
-    customer: { nickname: '', phone_number: '' },
+    customer: { nickname: '', phoneNumber: '' },
     items: [],
     timeSlot: null,
-    visitors_count: 0,
-    preferred_contact_method: 'whatsapp',
+    visitorsCount: 0,
+    preferredContactMethod: 'whatsapp',
 };
 
 const bookingReducer = (state, action) => {
@@ -37,10 +37,10 @@ const bookingReducer = (state, action) => {
             };
         }
         case 'SET_VISITORS_COUNT': {
-            return { ...state, visitors_count: action.payload };
+            return { ...state, visitorsCount: action.payload };
         }
         case 'SET_PREFERRED_CONTACT_METHOD': {
-            return { ...state, preferred_contact_method: action.payload };
+            return { ...state, preferredContactMethod: action.payload };
         }
         case 'RESET_BOOKINGS': {
             return initialState;
@@ -70,8 +70,8 @@ const BookingProvider = ({ children }) => {
             customer: state.customer,
             items: state.items,
             timeSlot: state.timeSlot,
-            visitors_count: state.visitors_count,
-            preferred_contact_method: state.preferred_contact_method,
+            visitorsCount: state.visitorsCount,
+            preferredContactMethod: state.preferredContactMethod,
         }),
     };
 

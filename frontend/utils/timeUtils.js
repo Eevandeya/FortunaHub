@@ -52,8 +52,8 @@ class TimeUtils {
      */
     static convertToMinutes({ value, format }) {
         try {
-            const normal_date_value = parse(value, format, new Date());
-            return this.getMinutesSinceMidnight(normal_date_value);
+            const normalDateValue = parse(value, format, new Date());
+            return this.getMinutesSinceMidnight(normalDateValue);
         } catch (error) {
             throw new Error(`${error}.\n Expected format: ${format}`);
         }
@@ -114,21 +114,21 @@ class TimeUtils {
         );
 
         for (const times of freeTimes) {
-            let free_start_time = parse(times.start, 'HH:mm', selectedDate);
-            let free_end_time = parse(times.end, 'HH:mm', selectedDate);
-            [free_start_time, free_end_time] = this.setTimeBorders(
-                free_start_time,
-                free_end_time
+            let freeStartTime = parse(times.start, 'HH:mm', selectedDate);
+            let freeEndTime = parse(times.end, 'HH:mm', selectedDate);
+            [freeStartTime, freeEndTime] = this.setTimeBorders(
+                freeStartTime,
+                freeEndTime
             );
 
             return (
                 isWithinInterval(start, {
-                    start: free_start_time,
-                    end: free_end_time,
+                    start: freeStartTime,
+                    end: freeEndTime,
                 }) &&
                 isWithinInterval(end, {
-                    start: free_start_time,
-                    end: free_end_time,
+                    start: freeStartTime,
+                    end: freeEndTime,
                 })
             );
         }

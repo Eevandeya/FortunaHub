@@ -58,12 +58,12 @@ export const useInventory = () => {
                 ) {
                     throw new Error('Error in bath accessories');
                 }
-                const select_items = items.map((item) => ({
+                const selectItems = items.map((item) => ({
                     quantity: item.quantity,
                     slug: item.slug,
                 }));
 
-                addItem(select_items);
+                addItem(selectItems);
             } catch (error) {
                 handleHookError(error, 'useInventory', { action: 'reserve' });
             }

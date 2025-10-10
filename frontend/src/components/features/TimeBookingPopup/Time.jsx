@@ -8,16 +8,16 @@ import TimeUtils from '@root.utils/timeUtils.js';
 import Loading from '@components.common/loader/Loading.jsx';
 import CloseButton from '@components.common/button/closeButton.jsx';
 
-const checkConditions = ({ min_booking_time, start, end }) => {
+const checkConditions = ({ minBookingTime, start, end }) => {
     const format = 'HH:mm';
-    const parsed_min_booking_time = TimeUtils.convertToMinutes({
-        value: min_booking_time,
+    const parsedMinBookingTime = TimeUtils.convertToMinutes({
+        value: minBookingTime,
         format,
     });
-    const start_time = TimeUtils.convertToMinutes({ value: start, format });
-    const end_time = TimeUtils.convertToMinutes({ value: end, format });
+    const startTime = TimeUtils.convertToMinutes({ value: start, format });
+    const endTime = TimeUtils.convertToMinutes({ value: end, format });
 
-    return Math.abs(start_time - end_time) >= parsed_min_booking_time;
+    return Math.abs(startTime - endTime) >= parsedMinBookingTime;
 };
 
 export function Time({ modalActive, setModalActive, date }) {
@@ -34,30 +34,15 @@ export function Time({ modalActive, setModalActive, date }) {
 
     const parsedTimeSlots = useMemo(() => {
         if (config) {
-            const parsed_opening_time = parse(
-                config.opening_time,
-                'HH:mm',
-                date
-            );
-            const parsed_closing_time = parse(
-                config.closing_time,
-                'HH:mm',
-                date
-            );
+            const parsedOpeningTime = parse(config.opening_time, 'HH:mm', date);
+            const parsedClosingTime = parse(config.closing_time, 'HH:mm', date);
 
-            const [checked_opening_time, checked_closing_time] =
-                TimeUtils.setTimeBorders(
-                    parsed_opening_time,
-                    parsed_closing_time
-                );
+            const [checkedOpeningTime, checkedClosingTime] =
+                TimeUtils.setTimeBorders(parsedOpeningTime, parsedClosingTime);
 
             const times = {};
 
-            for (
-                let temp = checked_opening_time;
-                temp <= checked_closing_time;
-
-            ) {
+            for (let temp = checkedOpeningTime; temp <= checkedClosingTime; ) {
                 times[format(temp, 'HH:mm')] = temp;
                 temp = addMinutes(temp, 30);
             }
@@ -72,13 +57,13 @@ export function Time({ modalActive, setModalActive, date }) {
             const start = parsedTimeSlots[slot.start];
             const end = parsedTimeSlots[slot.end];
 
-            const [boundary_start, boundary_end] = TimeUtils.setTimeBorders(
+            const [boundaryStart, boundaryEnd] = TimeUtils.setTimeBorders(
                 start,
                 end
             );
             return isWithinInterval(checkTime, {
-                start: boundary_start,
-                end: boundary_end,
+                start: boundaryStart,
+                end: boundaryEnd,
             });
         });
     };
@@ -99,12 +84,12 @@ export function Time({ modalActive, setModalActive, date }) {
                         )
                     }
                     isSelected={(function () {
-                        const parsed_time = parsedTimeSlots[tm];
+                        const parsedTime = parsedTimeSlots[tm];
                         if (borderTime.start && borderTime.end) {
                             const start = parsedTimeSlots[borderTime.start];
                             const end = parsedTimeSlots[borderTime.end];
                             return (
-                                isWithinInterval(parsed_time, { start, end }) &&
+                                isWithinInterval(parsedTime, { start, end }) &&
                                 isTimeAvailable(tm, availableTime)
                             );
                         }
@@ -131,17 +116,17 @@ export function Time({ modalActive, setModalActive, date }) {
             }
 
             if (!prev.end) {
-                const previous_start = parsedTimeSlots[prev.start];
+                const previousStart = parsedTimeSlots[prev.start];
                 const parsedSelectedTime = parsedTimeSlots[selectedTime];
 
-                if (parsedSelectedTime < previous_start) {
+                if (parsedSelectedTime < previousStart) {
                     return { start: selectedTime, end: prev.start };
                 }
                 return { ...prev, end: selectedTime };
             }
 
-            const previous_start = parsedTimeSlots[prev.start];
-            const previous_end = parsedTimeSlots[prev.end];
+            const previousStart = parsedTimeSlots[prev.start];
+            const previousEnd = parsedTimeSlots[prev.end];
             const parsedSelectedTime = parsedTimeSlots[selectedTime];
 
             if (selectedTime === prev.start) {
@@ -150,17 +135,17 @@ export function Time({ modalActive, setModalActive, date }) {
             if (selectedTime === prev.end) {
                 return { ...prev, end: null };
             }
-            if (parsedSelectedTime < previous_start) {
+            if (parsedSelectedTime < previousStart) {
                 return { ...prev, start: selectedTime };
             }
-            if (parsedSelectedTime > previous_end) {
+            if (parsedSelectedTime > previousEnd) {
                 return { ...prev, end: selectedTime };
             }
 
             const distanceToStart = Math.abs(
-                parsedSelectedTime - previous_start
+                parsedSelectedTime - previousStart
             );
-            const distanceToEnd = Math.abs(previous_end - parsedSelectedTime);
+            const distanceToEnd = Math.abs(previousEnd - parsedSelectedTime);
 
             return distanceToStart < distanceToEnd
                 ? { ...prev, start: selectedTime }
@@ -171,9 +156,9 @@ export function Time({ modalActive, setModalActive, date }) {
     const booking = useCallback(
         (e) => {
             e.preventDefault();
-            const min_booking_time = config.min_booking_time;
+            const minBookingTime = config.minBookingTime;
             const canBooking = checkConditions({
-                min_booking_time,
+                minBookingTime,
                 ...borderTime,
             });
             if (canBooking) {
@@ -182,13 +167,13 @@ export function Time({ modalActive, setModalActive, date }) {
                     parsedTimeSlots[borderTime.start],
                     parsedTimeSlots[borderTime.end]
                 );
-                const operation_progress = bookTimeSlot(
+                const operationProgress = bookTimeSlot(
                     startSlot,
                     endSlot,
                     date,
                     availableTime
                 );
-                if (operation_progress.success) {
+                if (operationProgress.success) {
                     setBorderTime({ start: null, end: null });
                 }
             }

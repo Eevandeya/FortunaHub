@@ -1,4 +1,4 @@
-import api_handler from './api.js';
+import apiHandler from './api.js';
 
 /**
  * Fetches inventory items with their quantities and converts unit prices to numbers
@@ -12,11 +12,11 @@ import api_handler from './api.js';
  */
 export const getItemsQuantity = async () => {
     try {
-        const response = await api_handler.get('/api/inventory/');
+        const response = await apiHandler.get('/api/inventory/');
 
         const inventory = response.data?.map((item) => ({
             ...item,
-            unit_price: parseFloat(item?.unit_price),
+            unitPrice: parseFloat(item?.unit_price),
         }));
         return inventory;
     } catch (error) {
@@ -24,6 +24,7 @@ export const getItemsQuantity = async () => {
             error.message || 'Unknown error while retrieving inventory';
         return Promise.reject(errorMessage);
     } finally {
+        // eslint-disable-next-line
         console.log('A GET request was sent');
     }
 };

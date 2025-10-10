@@ -22,19 +22,19 @@ export function useAvailableTimes(selectedDate) {
                         'The booking date has not been selected. Please go back and select a date.'
                     );
                 }
-                const formatted_selected_date = format(date, 'yyyy-MM-dd');
+                const formattedSelectedDate = format(date, 'yyyy-MM-dd');
 
-                if (prevData.current === formatted_selected_date) {
+                if (prevData.current === formattedSelectedDate) {
                     setIsLoading(false);
                     return;
                 }
 
                 try {
-                    const free_time = await getAvailableTimes(
-                        formatted_selected_date
+                    const freeTime = await getAvailableTimes(
+                        formattedSelectedDate
                     );
-                    setAvailableTime(free_time);
-                    prevData.current = formatted_selected_date;
+                    setAvailableTime(freeTime);
+                    prevData.current = formattedSelectedDate;
                 } catch (error) {
                     handleApiError(error, {
                         type: 'api_operation',

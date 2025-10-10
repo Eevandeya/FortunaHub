@@ -1,4 +1,4 @@
-import api_handler from './api.js';
+import apiHandler from './api.js';
 
 /**
  * Fetches available booking time slots for a specific date
@@ -13,12 +13,11 @@ import api_handler from './api.js';
  */
 export const getAvailableTimes = async (date) => {
     try {
-        const time_response = await api_handler.get(
-            '/api/bookings/free-slots/',
-            { params: { date: date } }
-        );
+        const timeResponse = await apiHandler.get('/api/bookings/free-slots/', {
+            params: { date: date },
+        });
 
-        return time_response.data?.free_slots ?? [];
+        return timeResponse.data?.free_slots ?? [];
     } catch (error) {
         return Promise.reject(error.message);
     }

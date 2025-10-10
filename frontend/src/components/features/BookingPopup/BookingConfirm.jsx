@@ -15,7 +15,7 @@ const BookingConfirm = ({ modalActive, setModalActive }) => {
         setCustomerInfo,
         setVisitorsCount,
         setPreferredContactMethod,
-        preferred_contact_method,
+        preferredContactMethod,
     } = useBooking();
     const { handleApiError, handleError } = useErrorHandler();
     const {
@@ -23,7 +23,7 @@ const BookingConfirm = ({ modalActive, setModalActive }) => {
         handleSubmit,
         formState: { errors, isSubmitting, isValid },
     } = useForm({
-        defaultValues: { nickname: undefined, phone_number: undefined },
+        defaultValues: { nickname: undefined, phoneNumber: undefined },
     });
 
     useEffect(() => {
@@ -35,11 +35,11 @@ const BookingConfirm = ({ modalActive, setModalActive }) => {
     const bookingSubmitHandler = useCallback(
         async (data) => {
             if (isValid) {
-                const { customer, items, timeSlot, preferred_contact_method } =
+                const { customer, items, timeSlot, preferredContactMethod } =
                     getBookingData();
                 const customerData = {
                     nickname: data.nickname ?? customer.nickname,
-                    phone_number: data.phone_number ?? customer.phone_number, //TODO resolve problem with silly fields in BookingContext(customer and visitors_count are unused)
+                    phoneNumber: data.phoneNumber ?? customer.phoneNumber,
                 };
                 setCustomerInfo(customerData);
                 setVisitorsCount(visitors);
@@ -49,7 +49,7 @@ const BookingConfirm = ({ modalActive, setModalActive }) => {
                         items,
                         timeSlot,
                         visitors,
-                        preferred_contact_method
+                        preferredContactMethod
                     );
                 } catch (error) {
                     handleApiError(error, { at: 'BookingConfirm' });
@@ -102,12 +102,12 @@ const BookingConfirm = ({ modalActive, setModalActive }) => {
                     </div>
                 )}
                 <div className='field'>
-                    <label className='label' htmlFor='phone_number'>
+                    <label className='label' htmlFor='phoneNumber'>
                         Номер телефона
                     </label>
                     <div className='control'>
                         <input
-                            {...register('phone_number', {
+                            {...register('phoneNumber', {
                                 required: 'Номер телефона обязателен',
                                 validate: (value) => {
                                     if (!/[78]\d{10}/.test(value))
@@ -117,14 +117,14 @@ const BookingConfirm = ({ modalActive, setModalActive }) => {
                             type='text'
                             className='input'
                             placeholder='Введите номер телефона'
-                            id='phone_number'
+                            id='phoneNumber'
                         />
                     </div>
                 </div>
-                {errors.phone_number && (
+                {errors.phoneNumber && (
                     <div className='field'>
                         <p className='has-text-danger'>
-                            {errors.phone_number?.message}
+                            {errors.phoneNumber?.message}
                         </p>
                     </div>
                 )}
@@ -132,7 +132,7 @@ const BookingConfirm = ({ modalActive, setModalActive }) => {
                     <label className='label'>Выберите способ связи</label>
                     <Select
                         options={['whatsapp', 'telegram', 'phone']}
-                        value={preferred_contact_method}
+                        value={preferredContactMethod}
                         onChange={setPreferredContactMethod}
                         defaultValue={'Метод связи'}
                     />
