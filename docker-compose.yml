@@ -51,9 +51,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5173:5173"
-    volumes:
-    - ./frontend:/app
-    - /app/node_modules
     working_dir: /app
 volumes:
   db-data:
