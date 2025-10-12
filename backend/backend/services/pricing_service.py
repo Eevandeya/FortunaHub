@@ -52,7 +52,7 @@ def get_booking_price(
       3. All monetary values are rounded to 2 decimal places using ROUND_HALF_UP
          to ensure financial accuracy.
     """
-    hourly_rent, _ = Pricing.get_hourly_rent_and_prepayment()
+    hourly_rent = Pricing.get_hourly_rent_price()
 
     duration_time_delta = end_datetime - start_datetime
     if duration_time_delta <= dt.timedelta(0):

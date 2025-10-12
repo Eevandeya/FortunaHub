@@ -1,9 +1,7 @@
+from django.db import models
+
+
 class MissingInitialDataError(Exception):
-    def __init__(self, hint_fixture: str | None = None) -> None:
-        message = "Required initial data is missing in the database."
-        if hint_fixture:
-            message += (
-                f"\nYou can load it by running:\n"
-                f"    python manage.py loaddata {hint_fixture}"
-            )
+    def __init__(self, model: type[models.Model], missing_data: str) -> None:
+        message = f"Missing initial data for {model.__name__}: {missing_data}"
         super().__init__(message)
