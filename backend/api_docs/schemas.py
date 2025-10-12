@@ -36,10 +36,3 @@ INVALID_QUERY_PARAM_SCHEMA = {
     "required": ["error"],
     "additionalProperties": False,
 }
-
-INVALID_API_KEY_SCHEMA = {
-    "type": "object",
-    "properties": {"detail": {"type": "string"}},
-    "required": ["detail"],
-    "additionalProperties": False,
-}

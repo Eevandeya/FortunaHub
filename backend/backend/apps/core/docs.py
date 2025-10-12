@@ -1,7 +1,6 @@
 from drf_spectacular.utils import OpenApiExample, OpenApiResponse, extend_schema
 from rest_framework import status
 
-from api_docs.responses import HTTP_403_FORBIDDEN_RESPONSE
 from backend.apps.core.serializers import SaunaConfigSerializer
 
 CONFIG_TAG = "Config"
@@ -29,6 +28,5 @@ get_sauna_config_schema = extend_schema(
                 ),
             ],
         ),
-        status.HTTP_403_FORBIDDEN: HTTP_403_FORBIDDEN_RESPONSE,
     },
 )

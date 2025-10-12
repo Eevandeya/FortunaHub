@@ -6,7 +6,6 @@ from drf_spectacular.utils import (
 )
 from rest_framework import serializers, status
 
-from api_docs.responses import HTTP_403_FORBIDDEN_RESPONSE
 from backend.apps.inventory.serializers import InventoryItemSerializer
 
 INVENTORY_TAG = "Inventory"
@@ -52,6 +51,5 @@ get_inventory_schema = extend_schema(
                 ),
             ],
         ),
-        status.HTTP_403_FORBIDDEN: HTTP_403_FORBIDDEN_RESPONSE,
     },
 )
