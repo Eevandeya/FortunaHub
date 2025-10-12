@@ -156,7 +156,7 @@ export function Time({ modalActive, setModalActive, date }) {
     const booking = useCallback(
         (e) => {
             e.preventDefault();
-            const minBookingTime = config.minBookingTime;
+            const minBookingTime = config.min_booking_time;
             const canBooking = checkConditions({
                 minBookingTime,
                 ...borderTime,
