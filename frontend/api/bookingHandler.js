@@ -33,14 +33,20 @@ const bookingHandler = async (
         const request = await apiHandler.post(
             'api/bookings/create/',
             {
-                customer,
+                customer: {
+                    nickname: customer.nickname,
+                    // eslint-disable-next-line camelcase
+                    phone_number: customer.phoneNumber,
+                },
                 items,
                 // eslint-disable-next-line camelcase
                 start_datetime: timeSlot.start,
                 // eslint-disable-next-line camelcase
                 end_datetime: timeSlot.end,
-                visitorsCount,
-                preferredContactMethod,
+                // eslint-disable-next-line camelcase
+                visitors_count: visitorsCount,
+                // eslint-disable-next-line camelcase
+                preferred_contact_method: preferredContactMethod,
             },
             { headers: { 'Content-Type': 'application/json' } }
         );
