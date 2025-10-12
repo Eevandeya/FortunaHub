@@ -34,7 +34,7 @@ services:
     depends_on:
       - backend
 
-  react-dev:
+  frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
