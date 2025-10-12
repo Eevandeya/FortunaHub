@@ -14,7 +14,7 @@ from backend.apps.inventory.serializers import (
 from backend.services.booking_service import TimeSlot
 from backend.services.customer_service import handle_customer_visit
 from backend.services.inventory_service import (
-    process_booking_items,
+    check_and_add_items,
 )
 from backend.services.pricing_service import BookingPricingResult
 
@@ -115,7 +115,7 @@ class BookingCreateSerializer(serializers.Serializer):
         except DjangoValidationError as e:
             raise serializers.ValidationError(self.format_validation_error(e)) from None
 
-        item_errors = process_booking_items(booking, items_data)
+        item_errors = check_and_add_items(booking, items_data)
         if item_errors:
             raise serializers.ValidationError({"items": item_errors})
 
