@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   db:
     image: postgres:16
@@ -22,10 +20,6 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    env_file:
-      - ./backend/.env
-    volumes:
-      - ./backend:/app
     ports:
       - "8000:8000"
     depends_on:
@@ -35,10 +29,6 @@ services:
     build:
       context: ./telegram-bot
       dockerfile: Dockerfile
-    env_file:
-      - ./telegram-bot/.env
-    volumes:
-      - ./telegram-bot:/app
     ports:
       - "7765:7765"
     depends_on:
@@ -51,5 +41,6 @@ services:
     ports:
       - "5173:5173"
     working_dir: /app
+
 volumes:
   db-data:
