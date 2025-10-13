@@ -6,7 +6,6 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from backend.apps.authentication.auth import APIKeyHeaderAuthentication
 from backend.apps.bookings.docs import (
     calculate_booking_price_schema,
     create_booking_schema,
@@ -25,7 +24,6 @@ from backend.services.pricing_service import build_booking_items, get_booking_pr
 
 class FreeBookingTimeView(APIView):
     permission_classes = [AllowAny]
-    authentication_classes = [APIKeyHeaderAuthentication]
 
     @get_free_slots_schema
     def get(self, request: Request) -> Response:
@@ -51,7 +49,6 @@ class BookingCreateView(APIView):
     # TODO: maybe optimize with prefetching inventory items and customers?
     # TODO: Web client can't access this endpoint
     permission_classes = [AllowAny]
-    authentication_classes = [APIKeyHeaderAuthentication]
 
     @create_booking_schema
     def post(self, request: Request) -> Response:
@@ -64,7 +61,6 @@ class BookingCreateView(APIView):
 
 class BookingPriceView(APIView):
     permission_classes = [AllowAny]
-    authentication_classes = [APIKeyHeaderAuthentication]
 
     @calculate_booking_price_schema
     def post(self, request: Request) -> Response:

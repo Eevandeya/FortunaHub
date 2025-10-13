@@ -8,14 +8,11 @@ logger = get_logger(__name__)
 
 
 class APIClient:
-    def __init__(self, base_url: str, api_key: str) -> None:
+    def __init__(self, base_url: str) -> None:
         self.base_url = base_url
-        self.headers = {"X-API-Key": api_key}
 
     async def get_free_slots(self, date_str: str) -> FreeSlotsResponse | None:
-        async with httpx.AsyncClient(
-            base_url=self.base_url, headers=self.headers
-        ) as client:
+        async with httpx.AsyncClient(base_url=self.base_url) as client:
             response = await client.get("/free-slots/", params={"date": date_str})
             try:
                 response.raise_for_status()

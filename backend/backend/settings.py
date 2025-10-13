@@ -19,7 +19,6 @@ INSTALLED_APPS = [
     "backend.apps.bookings",
     "backend.apps.customers",
     "backend.apps.core",
-    "backend.apps.authentication",
     "backend.apps.inventory",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -101,14 +100,12 @@ CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_HEADERS = [
     "accept",
     "accept-encoding",
-    "authorization",
     "content-type",
     "dnt",
     "origin",
     "user-agent",
     "x-csrftoken",
     "x-requested-with",
-    "x-api-key",
 ]
 
 CORS_ALLOW_METHODS = [

@@ -7,7 +7,6 @@ from drf_spectacular.utils import (
 )
 from rest_framework import status
 
-from api_docs.responses import HTTP_403_FORBIDDEN_RESPONSE
 from api_docs.schemas import (
     INVALID_QUERY_PARAM_SCHEMA,
     VALIDATION_ERROR_SCHEMA,
@@ -67,7 +66,6 @@ get_free_slots_schema = extend_schema(
                 ),
             ],
         ),
-        status.HTTP_403_FORBIDDEN: HTTP_403_FORBIDDEN_RESPONSE,
     },
     parameters=[
         OpenApiParameter(
@@ -181,7 +179,6 @@ create_booking_schema = extend_schema(
                 ),
             ],
         ),
-        status.HTTP_403_FORBIDDEN: HTTP_403_FORBIDDEN_RESPONSE,
     },
     examples=[
         OpenApiExample(
@@ -291,7 +288,6 @@ calculate_booking_price_schema = extend_schema(
                 ),
             ],
         ),
-        status.HTTP_403_FORBIDDEN: HTTP_403_FORBIDDEN_RESPONSE,
     },
     examples=[
         OpenApiExample(
