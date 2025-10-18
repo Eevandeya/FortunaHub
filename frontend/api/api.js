@@ -9,7 +9,6 @@ export const baseApi = createApi({
         baseUrl: `${BACKEND_API_URL}/api/`,
         prepareHeaders: (headers) => {
             headers.set('Content-Type', 'application/json');
-            headers.set('X-API-KEY', 'api-secret-key');
             return headers;
         },
     }),
