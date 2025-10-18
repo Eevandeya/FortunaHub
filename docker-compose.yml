@@ -29,8 +29,6 @@ services:
     build:
       context: ./telegram-bot
       dockerfile: Dockerfile
-    ports:
-      - "7765:7765"
     depends_on:
       - backend
 

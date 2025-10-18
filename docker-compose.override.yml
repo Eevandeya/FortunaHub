@@ -9,4 +9,5 @@ services:
     volumes:
       - ./telegram-bot:/app
     command: python main.py
-
+    ports:
+      - "7765:7765"
