@@ -2,23 +2,21 @@ import paymentMethods from '../../../../consts/PaymentMethods.js';
 import CloseButton from '../../common/button/closeButton.jsx';
 import { useSetBookingMutation } from '../../../../api/bookingHandler.js';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import {resetBookings} from '../../../store/bookingSlice.js';
+import { resetBookings } from '../../../store/bookingSlice.js';
 
-const OrderPayment = ({onClick}) => {
-
-    const [reserve, { isLoading, error, isError }] = useSetBookingMutation();
-    const {customer, items, timeSlot, visitors_count, preferred_contact_method} = useSelector((state) => state.booking.order)
+const OrderPayment = ({ onClick }) => {
+    const [reserve] = useSetBookingMutation();
+    const { customer, items, timeSlot, visitorsCount, preferredContactMethod } =
+        useSelector((state) => state.booking.order);
     const dispatch = useDispatch();
 
     const makeReservation = async () => {
-
         await reserve({
             customer,
             items,
             timeSlot,
-            visitors_count,
-            preferred_contact_method,
+            visitorsCount,
+            preferredContactMethod,
         });
         dispatch(resetBookings());
     };
@@ -33,7 +31,7 @@ const OrderPayment = ({onClick}) => {
                 alignItems: 'center',
                 zIndex: 10,
             }}>
-            <CloseButton onClick={onClick}/>
+            <CloseButton onClick={onClick} />
             <ul>
                 {paymentMethods.map((method) => (
                     <li key={method.id}>
@@ -48,7 +46,9 @@ const OrderPayment = ({onClick}) => {
                     </li>
                 ))}
             </ul>
-            <button className='button is-submit' onClick={makeReservation}></button>
+            <button
+                className='button is-submit'
+                onClick={makeReservation}></button>
         </div>
     );
 };

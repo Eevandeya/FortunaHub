@@ -9,7 +9,7 @@ import DateSelector from '@components.common/date_picker/DatePicker.jsx';
 import { startOfDay } from 'date-fns';
 import BookingConfirm from '@components.features/BookingPopup/BookingConfirm.jsx';
 import { useSelector } from 'react-redux';
-import CountPriceUtils from '@root.utils/count_price_utils.js';
+import { ITEM_TYPE } from '@root.consts/constants';
 
 const BookingDetail = ({ modalActive, setModalActive }) => {
     const [inventory, isLoading, reserve] = useInventory();
@@ -102,9 +102,7 @@ const BookingDetail = ({ modalActive, setModalActive }) => {
                             item={item}
                             count={item.quantity}
                             total={item.total}
-                            itemType={
-                                CountPriceUtils.ITEM_TYPE[`${item.item_type}`]
-                            }
+                            itemType={ITEM_TYPE[`${item.item_type}`]}
                             onIncrement={() => handleIncrement(item)}
                             onDecrement={() => handleDecrement(item)}
                         />
@@ -132,7 +130,7 @@ const BookingDetail = ({ modalActive, setModalActive }) => {
                         disabled={
                             !timeSlot?.start &&
                             !timeSlot?.end &&
-                            items?.every((item) => item.is_available())
+                            items?.every((item) => item.isAvailable())
                         }>
                         Забронировать
                     </button>
