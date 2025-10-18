@@ -1,5 +1,5 @@
 import { useEffect, useState, useId, useMemo, useCallback } from 'react';
-import { useInventory } from '@hooks/useInventory.jsx';
+import { useInventory } from '@hooks/useInventory.js';
 import Modal from '@components.common/Modal/Modal.jsx';
 import ItemHandler from '@components.common/goods/itemHandler.jsx';
 import { useErrorHandler } from '@hooks/useErrorHandler.js';

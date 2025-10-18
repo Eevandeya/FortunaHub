@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import TimeUtils from '@root.utils/time_utils.js';
+import TimeUtils from '@root.utils/timeUtils.js';
 import { format } from 'date-fns';
 import { useErrorHandler } from '@hooks/useErrorHandler.js';
 import { setTimeSlot } from '@store/bookingSlice.js';
@@ -72,7 +72,7 @@ export function useTimeSlot() {
                 throw new Error('Выбранное время уже занято');
             }
 
-            const [startISOS, endISOS] = TimeUtils.formatToIsos([start, end]);
+            const [startISOS, endISOS] = TimeUtils.formatToIso([start, end]);
             const timeSlot = { start: startISOS, end: endISOS };
 
             dispatch(setTimeSlot({ timeSlot }));
