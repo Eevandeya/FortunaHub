@@ -1,8 +1,34 @@
 import { baseApi } from './api.js';
 
+/**
+ * Booking API extension with mutation endpoints for booking operations.
+ * Extends the base API with booking-specific functionality
+ */
 const bookingApi = baseApi.injectEndpoints({
+    /**
+     * @name endpoints
+     * @type {Function}
+     * @param {import('@reduxjs/toolkit/query').Builder} build - RTK Query builder instance
+     * @returns {Object} Endpoints configuration object
+     * @description Defines booking-related API endpoints
+     */
     endpoints: (build) => ({
+        /**
+         * Creates a new booking in the system
+         * @method setBooking
+         * @type {import('@reduxjs/toolkit/query').MutationDefinition}
+         *
+         * @param {BookingRequestData} consumerData - Booking creation data
+         * @returns {Promise<Booking>} Promise resolving to created booking
+         */
         setBooking: build.mutation({
+            /**
+             * @name query
+             * @type {Function}
+             * @param {BookingRequestData} consumerData - Input data for booking creation
+             * @returns {Object} Fetch API configuration object
+             * @description Constructs the HTTP request for booking creation
+             */
             query: (consumerData) => ({
                 url: 'bookings/create/',
                 method: 'POST',
@@ -24,6 +50,12 @@ const bookingApi = baseApi.injectEndpoints({
                         consumerData['preferredContactMethod'],
                 },
             }),
+            /**
+             * @name invalidatesTags
+             * @type {Array<string>}
+             * @description Tags to invalidate when this mutation succeeds
+             * Invalidates 'Booking' tag to trigger refetch of booking lists
+             */
             invalidatesTags: ['Booking'],
         }),
     }),
