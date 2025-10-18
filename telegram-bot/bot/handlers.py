@@ -17,7 +17,7 @@ from bot.core import dp
 from client.http_client import APIClient
 
 # TODO: make it smarter (use singleton or Dependency injection or something else)
-client = APIClient(config("FORTUNA_API_URL"))
+client = APIClient(config("BACKEND_API_URL"))
 
 
 @dp.message(Command("free_slots"))
