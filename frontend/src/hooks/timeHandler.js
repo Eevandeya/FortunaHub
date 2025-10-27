@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import TimeUtils from '@root.utils/timeUtils.js';
+import TimeUtils from '@root.utils/time_utils.js';
 import { format } from 'date-fns';
 import { useErrorHandler } from '@hooks/useErrorHandler.js';
 import { setTimeSlot } from '@store/bookingSlice.js';
@@ -12,7 +12,7 @@ export function useAvailableTimes(selectedDate) {
     const [freeSlots, setFreeSlots] = useState([]);
     const { handleHookError, handleApiError } = useErrorHandler();
     const { data: slots, isLoading } = useGetAvailableTimesQuery({
-        date: selectedDate ? format(selectedDate, 'yyyy-MM-dd') : skipToken,
+        date: format(selectedDate, 'yyyy-MM-dd') ?? skipToken,
     });
 
     const fetchTimes = useCallback(() => {
@@ -57,7 +57,7 @@ export function useTimeSlot() {
 
             const canBookingFromNow = TimeUtils.isBookingAvailable(
                 start,
-                config?.min_time_from_now_to_booking
+                config.min_time_from_now_to_booking
             );
 
             if (!canBookingFromNow)
@@ -72,7 +72,7 @@ export function useTimeSlot() {
                 throw new Error('Выбранное время уже занято');
             }
 
-            const [startISOS, endISOS] = TimeUtils.formatToIso([start, end]);
+            const [startISOS, endISOS] = TimeUtils.formatToIsos([start, end]);
             const timeSlot = { start: startISOS, end: endISOS };
 
             dispatch(setTimeSlot({ timeSlot }));

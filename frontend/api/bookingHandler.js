@@ -1,4 +1,4 @@
-import { baseApi } from './api.js';
+import baseApi from './api.js';
 
 /**
  * Booking API extension with mutation endpoints for booking operations.

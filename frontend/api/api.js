@@ -6,7 +6,7 @@ const BACKEND_API_URL = import.meta.env.VITE_BACKEND_API_URL;
  * Base API client for RTK Query
  * @type {import('@reduxjs/toolkit/query').CreateApiOptions}
  */
-export const baseApi = createApi({
+const baseApi = createApi({
     /** @type {string} Path in Redux store */
     reducerPath: 'api',
     /** @type {string[]} Tags for cache invalidation */
