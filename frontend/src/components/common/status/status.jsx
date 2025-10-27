@@ -1,4 +1,4 @@
-import Modal from '@components.features/Modal/Modal.jsx';
+import Modal from '@components.common/Modal/Modal.jsx';
 
 const StatusWindow = ({ status, message }) => {
     return (

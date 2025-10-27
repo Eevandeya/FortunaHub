@@ -52,7 +52,9 @@ export const inventoryApi = baseApi.injectEndpoints({
                             !Array.isArray(item)
                     )
                 ) {
-                    throw new Error('Invalid inventory data');
+                    throw new Error(
+                        'Inventory data must be an array of objects'
+                    );
                 }
                 return response.map((item) => ({
                     ...item,

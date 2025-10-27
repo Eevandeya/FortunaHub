@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import bookingReducer from '@store/bookingSlice.js';
 import itemsReducer from '@store/itemsSlice.js';
-import baseApi from '../../api/api.js';
+import baseApi from '@root.api/api.js';
 
 export default configureStore({
     reducer: {

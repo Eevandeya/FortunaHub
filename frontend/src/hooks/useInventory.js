@@ -23,21 +23,20 @@ export const useInventory = () => {
         if (isLoading) return;
 
         setInventory(inventoryData);
+    }, [error, handleHookError, inventoryData, isError, isLoading]);
 
+    useEffect(() => {
         if (isError) {
             handleHookError(error, 'useInventory', {
                 action: 'getSelectedItems',
             });
         }
-    }, [error, handleHookError, inventoryData, isError, isLoading]);
-
-    useEffect(() => {
         if (isReloadRef.current && inventoryData) {
             getSelectedItems();
             dispatch(reloadItems());
             isReloadRef.current = reload;
         }
-    }, [dispatch, getSelectedItems]);
+    }, [dispatch, getSelectedItems, isError]);
 
     const reserve = useCallback(
         (items) => {
@@ -51,7 +50,7 @@ export const useInventory = () => {
                             !Array.isArray(item)
                     )
                 ) {
-                    throw new Error('Ошибка в банных принадлежностях');
+                    throw new Error('Incorrect value');
                 }
                 const selectItems = items.map((item) => ({
                     quantity: item.quantity,
