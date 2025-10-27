@@ -46,9 +46,9 @@ const OrderPayment = ({ onClick }) => {
                     </li>
                 ))}
             </ul>
-            <button
-                className='button is-submit'
-                onClick={makeReservation}></button>
+            <button className='button is-submit' onClick={makeReservation}>
+                Забронировать
+            </button>
         </div>
     );
 };
