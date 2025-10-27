@@ -3,7 +3,7 @@ import { useErrorHandler } from '@hooks/useErrorHandler.js';
 import { addItem } from '@store/bookingSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { reloadItems } from '@store/itemsSlice.js';
-import { useGetItemsQuantityQuery } from '../../api/rentingItemsApi.js';
+import { useGetItemsQuantityQuery } from '@root.api/rentingItemsApi.js';
 import { selectReload } from '@store/itemsSlice.js';
 
 export const useInventory = () => {
@@ -19,7 +19,7 @@ export const useInventory = () => {
     const dispatch = useDispatch();
     const isReloadRef = useRef(reload);
 
-    function getSelectedItems() {
+    const getSelectedItems = useCallback(() => {
         if (isLoading) return;
 
         setInventory(inventoryData);
@@ -29,7 +29,7 @@ export const useInventory = () => {
                 action: 'getSelectedItems',
             });
         }
-    }
+    }, [error, handleHookError, inventoryData, isError, isLoading]);
 
     useEffect(() => {
         if (isReloadRef.current && inventoryData) {
@@ -63,7 +63,7 @@ export const useInventory = () => {
                 handleHookError(error, 'useInventory', { action: 'reserve' });
             }
         },
-        [addItem]
+        [dispatch]
     );
 
     return [inventory, isLoading, reserve];
