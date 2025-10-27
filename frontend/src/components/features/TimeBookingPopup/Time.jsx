@@ -1,12 +1,12 @@
 import { useAvailableTimes, useTimeSlot } from '@hooks/timeHandler.js';
-import Modal from '@components.features/Modal/Modal.jsx';
+import Modal from '@components.common/Modal/Modal.jsx';
 import Cell from '@components.common/cell/Cell.jsx';
 import { useEffect, useState, useMemo, useCallback } from 'react';
-import useConfig from '@hooks/useConfig.js';
 import { addMinutes, format, isWithinInterval, parse } from 'date-fns';
 import TimeUtils from '@root.utils/timeUtils.js';
 import Loading from '@components.common/loader/Loading.jsx';
 import CloseButton from '@components.common/button/closeButton.jsx';
+import { useGetSaunaConfigQuery } from '@root.api/saunaConfig.js';
 
 const checkConditions = ({ minBookingTime, start, end }) => {
     const format = 'HH:mm';
@@ -21,7 +21,7 @@ const checkConditions = ({ minBookingTime, start, end }) => {
 };
 
 export function Time({ modalActive, setModalActive, date }) {
-    const { config } = useConfig();
+    const { data: config } = useGetSaunaConfigQuery();
     const [availableTime, loading] = useAvailableTimes(date);
     const [bookTimeSlot, setIsBooking, isBooking] = useTimeSlot();
     const [borderTime, setBorderTime] = useState({ start: null, end: null });
@@ -35,6 +35,7 @@ export function Time({ modalActive, setModalActive, date }) {
     const parsedTimeSlots = useMemo(() => {
         if (config) {
             const parsedOpeningTime = parse(config.opening_time, 'HH:mm', date);
+
             const parsedClosingTime = parse(config.closing_time, 'HH:mm', date);
 
             const [checkedOpeningTime, checkedClosingTime] =
@@ -80,6 +81,7 @@ export function Time({ modalActive, setModalActive, date }) {
                         !isTimeAvailable(tm, availableTime) ||
                         !TimeUtils.isBookingAvailable(
                             parsedTimeSlots[tm],
+
                             config.min_time_from_now_to_booking
                         )
                     }
@@ -156,6 +158,7 @@ export function Time({ modalActive, setModalActive, date }) {
     const booking = useCallback(
         (e) => {
             e.preventDefault();
+
             const minBookingTime = config.min_booking_time;
             const canBooking = checkConditions({
                 minBookingTime,

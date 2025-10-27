@@ -1,10 +1,23 @@
-import apiHandler from './api.js';
+import baseApi from './api.js';
 
-export async function getSaunaConfig() {
-    try {
-        const saunaConfigInfo = await apiHandler.get('/api/config/');
-        return saunaConfigInfo;
-    } catch (error) {
-        return Promise.reject(new Error(error.message));
-    }
-}
+/**
+ * Configuration API for sauna application settings
+ * @namespace configApi
+ */
+const configApi = baseApi.injectEndpoints({
+    endpoints: (build) => ({
+        /**
+         * Fetch sauna configuration and settings
+         * @returns {SaunaConfig} Application configuration
+         */
+
+        getSaunaConfig: build.query({ query: () => 'config/' }),
+    }),
+    overrideExisting: true,
+});
+
+/**
+ * Hook for accessing sauna configuration
+ * @returns {Object} Query result with configuration data
+ */
+export const { useGetSaunaConfigQuery } = configApi;

@@ -1,30 +1,77 @@
-import apiHandler from './api.js';
+import baseApi from './api.js';
 
 /**
- * Fetches inventory items with their quantities and converts unit prices to numbers
- * @returns {Promise<Array>} Promise resolving to array of inventory items with numeric unit prices
- * @throws {Promise<string>} Promise rejecting with error message if request fails
- * @example
- * // Get inventory items
- * getItemsQuantity()
- *   .then(items => console.log('Inventory:', items))
- *   .catch(error => console.error('Error:', error));
+ * Inventory API extension with query endpoints for inventory management
+ * Extends the base API with inventory-specific functionality
+ *
+ * @namespace inventoryApi
+ * @extends baseApi
  */
-export const getItemsQuantity = async () => {
-    try {
-        const response = await apiHandler.get('/api/inventory/');
+export const inventoryApi = baseApi.injectEndpoints({
+    /**
+     * @name endpoints
+     * @type {Function}
+     * @param {import('@reduxjs/toolkit/query').Builder} build - RTK Query builder instance
+     * @returns {Object} Endpoints configuration object
+     * @description Defines inventory-related API endpoints
+     */
+    endpoints: (build) => ({
+        /**
+         * Fetches inventory items with quantity information.
+         * Retrieves and transforms inventory data from the backend
+         *
+         * @method getItemsQuantity
+         * @type {import('@reduxjs/toolkit/query').QueryDefinition}
+         * @returns {Promise<InventoryItem[]>} Promise resolving to transformed inventory items
+         */
+        getItemsQuantity: build.query({
+            /**
+             * @name query
+             * @type {Function}
+             * @returns {Object} Fetch API configuration object
+             * @description Constructs the HTTP request for inventory data
+             */
+            query: () => 'inventory/',
+            /**
+             * @name providesTags
+             * @type {Array<string>}
+             * @description Tags that this query provides for cache management
+             * Allows invalidation when bookings are created/updated
+             */
+            providesTags: ['Booking'],
+            transformResponse: (response) => {
+                if (!Array.isArray(response)) {
+                    throw new Error('Inventory data must be an array');
+                }
 
-        const inventory = response.data?.map((item) => ({
-            ...item,
-            unitPrice: parseFloat(item?.unit_price),
-        }));
-        return inventory;
-    } catch (error) {
-        const errorMessage =
-            error.message || 'Unknown error while retrieving inventory';
-        return Promise.reject(errorMessage);
-    } finally {
-        // eslint-disable-next-line
-        console.log('A GET request was sent');
-    }
-};
+                if (
+                    !response.every(
+                        (item) =>
+                            typeof item === 'object' &&
+                            item !== null &&
+                            !Array.isArray(item)
+                    )
+                ) {
+                    throw new Error(
+                        'Inventory data must be an array of objects'
+                    );
+                }
+                return response.map((item) => ({
+                    ...item,
+
+                    unitPrice: parseFloat(item?.unit_price || 0),
+                    isAvailable: item.quantity > 0,
+                }));
+            },
+        }),
+    }),
+    /**
+     * @name overrideExisting
+     * @type {boolean}
+     * @description Allows overriding existing endpoints with the same name
+     * Useful for development and testing when endpoints need to be redefined
+     */
+    overrideExisting: true,
+});
+
+export const { useGetItemsQuantityQuery } = inventoryApi;
