@@ -19,13 +19,13 @@ const bookingSlice = createSlice({
     reducers: {
         setCustomerInfo(state, action) {
             const customerData = action.payload.customer;
-            state.order.customer = { ...state.customer, ...customerData };
+            state.order.customer = { ...state.order.customer, ...customerData };
         },
         addItem(state, action) {
             state.order.items = action.payload.items;
         },
         removeItem(state, action) {
-            state.order.items?.filter(
+            state.order.items = state.order.items?.filter(
                 (item) => item.slug !== action.payload.slug
             );
         },
@@ -61,5 +61,5 @@ export const {
     resetBookings,
 } = bookingSlice.actions;
 
-export const { selectError, selectReload } = bookingSlice.selectors;
+export const { selectReload } = bookingSlice.selectors;
 export default bookingSlice.reducer;

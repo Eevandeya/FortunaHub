@@ -14,7 +14,9 @@ const itemsSlice = createSlice({
             state.items = action.payload.items;
         },
         removeItem(state, action) {
-            state.items?.filter((item) => item.slug !== action.payload.slug);
+            state.items = state.items?.filter(
+                (item) => item.slug !== action.payload.slug
+            );
         },
         reloadItems: (state) => {
             state.reload = !state.reload;
