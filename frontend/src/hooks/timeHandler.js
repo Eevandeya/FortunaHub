@@ -12,7 +12,7 @@ export function useAvailableTimes(selectedDate) {
     const [freeSlots, setFreeSlots] = useState([]);
     const { handleHookError, handleApiError } = useErrorHandler();
     const { data: slots, isLoading } = useGetAvailableTimesQuery({
-        date: format(selectedDate, 'yyyy-MM-dd') ?? skipToken,
+        date: selectedDate ? format(selectedDate, 'yyyy-MM-dd') : skipToken,
     });
 
     const fetchTimes = useCallback(() => {
@@ -57,7 +57,7 @@ export function useTimeSlot() {
 
             const canBookingFromNow = TimeUtils.isBookingAvailable(
                 start,
-                config.min_time_from_now_to_booking
+                config?.min_time_from_now_to_booking
             );
 
             if (!canBookingFromNow)
