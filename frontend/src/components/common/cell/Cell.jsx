@@ -1,10 +1,13 @@
 import { memo } from 'react';
+import classes from '@components.common/button/buttons-styles.module.css';
 
 const Cell = memo(({ time, isDisabled, isSelected, setSelectedTime }) => {
     return (
         <button
             className={
-                isSelected ? 'button is-link ' : 'button is-info is-outlined'
+                !isSelected
+                    ? `${classes.button}`
+                    : `${classes.button} ${classes.is_link}`
             }
             disabled={isDisabled}
             onClick={() => {

@@ -1,45 +1,46 @@
 import TransparentButton from '@components.common/button/transparentButton.jsx';
 import { memo } from 'react';
+import it from './item_handler.module.css';
 
 const ItemHandler = memo(
+    //eslint-disable-next-line
     ({ item, count = 0, maxCount, itemType, onIncrement, onDecrement }) => {
         return (
-            <div className='tags has-addons is-align-items-center mb-2 mr-2'>
-                <span className='tag is-medium is-light'>
-                    <span className='icon-text'>
-                        <span className='icon'>
-                            <img
-                                alt={item.display_name}
-                                style={{ width: '24px', height: '24px' }}
-                            />
-                        </span>
-                        <span>{item.display_name}</span>
-                    </span>
-                </span>
+            <article className={it.item_handler}>
+                <div className={it.content}>
+                    <img
+                        src={item.icon}
+                        alt={item.name || 'Банные принадлежности'}
+                        height={32}
+                        width={32}
+                        loading='lazy'
+                    />
+                    <p className={it.item_name}>{item.name}</p>
+                </div>
 
-                <span className='tag is-medium'>
+                <div className={it.controls}>
                     <TransparentButton
                         onClick={onDecrement}
-                        disabled={count <= 0}>
-                        <span className='icon is-small'>-</span>
+                        disabled={count <= 0}
+                        aria-label={`Уменьшить количество ${item.name}`}
+                        className={it.button}>
+                        —
                     </TransparentButton>
-                    <span className='px-2'>{count}</span>
+                    <span
+                        className={it.counter}
+                        aria-live='polite'
+                        title={`Текущее количество: ${count}`}>
+                        {count}
+                    </span>
                     <TransparentButton
                         onClick={onIncrement}
-                        disabled={count >= maxCount}>
-                        <span className='icon is-small'>+</span>
+                        disabled={count >= maxCount}
+                        aria-label={`Увеличить количество ${item.name}`}
+                        className={it.button}>
+                        +
                     </TransparentButton>
-                </span>
-                <div
-                    style={{
-                        position: 'relative',
-                        left: '20px',
-                        top: '5px',
-                        color: 'white',
-                    }}>
-                    {itemType}
                 </div>
-            </div>
+            </article>
         );
     }
 );
