@@ -22,11 +22,11 @@ export function useAvailableTimes(selectedDate) {
                     'Не выбрана дата бронирования. Вернитесь и выберите дату'
                 );
             }
-            setFreeSlots(slots.free_slots);
+            setFreeSlots(slots?.free_slots);
         } catch (error) {
             handleHookError(error, 'useAvailableTimes');
         }
-    }, [handleApiError, selectedDate]);
+    }, [handleApiError, selectedDate, slots]);
 
     useEffect(() => {
         if (selectedDate && slots) {
