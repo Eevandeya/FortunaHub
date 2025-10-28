@@ -13,7 +13,7 @@ import { VisitorsCountDisplay } from '@components.common/display/numberDisplay.j
 import TransparentButton from '@components.common/button/transparentButton.jsx';
 import OrderPayment from '../Payment/OrderPayment.jsx';
 
-const BookingConfirm = ({ modalActive, setModalActive, closeAllModals }) => {
+const BookingConfirm = () => {
     const [visitors, setVisitors] = useState(0);
     const dispatch = useDispatch();
     const preferredContactMethod = useSelector(
@@ -32,8 +32,6 @@ const BookingConfirm = ({ modalActive, setModalActive, closeAllModals }) => {
 
     useEffect(() => {
         if (isSubmitting && isValid) {
-            closeAllModals();
-            setModalActive();
             setStatus('Created');
         }
     }, [isSubmitting]);
@@ -90,105 +88,103 @@ const BookingConfirm = ({ modalActive, setModalActive, closeAllModals }) => {
     };
 
     return (
-        <>
+        <div
+            style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px',
+                alignItems: 'center',
+            }}>
             {status === 'Created' && <OrderPayment onClick={onClick} />}
-            <Modal active={modalActive} setActive={setModalActive}>
-                <h1>Оформление заказа</h1>
-                <form onSubmit={handleSubmit(bookingSubmitHandler, onError)}>
-                    <div className='field'>
-                        <label className='label' htmlFor='name'>
-                            Имя
-                        </label>
-                        <div className='control'>
-                            <input
-                                {...register('nickname', {
-                                    required: 'Имя обязательно',
-                                    validate: (value) => {
-                                        if (!/[a-z]+/gi.test(value))
-                                            return 'Неккоректное имя';
-                                    },
-                                })}
-                                placeholder='Введите имя'
-                                type='text'
-                                className='input'
-                                id='name'
-                            />
-                        </div>
-                    </div>
-                    {errors.nickname && (
-                        <div className='field'>
-                            <p className='has-text-danger'>
-                                {errors.nickname?.message}
-                            </p>
-                        </div>
-                    )}
-                    <div className='field'>
-                        <label className='label' htmlFor='phoneNumber'>
-                            Номер телефона
-                        </label>
-                        <div className='control'>
-                            <input
-                                {...register('phoneNumber', {
-                                    required: 'Номер телефона обязателен',
-                                    validate: (value) => {
-                                        if (!/[78]\d{10}/.test(value))
-                                            return 'Неккоректный номер телефона';
-                                    },
-                                })}
-                                type='text'
-                                className='input'
-                                placeholder='Введите номер телефона'
-                                id='phoneNumber'
-                            />
-                        </div>
-                    </div>
-                    {errors.phoneNumber && (
-                        <div className='field'>
-                            <p className='has-text-danger'>
-                                {errors.phoneNumber?.message}
-                            </p>
-                        </div>
-                    )}
-                    <div className='field'>
-                        <label className='label'>Выберите способ связи</label>
-                        <Select
-                            options={['whatsapp', 'telegram', 'phone']}
-                            value={preferredContactMethod}
-                            onChange={setContactMethod}
-                            defaultValue={'Метод связи'}
+            <form onSubmit={handleSubmit(bookingSubmitHandler, onError)}>
+                <div className='field'>
+                    <label className='label' htmlFor='name'>
+                        Имя
+                    </label>
+                    <div className='control'>
+                        <input
+                            {...register('nickname', {
+                                required: 'Имя обязательно',
+                                validate: (value) => {
+                                    if (!/[a-z]+/gi.test(value))
+                                        return 'Неккоректное имя';
+                                },
+                            })}
+                            placeholder='Введите имя'
+                            type='text'
+                            className='input'
+                            id='name'
                         />
                     </div>
-                    <div className='field is-grouped is-left'>
-                        <div className='control'>
-                            <TransparentButton
-                                onClick={decrease}
-                                disabled={visitors <= 0}>
-                                &#8212;
-                            </TransparentButton>
-                        </div>
-                        <VisitorsCountDisplay data={visitors} />
-                        <div className='control'>
-                            <TransparentButton
-                                onClick={increase}
-                                disabled={false}>
-                                &#43;
-                            </TransparentButton>
-                        </div>
+                </div>
+                {errors.nickname && (
+                    <div className='field'>
+                        <p className='has-text-danger'>
+                            {errors.nickname?.message}
+                        </p>
                     </div>
-                    <div className='field is-grouped is-right'>
-                        <div className='control'>
-                            <input type='reset' className='button is-danger' />
-                        </div>
-                        <div className='control'>
-                            <input
-                                type='submit'
-                                className='button is-success'
-                            />
-                        </div>
+                )}
+                <div className='field'>
+                    <label className='label' htmlFor='phoneNumber'>
+                        Номер телефона
+                    </label>
+                    <div className='control'>
+                        <input
+                            {...register('phoneNumber', {
+                                required: 'Номер телефона обязателен',
+                                validate: (value) => {
+                                    if (!/[78]\d{10}/.test(value))
+                                        return 'Неккоректный номер телефона';
+                                },
+                            })}
+                            type='text'
+                            className='input'
+                            placeholder='Введите номер телефона'
+                            id='phoneNumber'
+                        />
                     </div>
-                </form>
-            </Modal>
-        </>
+                </div>
+                {errors.phoneNumber && (
+                    <div className='field'>
+                        <p className='has-text-danger'>
+                            {errors.phoneNumber?.message}
+                        </p>
+                    </div>
+                )}
+                <div className='field'>
+                    <label className='label'>Выберите способ связи</label>
+                    <Select
+                        options={['whatsapp', 'telegram', 'phone']}
+                        value={preferredContactMethod}
+                        onChange={setContactMethod}
+                        defaultValue={'Метод связи'}
+                    />
+                </div>
+                <div className='field is-grouped is-left'>
+                    <div className='control'>
+                        <TransparentButton
+                            onClick={decrease}
+                            disabled={visitors <= 0}>
+                            &#8212;
+                        </TransparentButton>
+                    </div>
+                    <VisitorsCountDisplay data={visitors} />
+                    <div className='control'>
+                        <TransparentButton onClick={increase} disabled={false}>
+                            &#43;
+                        </TransparentButton>
+                    </div>
+                </div>
+                <div className='field is-grouped is-right'>
+                    <div className='control'>
+                        <input type='reset' className='button is-danger' />
+                    </div>
+                    <div className='control'>
+                        <input type='submit' className='button is-success' />
+                    </div>
+                </div>
+            </form>
+        </div>
     );
 };
 
