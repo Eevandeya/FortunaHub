@@ -21,6 +21,8 @@ export default defineConfig({
       '@context' : path.resolve(__dirname, "src/context"),
       '@hooks' : path.resolve(__dirname, "src/hooks"),
       '@store': path.resolve(__dirname, 'src/store'),
+      '@pages': path.resolve(__dirname, 'src/pages'),
+      '@components.layout': path.resolve(__dirname, 'src/components/layout'),
 
       '@root' : path.resolve(__dirname),
       '@root.api' : path.resolve(__dirname, 'api'),
