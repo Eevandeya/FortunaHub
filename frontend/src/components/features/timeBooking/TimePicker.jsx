@@ -18,7 +18,7 @@ const checkConditions = ({ minBookingTime, start, end }) => {
     return Math.abs(startTime - endTime) >= parsedMinBookingTime;
 };
 
-export function Time({ date }) {
+export function TimePicker({ date }) {
     const { data: config } = useGetSaunaConfigQuery();
     const [availableTime, loading] = useAvailableTimes(date);
     const [bookTimeSlot, setIsBooking, isBooking] = useTimeSlot();

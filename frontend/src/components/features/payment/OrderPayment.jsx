@@ -1,4 +1,4 @@
-import paymentMethods from '../../../../consts/PaymentMethods.js';
+import paymentMethods from '../../../../consts/paymentMethods.js';
 import CloseButton from '../../common/button/closeButton.jsx';
 import { useSetBookingMutation } from '../../../../api/bookingHandler.js';
 import { useDispatch, useSelector } from 'react-redux';

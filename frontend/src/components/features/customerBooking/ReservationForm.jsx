@@ -8,17 +8,16 @@ import { useCallback, useEffect, useState } from 'react';
 import { useErrorHandler } from '@hooks/useErrorHandler.js';
 import { useForm } from 'react-hook-form';
 import Select from '@components.common/select/Select.jsx';
-import Modal from '@components.common/Modal/Modal.jsx';
 import { VisitorsCountDisplay } from '@components.common/display/numberDisplay.jsx';
 import TransparentButton from '@components.common/button/transparentButton.jsx';
-import OrderPayment from '../Payment/OrderPayment.jsx';
 
-const BookingConfirm = () => {
+const ReservationForm = () => {
     const [visitors, setVisitors] = useState(0);
     const dispatch = useDispatch();
     const preferredContactMethod = useSelector(
         (state) => state.booking.order?.preferredContactMethod
     );
+    //eslint-disable-next-line
     const [status, setStatus] = useState('');
     const { handleApiError, handleError } = useErrorHandler();
     const {
@@ -82,7 +81,7 @@ const BookingConfirm = () => {
     const onError = (errors) => {
         handleError(errors, 'component', { at: 'onError', type: 'validate' });
     };
-
+    //eslint-disable-next-line
     const onClick = () => {
         setStatus('Waiting');
     };
@@ -95,7 +94,6 @@ const BookingConfirm = () => {
                 gap: '10px',
                 alignItems: 'center',
             }}>
-            {status === 'Created' && <OrderPayment onClick={onClick} />}
             <form onSubmit={handleSubmit(bookingSubmitHandler, onError)}>
                 <div className='field'>
                     <label className='label' htmlFor='name'>
@@ -188,4 +186,4 @@ const BookingConfirm = () => {
     );
 };
 
-export default BookingConfirm;
+export default ReservationForm;

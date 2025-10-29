@@ -4,7 +4,7 @@ import ItemHandler from '@components.common/goods/itemHandler.jsx';
 import { useErrorHandler } from '@hooks/useErrorHandler.js';
 import { ITEM_TYPE } from '@root.consts/constants';
 
-const BookingDetail = () => {
+const ProductReservation = () => {
     const [inventory, isLoading, reserve] = useInventory();
     const [items, setItems] = useState(null);
     const { handleApiError } = useErrorHandler();
@@ -105,4 +105,4 @@ const BookingDetail = () => {
         </div>
     );
 };
-export default BookingDetail;
+export default ProductReservation;
