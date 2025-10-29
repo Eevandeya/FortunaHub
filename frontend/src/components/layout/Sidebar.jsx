@@ -4,27 +4,9 @@ export const Sidebar = ({ paths, children }) => {
     const navigate = useNavigate();
 
     return (
-        <aside
-            style={{
-                backgroundColor: 'white',
-                display: 'flex',
-                gap: '10px',
-                alignItems: 'center',
-                flexDirection: 'column',
-                position: 'sticky',
-                top: 0,
-                right: 0,
-                height: '100vh',
-            }}>
+        <aside className='sidebar sidebar-right'>
             {children}
-            <div
-                style={{
-                    height: '20vh',
-                    width: '100%',
-                    zIndex: 10000,
-                    backgroundColor: 'white',
-                    boxShadow: '0 -10px 15px gray',
-                }}>
+            <footer className='sidebar-footer'>
                 <button
                     style={{
                         width: '100px',
@@ -50,7 +32,7 @@ export const Sidebar = ({ paths, children }) => {
                     onClick={() => navigate(paths.next, { relative: 'path' })}>
                     <p>Далее</p>
                 </button>
-            </div>
+            </footer>
         </aside>
     );
 };
