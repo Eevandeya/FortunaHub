@@ -26,7 +26,7 @@ export function useAvailableTimes(selectedDate) {
         } catch (error) {
             handleHookError(error, 'useAvailableTimes');
         }
-    }, [handleApiError, selectedDate, slots]);
+    }, [handleApiError, selectedDate]);
 
     useEffect(() => {
         if (selectedDate && slots) {

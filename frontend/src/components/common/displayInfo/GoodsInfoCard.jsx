@@ -12,6 +12,6 @@ export const GoodsInfoCard = ({ items }) => (
                 </li>
             ))}
         </ul>
-        <h3 style={{ fonstSize: '18px' }}>Итог</h3>
+        <h3 style={{ fontSize: '18px' }}>Итог</h3>
     </InfoCard>
 );

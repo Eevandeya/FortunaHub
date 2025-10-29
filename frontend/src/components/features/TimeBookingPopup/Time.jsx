@@ -65,7 +65,7 @@ export function Time({ date }) {
         if (config && availableTime && !loading) {
             const times = Object.keys(parsedTimeSlots);
             return (
-                <div styles={{ display: 'flex', gap: '5px' }}>
+                <div style={{ display: 'flex', gap: '5px' }}>
                     {times?.map((tm) => (
                         <Cell
                             key={tm}
@@ -194,9 +194,9 @@ export function Time({ date }) {
 
     return (
         <section
-            styles={{
+            style={{
                 minWidth: '200px',
-                minHight: '200px',
+                minHeight: '200px',
                 backgroundColor: 'white',
             }}>
             {loading ? <Loading /> : Content}

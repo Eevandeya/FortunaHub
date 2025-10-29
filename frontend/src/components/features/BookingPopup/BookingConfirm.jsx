@@ -107,7 +107,7 @@ const BookingConfirm = () => {
                                 required: 'Имя обязательно',
                                 validate: (value) => {
                                     if (!/[a-z]+/gi.test(value))
-                                        return 'Неккоректное имя';
+                                        return 'Некорректное имя';
                                 },
                             })}
                             placeholder='Введите имя'
@@ -134,7 +134,7 @@ const BookingConfirm = () => {
                                 required: 'Номер телефона обязателен',
                                 validate: (value) => {
                                     if (!/[78]\d{10}/.test(value))
-                                        return 'Неккоректный номер телефона';
+                                        return 'Некорректный номер телефона';
                                 },
                             })}
                             type='text'
