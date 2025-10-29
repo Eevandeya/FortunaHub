@@ -1,0 +1,11 @@
+.react-datepicker__navigation {
+    width: 44px !important;
+    height: 44px !important;
+    top: 16px !important;
+}
+
+.react-datepicker__navigation-icon::before {
+    border-width: 3px 3px 0 0 !important;
+    width: 14px !important;
+    height: 14px !important;
+}
