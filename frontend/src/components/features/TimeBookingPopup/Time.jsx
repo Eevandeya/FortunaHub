@@ -65,7 +65,7 @@ export function Time({ date }) {
         if (config && availableTime && !loading) {
             const times = Object.keys(parsedTimeSlots);
             return (
-                <div style={{ display: 'flex', gap: '5px' }}>
+                <div>
                     {times?.map((tm) => (
                         <Cell
                             key={tm}
