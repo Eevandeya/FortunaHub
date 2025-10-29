@@ -1,11 +1,9 @@
 import { useAvailableTimes, useTimeSlot } from '@hooks/timeHandler.js';
-import Modal from '@components.common/Modal/Modal.jsx';
 import Cell from '@components.common/cell/Cell.jsx';
-import { useEffect, useState, useMemo, useCallback } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { addMinutes, format, isWithinInterval, parse } from 'date-fns';
 import TimeUtils from '@root.utils/timeUtils.js';
 import Loading from '@components.common/loader/Loading.jsx';
-import CloseButton from '@components.common/button/closeButton.jsx';
 import { useGetSaunaConfigQuery } from '@root.api/saunaConfig.js';
 
 const checkConditions = ({ minBookingTime, start, end }) => {
@@ -20,17 +18,11 @@ const checkConditions = ({ minBookingTime, start, end }) => {
     return Math.abs(startTime - endTime) >= parsedMinBookingTime;
 };
 
-export function Time({ modalActive, setModalActive, date }) {
+export function Time({ date }) {
     const { data: config } = useGetSaunaConfigQuery();
     const [availableTime, loading] = useAvailableTimes(date);
     const [bookTimeSlot, setIsBooking, isBooking] = useTimeSlot();
     const [borderTime, setBorderTime] = useState({ start: null, end: null });
-
-    useEffect(() => {
-        if (!modalActive) {
-            setBorderTime({ start: null, end: null });
-        }
-    }, [modalActive]);
 
     const parsedTimeSlots = useMemo(() => {
         if (config) {
@@ -72,34 +64,43 @@ export function Time({ modalActive, setModalActive, date }) {
     const Content = useMemo(() => {
         if (config && availableTime && !loading) {
             const times = Object.keys(parsedTimeSlots);
+            return (
+                <div>
+                    {times?.map((tm) => (
+                        <Cell
+                            key={tm}
+                            time={tm}
+                            isDisabled={
+                                !isTimeAvailable(tm, availableTime) ||
+                                !TimeUtils.isBookingAvailable(
+                                    parsedTimeSlots[tm],
 
-            return times?.map((tm) => (
-                <Cell
-                    key={tm}
-                    time={tm}
-                    isDisabled={
-                        !isTimeAvailable(tm, availableTime) ||
-                        !TimeUtils.isBookingAvailable(
-                            parsedTimeSlots[tm],
-
-                            config.min_time_from_now_to_booking
-                        )
-                    }
-                    isSelected={(function () {
-                        const parsedTime = parsedTimeSlots[tm];
-                        if (borderTime.start && borderTime.end) {
-                            const start = parsedTimeSlots[borderTime.start];
-                            const end = parsedTimeSlots[borderTime.end];
-                            return (
-                                isWithinInterval(parsedTime, { start, end }) &&
-                                isTimeAvailable(tm, availableTime)
-                            );
-                        }
-                        return tm === borderTime.start || tm === borderTime.end;
-                    })()}
-                    setSelectedTime={() => handleTimeSelection(tm)}
-                />
-            ));
+                                    config.min_time_from_now_to_booking
+                                )
+                            }
+                            isSelected={(function () {
+                                const parsedTime = parsedTimeSlots[tm];
+                                if (borderTime.start && borderTime.end) {
+                                    const start =
+                                        parsedTimeSlots[borderTime.start];
+                                    const end = parsedTimeSlots[borderTime.end];
+                                    return (
+                                        isWithinInterval(parsedTime, {
+                                            start,
+                                            end,
+                                        }) && isTimeAvailable(tm, availableTime)
+                                    );
+                                }
+                                return (
+                                    tm === borderTime.start ||
+                                    tm === borderTime.end
+                                );
+                            })()}
+                            setSelectedTime={() => handleTimeSelection(tm)}
+                        />
+                    ))}
+                </div>
+            );
         }
     }, [
         config,
@@ -109,6 +110,7 @@ export function Time({ modalActive, setModalActive, date }) {
         isTimeAvailable,
         borderTime.start,
         borderTime.end,
+        date,
     ]);
 
     const handleTimeSelection = (selectedTime) => {
@@ -165,7 +167,6 @@ export function Time({ modalActive, setModalActive, date }) {
                 ...borderTime,
             });
             if (canBooking) {
-                setModalActive();
                 const [startSlot, endSlot] = TimeUtils.setTimeBorders(
                     parsedTimeSlots[borderTime.start],
                     parsedTimeSlots[borderTime.end]
@@ -181,21 +182,23 @@ export function Time({ modalActive, setModalActive, date }) {
                 }
             }
         },
-        [availableTime, bookTimeSlot, date, parsedTimeSlots, setModalActive]
+        [availableTime, bookTimeSlot, date, parsedTimeSlots]
     );
 
     useEffect(() => {
         if (isBooking) {
-            setModalActive(false);
             setIsBooking(false);
             setBorderTime({ start: null, end: null });
         }
     }, [isBooking]);
 
     return (
-        <Modal active={modalActive} setActive={setModalActive}>
-            <CloseButton onClick={setModalActive} />
-
+        <section
+            style={{
+                minWidth: '200px',
+                minHeight: '200px',
+                backgroundColor: 'white',
+            }}>
             {loading ? <Loading /> : Content}
 
             <button
@@ -204,6 +207,6 @@ export function Time({ modalActive, setModalActive, date }) {
                 disabled={!borderTime.start || !borderTime.end}>
                 Выбрать
             </button>
-        </Modal>
+        </section>
     );
 }

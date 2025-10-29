@@ -55,6 +55,7 @@ export const useInventory = () => {
                 const selectItems = items.map((item) => ({
                     quantity: item.quantity,
                     slug: item.slug,
+                    displayName: item.name,
                 }));
 
                 dispatch(addItem({ items: selectItems }));

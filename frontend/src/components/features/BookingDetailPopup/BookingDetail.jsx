@@ -1,24 +1,13 @@
-import { useEffect, useState, useId, useMemo, useCallback } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useInventory } from '@hooks/useInventory.js';
-import Modal from '@components.common/Modal/Modal.jsx';
 import ItemHandler from '@components.common/goods/itemHandler.jsx';
 import { useErrorHandler } from '@hooks/useErrorHandler.js';
-import { Time } from '@components.features/TimeBookingPopup/Time.jsx';
-import useModal from '@hooks/useModal.js';
-import DateSelector from '@components.common/date_picker/DatePicker.jsx';
-import { startOfDay } from 'date-fns';
-import BookingConfirm from '@components.features/BookingPopup/BookingConfirm.jsx';
-import { useSelector } from 'react-redux';
 import { ITEM_TYPE } from '@root.consts/constants';
 
-const BookingDetail = ({ modalActive, setModalActive }) => {
+const BookingDetail = () => {
     const [inventory, isLoading, reserve] = useInventory();
     const [items, setItems] = useState(null);
     const { handleApiError } = useErrorHandler();
-    const [modals, openModal, closeModal, closeAllModals] = useModal();
-    const [date, setDate] = useState(new Date());
-    const uniqueId = useId();
-    const { timeSlot } = useSelector((state) => state.booking.order);
 
     const parsedInventory = useMemo(() => {
         if (isLoading || !inventory) {
@@ -82,73 +71,38 @@ const BookingDetail = ({ modalActive, setModalActive }) => {
         }
     }, [items, reserve, handleApiError]);
 
-    return [
-        <Modal
-            active={modalActive}
-            setActive={setModalActive}
-            key={`${uniqueId}-modal`}>
-            <div className='box'>
-                <div className='content'>
-                    <h2 className='title is-4'>Банные принадлежности</h2>
-                    <div
-                        style={{
-                            width: '100%',
-                            height: '150px',
-                            backgroundColor: 'current-color',
-                        }}></div>
-                    {items?.map((item) => (
-                        <ItemHandler
-                            key={item.slug}
-                            item={item}
-                            count={item.quantity}
-                            total={item.total}
-                            itemType={ITEM_TYPE[`${item.item_type}`]}
-                            onIncrement={() => handleIncrement(item)}
-                            onDecrement={() => handleDecrement(item)}
-                        />
-                    ))}
-
-                    <div
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                        }}>
-                        <button
-                            className='button is-primary'
-                            onClick={() => openModal('time')}>
-                            Time
-                        </button>
-                        <DateSelector date={date} setDate={setDate} />
-                    </div>
-
-                    <button
-                        className={`button is-primary is-fullwidth ${isLoading ? 'is-loading' : ''}`}
-                        onClick={() => {
-                            modalHandleReserve();
-                            openModal('bookingConfirm');
-                        }}
-                        disabled={
-                            !timeSlot?.start &&
-                            !timeSlot?.end &&
-                            items?.every((item) => item.isAvailable())
-                        }>
-                        Забронировать
-                    </button>
-                </div>
+    return (
+        <div
+            style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                width: '100%',
+            }}>
+            <div>
+                {items?.map((item) => (
+                    <ItemHandler
+                        key={item.slug}
+                        item={item}
+                        count={item.quantity}
+                        total={item.total}
+                        itemType={ITEM_TYPE[`${item.item_type}`]}
+                        onIncrement={() => handleIncrement(item)}
+                        onDecrement={() => handleDecrement(item)}
+                    />
+                ))}
             </div>
-        </Modal>,
-        <Time
-            modalActive={modals.time?.isActive}
-            setModalActive={() => closeModal('time')}
-            date={startOfDay(date)}
-            key={`${uniqueId}-time`}
-        />,
-        <BookingConfirm
-            modalActive={modals.bookingConfirm?.isActive}
-            setModalActive={() => closeModal('bookingConfirm')}
-            closeAllModals={closeAllModals}
-            key={`${uniqueId}-booking`}
-        />,
-    ];
+            <button
+                style={{
+                    border: 'solid 1px black',
+                    borderRadius: '30px',
+                    width: '200px',
+                    height: '100px',
+                }}
+                onClick={modalHandleReserve}>
+                Арендовать
+            </button>
+        </div>
+    );
 };
 export default BookingDetail;
