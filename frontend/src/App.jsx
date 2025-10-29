@@ -4,13 +4,7 @@ import { GlobalErrorBoundary } from '@components.features/ReactErrorBoundary/Glo
 import { Outlet } from 'react-router-dom';
 
 function App() {
-    return (
-        <ErrorBoundaryProvider>
-            <GlobalErrorBoundary>
-                <Outlet />
-            </GlobalErrorBoundary>
-        </ErrorBoundaryProvider>
-    );
+    return <Outlet />;
 }
 
 export default App;
