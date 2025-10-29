@@ -4,7 +4,7 @@ export const GoodsInfoCard = ({ items }) => (
     <InfoCard>
         <h2 style={{ fontSize: '24px' }}>Общая стоимость</h2>
         <ul>
-            {items.map((item, index) => (
+            {items?.map((item, index) => (
                 <li key={index}>
                     <p>
                         {item.displayName}, кол-во: {item.quantity}{' '}
