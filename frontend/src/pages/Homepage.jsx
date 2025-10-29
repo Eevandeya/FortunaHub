@@ -72,10 +72,10 @@ function Homepage() {
                     </div>
                 </nav>
             </header>
-            <main className='container'>
-                <div className='first'></div>
-                <div className='second'></div>
-                <div className='third'></div>
+            <main className='homepage-container'>
+                <div className='homepage-hero'></div>
+                <div className='homepage-description'></div>
+                <div className='homepage-map'></div>
             </main>
             <footer>
                 <div className='basement' id='about'>
