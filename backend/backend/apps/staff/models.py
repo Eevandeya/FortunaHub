@@ -7,12 +7,12 @@ class Role(models.Model):
     display_name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True, max_length=50)
     description = models.CharField(blank=True, null=True, max_length=500)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
 
     # For the future
     is_active = models.BooleanField(default=True)
-    permissions = models.JSONField(default=dict, blank=True)
+    permissions = models.ManyToManyField(
+        "permissions.Permission", related_name="roles", blank=True
+    )
 
     def __str__(self) -> str:
         return self.display_name
