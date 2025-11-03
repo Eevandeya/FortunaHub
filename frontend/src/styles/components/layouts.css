@@ -132,7 +132,6 @@ footer {
     z-index: 1;
     cursor: pointer;
     display: none;
-    position: relative;
     border: none;
     background: transparent;
     width: 40px;
