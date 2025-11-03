@@ -1,11 +1,6 @@
 from django.contrib import admin
 
-from backend.apps.staff.models import Role, Staff
-
-
-@admin.register(Role)
-class RoleAdmin(admin.ModelAdmin):
-    pass
+from backend.apps.staff.models import Staff
 
 
 @admin.register(Staff)

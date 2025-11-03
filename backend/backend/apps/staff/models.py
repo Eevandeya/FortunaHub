@@ -3,26 +3,11 @@ from django.db import models
 from backend.utils.django_validators import validate_phone_number
 
 
-class Role(models.Model):
-    display_name = models.CharField(max_length=100)
-    slug = models.SlugField(unique=True, max_length=50)
-    description = models.CharField(blank=True, null=True, max_length=500)
-
-    # For the future
-    is_active = models.BooleanField(default=True)
-    permissions = models.ManyToManyField(
-        "permissions.Permission", related_name="roles", blank=True
-    )
-
-    def __str__(self) -> str:
-        return self.display_name
-
-
 class Staff(models.Model):
     telegram_user_id = models.BigIntegerField(unique=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100, blank=True, null=True)
-    roles = models.ManyToManyField("Role", related_name="staff")
+    roles = models.ManyToManyField("permissions.Role", related_name="staff")
     phone_number = models.CharField(
         max_length=20, validators=[validate_phone_number], unique=True
     )
