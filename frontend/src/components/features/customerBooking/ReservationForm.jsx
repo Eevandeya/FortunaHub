@@ -10,13 +10,16 @@ import { useForm } from 'react-hook-form';
 import Select from '@components.common/select/Select.jsx';
 import { VisitorsCountDisplay } from '@components.common/display/numberDisplay.jsx';
 import TransparentButton from '@components.common/button/transparentButton.jsx';
+import { resetBookings } from '@store/bookingSlice.js';
+import { useSetBookingMutation } from '@root.api/bookingHandler.js';
 
 const ReservationForm = () => {
     const [visitors, setVisitors] = useState(0);
     const dispatch = useDispatch();
-    const preferredContactMethod = useSelector(
-        (state) => state.booking.order?.preferredContactMethod
-    );
+    const [reserve] = useSetBookingMutation();
+    //eslint-disable-next-line
+    const { customer, items, timeSlot, visitorsCount, preferredContactMethod } =
+        useSelector((state) => state.booking.order);
     //eslint-disable-next-line
     const [status, setStatus] = useState('');
     const { handleApiError, handleError } = useErrorHandler();
@@ -38,7 +41,6 @@ const ReservationForm = () => {
     const setContactMethod = (data) => {
         dispatch(setPreferredContactMethod({ preferredContactMethod: data }));
     };
-
     const increase = () => {
         setVisitors((value) => value + 1);
     };
@@ -46,7 +48,7 @@ const ReservationForm = () => {
         setVisitors((value) => value - 1);
     };
     const bookingSubmitHandler = useCallback(
-        (data) => {
+        async (data) => {
             if (isValid) {
                 try {
                     const customerData = {
@@ -56,14 +58,13 @@ const ReservationForm = () => {
                     dispatch(setCustomerInfo({ customer: customerData }));
                     dispatch(setVisitorsCount({ visitorsCount: visitors }));
 
-                    /*
-                    reserve({
+                    await reserve({
                         customer: customerData,
                         items,
                         timeSlot,
                         visitorsCount: visitors,
                         preferredContactMethod,
-                    });*/
+                    });
                 } catch (error) {
                     handleApiError(error, { at: 'BookingConfirm' });
                     setStatus('Canceled');
@@ -72,7 +73,7 @@ const ReservationForm = () => {
                 reset({ nickname: '', phoneNumber: '' });
                 setVisitors(0);
 
-                //dispatch(reloadItems());
+                dispatch(resetBookings());
             }
         },
         [handleApiError, isValid, visitors]
@@ -175,10 +176,10 @@ const ReservationForm = () => {
                 </div>
                 <div className='field is-grouped is-right'>
                     <div className='control'>
-                        <input type='reset' className='button is-danger' />
+                        <input type='reset' value='Отменить' />
                     </div>
                     <div className='control'>
-                        <input type='submit' className='button is-success' />
+                        <input type='submit' value='Выбрать' />
                     </div>
                 </div>
             </form>
