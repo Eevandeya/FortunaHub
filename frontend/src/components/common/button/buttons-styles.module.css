@@ -22,7 +22,7 @@
 }
 
 .close-button::before,
-.close-button.after {
+.close-button::after {
     content: '';
     background-color: black;
     top: 0;
