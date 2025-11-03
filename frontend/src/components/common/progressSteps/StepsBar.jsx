@@ -1,18 +1,7 @@
 import { Step } from '@components.common/progressSteps/Step.jsx';
 
 export const StepsBar = ({ steps }) => (
-    <aside
-        style={{
-            backgroundColor: 'white',
-            display: 'flex',
-            gap: '10px',
-            alignItems: 'center',
-            flexDirection: 'column',
-            position: 'sticky',
-            top: 0,
-            right: 0,
-            height: '100vh',
-        }}>
+    <aside className='sidebar sidebar-left'>
         <ul
             style={{
                 width: '100%',

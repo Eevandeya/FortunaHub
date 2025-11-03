@@ -1,4 +1,4 @@
-import DatePicker, { CalendarContainer } from 'react-datepicker';
+import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { memo } from 'react';
 import { startOfDay } from 'date-fns';

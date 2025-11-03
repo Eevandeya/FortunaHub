@@ -1,14 +1,14 @@
-import ProductReservation from '@components.features/goodsBooking/ProductReservation.jsx';
+import ReservationForm from '@components.features/customerBooking/ReservationForm.jsx';
 import { useSelector } from 'react-redux';
+import { Sidebar } from '@components.layout/Sidebar.jsx';
 import { TimeInfoCard } from '@components.common/displayInfo/TimeInfoCard.jsx';
 import { GoodsInfoCard } from '@components.common/displayInfo/GoodsInfoCard.jsx';
-import { Sidebar } from '@components.layout/Sidebar.jsx';
-import { StepsBar } from '@components.common/progressSteps/StepsBar.jsx';
+import { StepsBar } from '../components/common/progressSteps/StepsBar.jsx';
 
-const GoodsBookingPage = () => {
+const ReservationPage = () => {
     const { timeSlot, items } = useSelector((state) => state.booking.order);
 
-    const paths = { previous: '../time', next: '../reservation' };
+    const paths = { previous: '../goods', next: '' };
     const steps = [
         { number: 1, to: '/booking/time' },
         { number: 2, to: '/booking/goods' },
@@ -20,10 +20,10 @@ const GoodsBookingPage = () => {
             <StepsBar steps={steps} />
             <div className='booking-main'>
                 <header>
-                    <h3>Выберите товары:</h3>
+                    <h3>Введите персональные данные:</h3>
                 </header>
                 <div className='booking-content'>
-                    <ProductReservation />
+                    <ReservationForm />
                 </div>
             </div>
             <Sidebar paths={paths}>
@@ -33,4 +33,4 @@ const GoodsBookingPage = () => {
         </div>
     );
 };
-export default GoodsBookingPage;
+export default ReservationPage;

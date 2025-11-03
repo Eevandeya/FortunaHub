@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Time } from '@components.features/TimeBookingPopup/Time.jsx';
-import DateSelector from '@components.common/date_picker/DatePicker.jsx';
+import { TimePicker } from '@components.features/timeBooking/TimePicker.jsx';
+import DateSelector from '@components.common/datePicker/DatePicker.jsx';
 import { startOfDay } from 'date-fns';
 import { useSelector } from 'react-redux';
 import { Sidebar } from '@components.layout/Sidebar.jsx';
@@ -16,59 +16,27 @@ const TimeBookingPage = () => {
     const steps = [
         { number: 1, to: '/booking/time' },
         { number: 2, to: '/booking/goods' },
-        { number: 3, to: '/booking/payment' },
+        { number: 3, to: '/booking/reservation' },
     ];
 
     return (
-        <div
-            style={{
-                backgroundColor: '#FDFAF0',
-                display: 'grid',
-                gridTemplateColumns: '5vw 65vw 30vw',
-                position: 'relative',
-                height: '300vh',
-            }}>
+        <div className='booking-container'>
             <StepsBar steps={steps} />
-            <div>
-                <h1
-                    style={{
-                        color: 'black',
-                        fontSize: '48px',
-                        fontWeight: 'medium',
-                    }}>
-                    Забронируйте баню
-                </h1>
-                <div className='first'>
-                    <h2 style={{ fontSize: '32px' }}>Выберите дату</h2>
-                    <div
-                        style={{
-                            marginBlock: '10px',
-                            marginInline: '5px',
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            backgroundColor: 'white',
-                            maxWidth: '40vw',
-                        }}>
-                        <DateSelector date={date} setDate={setDate} />
-                    </div>
+            <div className='booking-main'>
+                <div className='booking-header'>
+                    <h1>Забронируйте баню</h1>
                 </div>
-                <div className='second'>
-                    <h2 style={{ fontSize: '32px' }}>Выберите время</h2>
-                    <div
-                        style={{
-                            marginBlock: '10px',
-                            marginInline: '5px',
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            backgroundColor: 'white',
-                            minWidth: '50vw',
-                            minHeight: '50vh',
-                            gap: '5px',
-                        }}>
-                        <Time date={startOfDay(date)} />
-                    </div>
+                <div className='booking-content'>
+                    <header>
+                        <h3>Выберите дату</h3>
+                    </header>
+                    <DateSelector date={date} setDate={setDate} />
+                </div>
+                <div className='booking-content'>
+                    <header>
+                        <h3>Выберите время</h3>
+                    </header>
+                    <TimePicker date={startOfDay(date)} />
                 </div>
             </div>
             <Sidebar paths={paths}>

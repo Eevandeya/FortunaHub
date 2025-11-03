@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ErrorBoundaryContext } from './Context.js';
+import { GlobalErrorBoundary } from '@components.features/reactErrorBoundary/GlobalErrorBoundary.jsx';
 
 export const ErrorBoundaryProvider = ({ children }) => {
     const [errors, setErrors] = useState([]);
@@ -27,7 +28,7 @@ export const ErrorBoundaryProvider = ({ children }) => {
     return (
         <ErrorBoundaryContext.Provider
             value={{ errors, addError, clearError, clearAllErrors }}>
-            {children}
+            <GlobalErrorBoundary>{children}</GlobalErrorBoundary>
         </ErrorBoundaryContext.Provider>
     );
 };
