@@ -1,10 +1,9 @@
 import paymentMethods from '../../../../consts/paymentMethods.js';
-import CloseButton from '../../common/button/closeButton.jsx';
 import { useSetBookingMutation } from '../../../../api/bookingHandler.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetBookings } from '../../../store/bookingSlice.js';
 
-const OrderPayment = ({ onClick }) => {
+const OrderPayment = () => {
     const [reserve] = useSetBookingMutation();
     const { customer, items, timeSlot, visitorsCount, preferredContactMethod } =
         useSelector((state) => state.booking.order);
@@ -31,7 +30,6 @@ const OrderPayment = ({ onClick }) => {
                 alignItems: 'center',
                 zIndex: 10,
             }}>
-            <CloseButton onClick={onClick} />
             <ul>
                 {paymentMethods.map((method) => (
                     <li key={method.id}>
