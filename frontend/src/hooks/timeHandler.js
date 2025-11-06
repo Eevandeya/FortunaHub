@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import TimeUtils from '@root.utils/timeUtils.js';
 import { format } from 'date-fns';
 import { useErrorHandler } from '@hooks/useErrorHandler.js';
@@ -7,34 +7,32 @@ import { useDispatch } from 'react-redux';
 import { useGetSaunaConfigQuery } from '@root.api/saunaConfig.js';
 import { useGetAvailableTimesQuery } from '@root.api/timeSlotsApi.js';
 import { skipToken } from '@reduxjs/toolkit/query';
+import { setDate, setTime } from '@store/dateTimeSlice.js';
 
 export function useAvailableTimes(selectedDate) {
-    const [freeSlots, setFreeSlots] = useState([]);
     const { handleHookError, handleApiError } = useErrorHandler();
-    const { data: slots, isLoading } = useGetAvailableTimesQuery({
+    const {
+        data: slots,
+        isLoading,
+        error,
+    } = useGetAvailableTimesQuery({
         date: selectedDate ? format(selectedDate, 'yyyy-MM-dd') : skipToken,
     });
+    const dispatch = useDispatch();
 
-    const fetchTimes = useCallback(() => {
-        try {
-            if (!selectedDate) {
-                throw new Error(
-                    'Не выбрана дата бронирования. Вернитесь и выберите дату'
-                );
-            }
-            setFreeSlots(slots?.free_slots ?? []);
-        } catch (error) {
+    useEffect(() => {
+        if (error) {
             handleHookError(error, 'useAvailableTimes');
         }
     }, [handleApiError, selectedDate]);
 
     useEffect(() => {
-        if (selectedDate && slots) {
-            fetchTimes(selectedDate);
+        if (selectedDate) {
+            dispatch(setDate({ date: format(selectedDate, 'yyyy-MM-dd') }));
         }
     }, [selectedDate, slots]);
 
-    return [freeSlots, isLoading];
+    return [slots?.free_slots ?? [], isLoading];
 }
 
 export function useTimeSlot() {
@@ -54,7 +52,6 @@ export function useTimeSlot() {
             if (!start || !end || !selectedDate) {
                 throw new Error('Не выбрано время или дата');
             }
-
             const canBookingFromNow = TimeUtils.isBookingAvailable(
                 start,
 
@@ -73,10 +70,16 @@ export function useTimeSlot() {
                 throw new Error('Выбранное время уже занято');
             }
 
-            const [startISOS, endISOS] = TimeUtils.formatToIso([start, end]);
-            const timeSlot = { start: startISOS, end: endISOS };
+            const [startISO, endISO] = TimeUtils.formatToIso([start, end]);
+            const timeSlot = { start: startISO, end: endISO };
 
             dispatch(setTimeSlot({ timeSlot }));
+            dispatch(
+                setTime({
+                    start: timeSlot.start.split('T')[1],
+                    end: timeSlot.end.split('T')[1],
+                })
+            );
             setIsBooking(true);
             return { success: undefined };
         } catch (error) {
