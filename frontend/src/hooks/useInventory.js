@@ -1,29 +1,19 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useErrorHandler } from '@hooks/useErrorHandler.js';
-import { addItem } from '@store/bookingSlice.js';
-import { useDispatch, useSelector } from 'react-redux';
-import { reloadItems } from '@store/itemsSlice.js';
+import { addBookingItems, removeBookingItem } from '@store/bookingSlice.js';
+import { useDispatch } from 'react-redux';
 import { useGetItemsQuantityQuery } from '@root.api/rentingItemsApi.js';
-import { selectReload } from '@store/itemsSlice.js';
+import { addItems, removeItem } from '@store/itemsSlice.js';
 
 export const useInventory = () => {
     const {
-        data: inventoryData,
+        data: inventory,
         isLoading,
         error,
         isError,
     } = useGetItemsQuantityQuery();
-    const reload = useSelector((state) => selectReload(state));
-    const [inventory, setInventory] = useState();
     const { handleHookError } = useErrorHandler();
     const dispatch = useDispatch();
-    const isReloadRef = useRef(reload);
-
-    const getSelectedItems = useCallback(() => {
-        if (isLoading) return;
-
-        setInventory(inventoryData);
-    }, [error, handleHookError, inventoryData, isError, isLoading]);
 
     useEffect(() => {
         if (isError) {
@@ -31,12 +21,16 @@ export const useInventory = () => {
                 action: 'getSelectedItems',
             });
         }
-        if (isReloadRef.current && inventoryData) {
-            getSelectedItems();
-            dispatch(reloadItems());
-            isReloadRef.current = reload;
+    }, [error, handleHookError, isError]);
+
+    const deleteItem = (items) => {
+        for (const item of items) {
+            if (!item.quantity) {
+                dispatch(removeItem({ slug: item.slug }));
+                dispatch(removeBookingItem({ slug: item.slug }));
+            }
         }
-    }, [dispatch, getSelectedItems, isError]);
+    };
 
     const reserve = useCallback(
         (items) => {
@@ -58,7 +52,8 @@ export const useInventory = () => {
                     displayName: item.name,
                 }));
 
-                dispatch(addItem({ items: selectItems }));
+                dispatch(addBookingItems({ items: selectItems }));
+                dispatch(addItems({ items: selectItems }));
             } catch (error) {
                 handleHookError(error, 'useInventory', { action: 'reserve' });
             }
@@ -66,5 +61,5 @@ export const useInventory = () => {
         [dispatch]
     );
 
-    return [inventory, isLoading, reserve];
+    return [inventory, isLoading, reserve, deleteItem];
 };
