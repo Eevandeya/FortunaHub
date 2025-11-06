@@ -2,15 +2,14 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const itemsSlice = createSlice({
     name: 'items',
-    initialState: { items: [], reload: true },
+    initialState: { items: [] },
     selectors: {
         selectItem: (state, slug) =>
             state.items.find((item) => item.slug === slug),
         selectItems: (state) => state.items,
-        selectReload: (state) => state.reload,
     },
     reducers: {
-        addItem(state, action) {
+        addItems(state, action) {
             state.items = action.payload.items;
         },
         removeItem(state, action) {
@@ -18,12 +17,11 @@ const itemsSlice = createSlice({
                 (item) => item.slug !== action.payload.slug
             );
         },
-        reloadItems: (state) => {
-            state.reload = !state.reload;
+        resetItems(state) {
+            state.items = [];
         },
     },
 });
 
-export const { reloadItems } = itemsSlice.actions;
-export const { selectReload } = itemsSlice.selectors;
+export const { addItems, removeItem, resetItems } = itemsSlice.actions;
 export default itemsSlice.reducer;
