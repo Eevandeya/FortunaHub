@@ -1,6 +1,25 @@
 import { Link, Outlet } from 'react-router-dom';
+import { StepsBar } from '@components.common/progressSteps/StepsBar.jsx';
+import { ROUTES } from '@root.consts/navigation.js';
+import { Sidebar } from '@components.layout/Sidebar.jsx';
+import { useBookingNavigation } from '@hooks/useBookingNavigation.js';
+import { GoodsInfoCard } from '@components.common/displayInfo/GoodsInfoCard.jsx';
+import { TimeInfoCard } from '@components.common/displayInfo/TimeInfoCard.jsx';
+import { useSelector } from 'react-redux';
+import { useBookingBlocker } from '@hooks/useBookingBlocker.js';
 
 const BookingLayout = () => {
+    const steps = [
+        { to: ROUTES.BOOKING.TIME, number: 1 },
+        { to: ROUTES.BOOKING.GOODS, number: 2 },
+        { to: ROUTES.BOOKING.RESERVATION, number: 3 },
+    ];
+
+    const { date, time } = useSelector((state) => state.datetime);
+    const { items } = useSelector((state) => state.items);
+    const blocker = useBookingBlocker({ items, time });
+    const navigation = useBookingNavigation();
+
     return (
         <>
             <header style={{ position: 'relative' }}>
@@ -18,9 +37,34 @@ const BookingLayout = () => {
                     </div>
                 </nav>
             </header>
-            <main>
-                <Outlet />
-            </main>
+            <div className='booking-container'>
+                <StepsBar steps={steps} />
+                <main>
+                    <Outlet />
+                    {blocker.state === 'blocked' && (
+                        <div>
+                            <button
+                                style={{ backgroundColor: 'white' }}
+                                onClick={() => {
+                                    blocker.reset();
+                                }}>
+                                Остаться
+                            </button>
+                            <button
+                                style={{ backgroundColor: 'white' }}
+                                onClick={() => {
+                                    blocker.proceed();
+                                }}>
+                                Перейти
+                            </button>
+                        </div>
+                    )}
+                </main>
+                <Sidebar paths={navigation}>
+                    <TimeInfoCard timeSlot={time} date={date} />
+                    <GoodsInfoCard items={items} />
+                </Sidebar>
+            </div>
         </>
     );
 };
