@@ -1,4 +1,7 @@
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { NavigationItem } from '@components.common/navigation/NavigationItem.jsx';
+import { HashNavigationItem } from '@components.common/navigation/HashNavigationItem.jsx';
+import { ROUTES } from '@root.consts/navigation.js';
 
 function Homepage() {
     return (
@@ -14,33 +17,15 @@ function Homepage() {
                             </svg>
                         </div>
                         <div className='navbar-right'>
-                            <span>
-                                <NavLink
-                                    style={({ isActive }) =>
-                                        isActive
-                                            ? { color: 'white' }
-                                            : { color: '#c6cec9' }
-                                    }
-                                    to='/'
-                                    end>
-                                    В главное меню
-                                </NavLink>
-                            </span>
-                            <span>
-                                <NavLink
-                                    style={({ isActive }) =>
-                                        isActive
-                                            ? { color: 'white' }
-                                            : { color: '#c6cec9' }
-                                    }
-                                    to='/booking/time'
-                                    end>
-                                    Забронировать
-                                </NavLink>
-                            </span>
-                            <span>
-                                <a href='#about'>О нас</a>
-                            </span>
+                            <NavigationItem to={ROUTES.HOME} end>
+                                В главное меню
+                            </NavigationItem>
+                            <NavigationItem to={ROUTES.BOOKING.TIME} end>
+                                Забронировать
+                            </NavigationItem>
+                            <HashNavigationItem to={ROUTES.ABOUT}>
+                                О нас
+                            </HashNavigationItem>
                         </div>
                         <div id='burger-menu'>
                             <input
@@ -53,19 +38,25 @@ function Homepage() {
                                 className='burger'></label>
                             <ul className='menu-list'>
                                 <li>
-                                    <a className='menu-item' href='#'>
+                                    <NavigationItem
+                                        to={ROUTES.BOOKING}
+                                        className='menu-item'>
                                         Главная
-                                    </a>
+                                    </NavigationItem>
                                 </li>
                                 <li>
-                                    <a className='menu-item' href='#'>
+                                    <NavigationItem
+                                        to={ROUTES.BOOKING.TIME}
+                                        className='menu-item'>
                                         Забронировать
-                                    </a>
+                                    </NavigationItem>
                                 </li>
                                 <li>
-                                    <a className='menu-item' href='#'>
+                                    <HashNavigationItem
+                                        className='menu-item'
+                                        to={ROUTES.ABOUT}>
                                         О нас
-                                    </a>
+                                    </HashNavigationItem>
                                 </li>
                             </ul>
                         </div>
@@ -73,7 +64,17 @@ function Homepage() {
                 </nav>
             </header>
             <main className='homepage-container'>
-                <div className='homepage-hero'></div>
+                <div className='homepage-hero'>
+                    <Link
+                        to='/booking/time'
+                        style={{
+                            backgroundColor: 'transparent',
+                            border: 'solid 2px black',
+                            borderRadius: '30px',
+                        }}>
+                        Забронировать
+                    </Link>
+                </div>
                 <div className='homepage-description'></div>
                 <div className='homepage-map'></div>
             </main>
