@@ -28,7 +28,8 @@
         "react-error-boundary": "^6.0.0",
         "react-hook-form": "^7.62.0",
         "react-redux": "^9.2.0",
-        "react-router-dom": "^7.9.4"
+        "react-router-dom": "^7.9.4",
+        "redux-remember": "^5.3.0"
     },
     "devDependencies": {
         "@eslint/js": "^9.21.0",
