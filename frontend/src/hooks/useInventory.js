@@ -23,14 +23,17 @@ export const useInventory = () => {
         }
     }, [error, handleHookError, isError]);
 
-    const deleteItem = (items) => {
-        for (const item of items) {
-            if (!item.quantity) {
-                dispatch(removeItem({ slug: item.slug }));
-                dispatch(removeBookingItem({ slug: item.slug }));
+    const deleteItem = useCallback(
+        (items) => {
+            for (const item of items) {
+                if (!item.quantity) {
+                    dispatch(removeItem({ slug: item.slug }));
+                    dispatch(removeBookingItem({ slug: item.slug }));
+                }
             }
-        }
-    };
+        },
+        [dispatch]
+    );
 
     const reserve = useCallback(
         (items) => {

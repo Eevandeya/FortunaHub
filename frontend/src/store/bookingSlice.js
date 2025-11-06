@@ -6,7 +6,7 @@ const bookingSlice = createSlice({
         order: {
             customer: { nickname: '', phoneNumber: '' },
             items: [],
-            timeSlot: null,
+            timeSlot: { start: '', end: '' },
             visitorsCount: 0,
             preferredContactMethod: 'whatsapp',
         },
@@ -50,7 +50,7 @@ const bookingSlice = createSlice({
             state.order = {
                 customer: { nickname: '', phoneNumber: '' },
                 items: [],
-                timeSlot: null,
+                timeSlot: { start: '', end: '' },
                 visitorsCount: 0,
                 preferredContactMethod: 'whatsapp',
             };
@@ -65,7 +65,7 @@ const bookingSlice = createSlice({
             state.status.current = 'idle';
             state.status.statusMessage = '';
             state.status.attempts = 0;
-            state.status.lastAttempt = 0;
+            state.status.lastAttempt = null;
         },
     },
 });

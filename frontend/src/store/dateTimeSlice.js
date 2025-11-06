@@ -17,7 +17,7 @@ const dateTimeSlice = createSlice({
         },
         resetDateTime(state) {
             state.date = null;
-            state.time = null;
+            state.time = { start: '', end: '' };
         },
     },
 });

@@ -62,7 +62,7 @@ export const useReservation = (preferredContactMethod, visitors, formState) => {
                 } catch (error) {
                     handleApiError(error, { at: 'BookingConfirm' });
                     const errorMessage =
-                        'Ошибка оформелния брони. Пожалйста повторите еще раз!';
+                        'Ошибка оформления брони. Пожалуйста повторите еще раз!';
                     const lastAttempt = new Date().toLocaleString();
                     const status = 'error';
                     dispatch(
@@ -76,7 +76,7 @@ export const useReservation = (preferredContactMethod, visitors, formState) => {
                 }
             } else {
                 const errorMessage =
-                    'Ошибка оформелния брони. Проверьте, правильно ли вы заполнили данные брони!';
+                    'Ошибка оформления брони. Проверьте, правильно ли вы заполнили данные брони!';
                 const lastAttempt = new Date().toLocaleString();
                 const status = 'error';
                 dispatch(
@@ -91,8 +91,6 @@ export const useReservation = (preferredContactMethod, visitors, formState) => {
         [
             formState.isValid,
             dispatch,
-            setCustomer,
-            setVisitors,
             visitors,
             reserve,
             items,
