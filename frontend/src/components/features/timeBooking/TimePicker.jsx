@@ -60,7 +60,6 @@ export function TimePicker({ date }) {
             });
         });
     };
-
     const Content = useMemo(() => {
         if (config && availableTime && !loading) {
             const times = Object.keys(parsedTimeSlots);
@@ -160,7 +159,6 @@ export function TimePicker({ date }) {
     const booking = useCallback(
         (e) => {
             e.preventDefault();
-
             const minBookingTime = config.min_booking_time;
             const canBooking = checkConditions({
                 minBookingTime,

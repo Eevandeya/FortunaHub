@@ -40,9 +40,9 @@ const bookingApi = baseApi.injectEndpoints({
                     },
                     items: consumerData['items'],
                     // eslint-disable-next-line camelcase
-                    start_datetime: consumerData.timeSlot.start,
+                    start_datetime: consumerData.timeSlot?.start,
                     // eslint-disable-next-line camelcase
-                    end_datetime: consumerData.timeSlot.end,
+                    end_datetime: consumerData.timeSlot?.end,
                     // eslint-disable-next-line camelcase
                     visitors_count: consumerData['visitorsCount'],
                     // eslint-disable-next-line camelcase
