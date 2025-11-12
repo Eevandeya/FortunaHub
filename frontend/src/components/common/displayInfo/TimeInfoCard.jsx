@@ -9,9 +9,8 @@ export const TimeInfoCard = ({ timeSlot, date }) => (
             </li>
             <li key={2}>
                 <p>
-                    Выбранное время:{' '}
-                    {timeSlot && format(timeSlot.start, 'HH:mm')}—
-                    {timeSlot && format(timeSlot.end, 'HH:mm')}
+                    Выбранное время:
+                    {timeSlot && timeSlot.start}—{timeSlot && timeSlot.end}
                 </p>
             </li>
         </ul>

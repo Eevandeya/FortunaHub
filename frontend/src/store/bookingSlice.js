@@ -6,25 +6,32 @@ const bookingSlice = createSlice({
         order: {
             customer: { nickname: '', phoneNumber: '' },
             items: [],
-            timeSlot: null,
+            timeSlot: { start: '', end: '' },
             visitorsCount: 0,
             preferredContactMethod: 'whatsapp',
         },
         reload: true,
+        status: {
+            current: 'idle',
+            statusMessage: '',
+            attempts: 0,
+            lastAttempt: null,
+        },
     },
     selectors: {
         selectReload: (state) => state.reload,
-        selectStatus: (state) => state.status,
+        selectStatus: (state) => state.status.current,
+        selectStatusMessage: (state) => state.status.statusMessage,
     },
     reducers: {
         setCustomerInfo(state, action) {
             const customerData = action.payload.customer;
             state.order.customer = { ...state.order.customer, ...customerData };
         },
-        addItem(state, action) {
+        addBookingItems(state, action) {
             state.order.items = action.payload.items;
         },
-        removeItem(state, action) {
+        removeBookingItem(state, action) {
             state.order.items = state.order.items?.filter(
                 (item) => item.slug !== action.payload.slug
             );
@@ -43,23 +50,38 @@ const bookingSlice = createSlice({
             state.order = {
                 customer: { nickname: '', phoneNumber: '' },
                 items: [],
-                timeSlot: null,
+                timeSlot: { start: '', end: '' },
                 visitorsCount: 0,
                 preferredContactMethod: 'whatsapp',
             };
+        },
+        setBookingStatus(state, action) {
+            state.status.current = action.payload.status;
+            state.status.attempts += 1;
+            state.status.lastAttempt = action.payload.lastAttempt;
+            state.status.statusMessage = action.payload.statusMessage;
+        },
+        resetBookingsStatus(state) {
+            state.status.current = 'idle';
+            state.status.statusMessage = '';
+            state.status.attempts = 0;
+            state.status.lastAttempt = null;
         },
     },
 });
 
 export const {
     setCustomerInfo,
-    addItem,
-    removeItem,
+    addBookingItems,
+    removeBookingItem,
     setTimeSlot,
     setVisitorsCount,
     setPreferredContactMethod,
     resetBookings,
+    setBookingStatus,
+    resetBookingsStatus,
 } = bookingSlice.actions;
 
-export const { selectReload } = bookingSlice.selectors;
+export const { selectReload, selectStatus, selectStatusMessage } =
+    bookingSlice.selectors;
 export default bookingSlice.reducer;

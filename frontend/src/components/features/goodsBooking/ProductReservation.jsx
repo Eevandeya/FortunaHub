@@ -5,7 +5,7 @@ import { useErrorHandler } from '@hooks/useErrorHandler.js';
 import { ITEM_TYPE } from '@root.consts/constants';
 
 const ProductReservation = () => {
-    const [inventory, isLoading, reserve] = useInventory();
+    const [inventory, isLoading, reserve, deleteItem] = useInventory();
     const [items, setItems] = useState(null);
     const { handleApiError } = useErrorHandler();
 
@@ -64,6 +64,7 @@ const ProductReservation = () => {
         try {
             if (items) {
                 reserve(items);
+                deleteItem(items);
                 resetItems();
             }
         } catch (error) {
