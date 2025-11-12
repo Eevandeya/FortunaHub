@@ -11,21 +11,21 @@ export const ROUTES = {
 
 export const BOOKING_NAVIGATION = {
     time: {
-        path: '/booking/time',
-        previous: '/',
-        next: '/booking/goods',
+        path: ROUTES.BOOKING.TIME,
+        previous: ROUTES.HOME,
+        next: ROUTES.BOOKING.GOODS,
         label: 'Выбор времени',
     },
     goods: {
-        path: '/booking/goods',
-        previous: '/booking/time',
-        next: '/booking/reservation',
+        path: ROUTES.BOOKING.GOODS,
+        previous: ROUTES.BOOKING.TIME,
+        next: ROUTES.BOOKING.RESERVATION,
         label: 'Выбор товаров',
     },
     reservation: {
-        path: '/booking/reservation',
-        previous: '/booking/goods',
-        next: '/booking/reservation',
+        path: ROUTES.BOOKING.RESERVATION,
+        previous: ROUTES.BOOKING.GOODS,
+        next: null,
         label: 'Оформление брони',
     },
 };
