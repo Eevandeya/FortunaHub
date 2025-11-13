@@ -39,7 +39,7 @@ class SaunaConfigSerializer(serializers.ModelSerializer):
         return data
 
 
-class PricingConfigSerializer(serializers.ModelSerializer):
+class PricingConfigSerializer(serializers.Serializer):
     prepayment = serializers.DecimalField(max_digits=10, decimal_places=2)
     hourly_rent = serializers.DecimalField(max_digits=10, decimal_places=2)
     currency = serializers.SerializerMethodField()
