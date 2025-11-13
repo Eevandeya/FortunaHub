@@ -1,5 +1,6 @@
 import datetime
 
+from django.conf import settings
 from rest_framework import serializers
 
 from backend.apps.core.models import SaunaConfig
@@ -41,3 +42,7 @@ class SaunaConfigSerializer(serializers.ModelSerializer):
 class PricingConfigSerializer(serializers.ModelSerializer):
     prepayment = serializers.DecimalField(max_digits=10, decimal_places=2)
     hourly_rent = serializers.DecimalField(max_digits=10, decimal_places=2)
+    currency = serializers.SerializerMethodField()
+
+    def get_currency(self, _obj: dict) -> str:
+        return settings.CASH_CURRENCY_CODE
