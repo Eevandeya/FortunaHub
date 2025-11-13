@@ -36,3 +36,8 @@ class SaunaConfigSerializer(serializers.ModelSerializer):
             instance.min_time_between_bookings
         )
         return data
+
+
+class PricingConfigSerializer(serializers.ModelSerializer):
+    prepayment = serializers.DecimalField(max_digits=10, decimal_places=2)
+    hourly_rent = serializers.DecimalField(max_digits=10, decimal_places=2)
