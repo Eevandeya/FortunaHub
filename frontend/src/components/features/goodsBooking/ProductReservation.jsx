@@ -20,6 +20,7 @@ const ProductReservation = () => {
                 quantity: 0,
                 slug: item.slug,
                 itemType: item.itemType,
+                unitPrice: item.unitPrice,
                 isAvailable() {
                     return this.total > 0;
                 },
