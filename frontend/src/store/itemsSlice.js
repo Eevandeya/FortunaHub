@@ -7,6 +7,11 @@ const itemsSlice = createSlice({
         selectItem: (state, slug) =>
             state.items.find((item) => item.slug === slug),
         selectItems: (state) => state.items,
+        selectBookingItems: (state) =>
+            state.items.map((item) => ({
+                slug: item.slug,
+                quantity: item.quantity,
+            })),
     },
     reducers: {
         addItems(state, action) {
@@ -24,4 +29,5 @@ const itemsSlice = createSlice({
 });
 
 export const { addItems, removeItem, resetItems } = itemsSlice.actions;
+export const { selectItems } = itemsSlice.selectors;
 export default itemsSlice.reducer;
