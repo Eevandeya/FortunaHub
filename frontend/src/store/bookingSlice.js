@@ -10,7 +10,6 @@ const bookingSlice = createSlice({
             visitorsCount: 0,
             preferredContactMethod: 'whatsapp',
         },
-        reload: true,
         status: {
             current: 'idle',
             statusMessage: '',
@@ -19,7 +18,6 @@ const bookingSlice = createSlice({
         },
     },
     selectors: {
-        selectReload: (state) => state.reload,
         selectStatus: (state) => state.status.current,
         selectStatusMessage: (state) => state.status.statusMessage,
     },
@@ -61,7 +59,7 @@ const bookingSlice = createSlice({
             state.status.lastAttempt = action.payload.lastAttempt;
             state.status.statusMessage = action.payload.statusMessage;
         },
-        resetBookingsStatus(state) {
+        resetBookingStatus(state) {
             state.status.current = 'idle';
             state.status.statusMessage = '';
             state.status.attempts = 0;
@@ -79,9 +77,8 @@ export const {
     setPreferredContactMethod,
     resetBookings,
     setBookingStatus,
-    resetBookingsStatus,
+    resetBookingStatus,
 } = bookingSlice.actions;
 
-export const { selectReload, selectStatus, selectStatusMessage } =
-    bookingSlice.selectors;
+export const { selectStatus, selectStatusMessage } = bookingSlice.selectors;
 export default bookingSlice.reducer;
