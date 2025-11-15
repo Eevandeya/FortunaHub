@@ -6,6 +6,7 @@ import GoodsBookingPage from '@pages/GoodsBookingPage.jsx';
 import ReservationPage from '@pages/ReservationPage.jsx';
 import BookingLayout from '@components.layout/BookingLayout.jsx';
 import { NotFoundPage } from '@pages/ErrorPage.jsx';
+import { SuccessStatusPage } from '../pages/StatusPage.jsx';
 
 const routes = createRoutesFromElements([
     <Route path='/' element={<App />}>
@@ -17,6 +18,9 @@ const routes = createRoutesFromElements([
             <Route path='reservation' element={<ReservationPage />} />
         </Route>
         <Route path='*' element={<NotFoundPage />} />
+        <Route path='status'>
+            <Route path='success' element={<SuccessStatusPage />} />
+        </Route>
     </Route>,
 ]);
 
