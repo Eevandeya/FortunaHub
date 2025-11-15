@@ -10,6 +10,7 @@ import {
     parse,
     setHours,
     setMinutes,
+    isMatch,
 } from 'date-fns';
 
 /**
@@ -27,7 +28,7 @@ class TimeUtils {
 
     /**
      * Formats an array of dates to ISO strings
-     * @param {Date[]} datetime - Array of Date objects to format
+     * @param {number[]} datetime - Array of Date objects to format
      * @returns {string[]} Array of strings in "yyyy-MM-dd'T'HH:mm:ss" format
      * @throws {Error} If date conversion fails
      */
@@ -121,7 +122,7 @@ class TimeUtils {
                 freeEndTime
             );
 
-            return (
+            if (
                 isWithinInterval(start, {
                     start: freeStartTime,
                     end: freeEndTime,
@@ -130,7 +131,51 @@ class TimeUtils {
                     start: freeStartTime,
                     end: freeEndTime,
                 })
-            );
+            ) {
+                return true;
+            }
+        }
+        return false;
+    }
+    static calculateRange(time) {
+        const format = 'HH:mm:ss';
+        try {
+            let startTime = parse(time.start, format, Date.now());
+            let endTime = parse(time.end, format, Date.now());
+            if (isAfter(startTime, endTime)) {
+                endTime = setHours(setMinutes(addDays(startTime, 1), 0), 0);
+            }
+            const range = endTime - startTime;
+            const timeRange = range / 1000 / 60 / 60;
+            return timeRange;
+        } catch (error) {
+            throw new Error(`${error}.\n Expected format: ${format}`);
+        }
+    }
+    static concateDateTime(time, date) {
+        if (!time.start || !time.end || !date) {
+            return [undefined, undefined];
+        }
+        try {
+            const formatDate = parse(date, 'yyyy-MM-dd', Date.now());
+            let startTime, endTime;
+            if (isMatch(time.start, 'HH:mm') && isMatch(time.end, 'HH:mm')) {
+                const format = 'HH:mm';
+                startTime = parse(time.start, format, formatDate);
+                endTime = parse(time.end, format, formatDate);
+            } else if (
+                isMatch(time.start, 'HH:mm:ss') &&
+                isMatch(time.end, 'HH:mm:ss')
+            ) {
+                const format = 'HH:mm:ss';
+                startTime = parse(time.start, format, formatDate);
+                endTime = parse(time.end, format, formatDate);
+            } else {
+                throw new Error('Invalid time format');
+            }
+            return this.formatToIso(this.setTimeBorders(startTime, endTime));
+        } catch (error) {
+            throw new Error(error.message);
         }
     }
 }
