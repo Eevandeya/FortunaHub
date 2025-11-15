@@ -59,7 +59,7 @@ const ReservationForm = () => {
                             {...register('nickname', {
                                 required: 'Имя обязательно',
                                 validate: (value) => {
-                                    if (!/[a-z]+/gi.test(value))
+                                    if (!/[a-zA-Zа-яА-я]+/gi.test(value))
                                         return 'Некорректное имя';
                                 },
                             })}
