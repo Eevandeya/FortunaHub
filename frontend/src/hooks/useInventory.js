@@ -49,13 +49,17 @@ export const useInventory = () => {
                 ) {
                     throw new Error('Incorrect value');
                 }
+                const bookingSelectItems = items.map((item) => ({
+                    quantity: item.quantity,
+                    slug: item.slug,
+                }));
                 const selectItems = items.map((item) => ({
                     quantity: item.quantity,
                     slug: item.slug,
                     displayName: item.name,
+                    unitPrice: item.unitPrice,
                 }));
-
-                dispatch(addBookingItems({ items: selectItems }));
+                dispatch(addBookingItems({ items: bookingSelectItems }));
                 dispatch(addItems({ items: selectItems }));
             } catch (error) {
                 handleHookError(error, 'useInventory', { action: 'reserve' });

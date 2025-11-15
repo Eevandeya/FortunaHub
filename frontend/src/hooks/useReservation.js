@@ -1,18 +1,15 @@
 import { useDispatch, useSelector } from 'react-redux';
 import {
-    resetBookings,
-    setCustomerInfo,
-    setVisitorsCount,
-    setBookingStatus,
     selectStatus,
     selectStatusMessage,
+    setBookingStatus,
+    setCustomerInfo,
+    setVisitorsCount,
 } from '@store/bookingSlice.js';
 
 import { useCallback } from 'react';
 import { useErrorHandler } from '@hooks/useErrorHandler.js';
 import { useSetBookingMutation } from '@root.api/bookingHandler.js';
-import { resetItems } from '@store/itemsSlice.js';
-import { resetDateTime } from '@store/dateTimeSlice.js';
 
 export const useReservation = (preferredContactMethod, visitors, formState) => {
     const dispatch = useDispatch();
@@ -36,7 +33,7 @@ export const useReservation = (preferredContactMethod, visitors, formState) => {
         dispatch(setVisitorsCount({ visitorsCount: data }));
     };
 
-    const bookingSubmitHandler = useCallback(
+    const submitReservation = useCallback(
         async (data) => {
             if (formState.isValid && isFieldsValid()) {
                 try {
@@ -55,10 +52,6 @@ export const useReservation = (preferredContactMethod, visitors, formState) => {
                         visitorsCount: visitors,
                         preferredContactMethod,
                     });
-
-                    dispatch(resetDateTime());
-                    dispatch(resetItems());
-                    dispatch(resetBookings());
                 } catch (error) {
                     handleApiError(error, { at: 'BookingConfirm' });
                     const errorMessage =
@@ -100,5 +93,5 @@ export const useReservation = (preferredContactMethod, visitors, formState) => {
         ]
     );
 
-    return { reserve: bookingSubmitHandler, status, statusMessage };
+    return { reserve: submitReservation, status, statusMessage };
 };
