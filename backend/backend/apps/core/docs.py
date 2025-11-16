@@ -8,7 +8,7 @@ from rest_framework import serializers, status
 
 from backend.apps.core.serializers import PricingSerializer, SaunaConfigSerializer
 
-CONFIG_TAG = "Config"
+SAUNA_CONFIG_TAG = "SaunaConfig"
 PRICING_TAG = "Pricing"
 
 
@@ -22,7 +22,7 @@ PricingListSerializer = inline_serializer(
 
 get_sauna_config_schema = extend_schema(
     summary="Get sauna config",
-    tags=[CONFIG_TAG],
+    tags=[SAUNA_CONFIG_TAG],
     description="Retrieve the current sauna configuration settings.",
     responses={
         status.HTTP_200_OK: OpenApiResponse(
