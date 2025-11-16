@@ -27,8 +27,8 @@ from backend.settings import DEBUG
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("api/", include("backend.apps.core.urls", namespace="core")),
     path("api/bookings/", include("backend.apps.bookings.urls", namespace="bookings")),
-    path("api/config/", include("backend.apps.core.urls", namespace="core")),
     path(
         "api/inventory/", include("backend.apps.inventory.urls", namespace="inventory")
     ),

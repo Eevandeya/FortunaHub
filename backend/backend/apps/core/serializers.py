@@ -1,8 +1,9 @@
 import datetime
 
+from django.conf import settings
 from rest_framework import serializers
 
-from backend.apps.core.models import SaunaConfig
+from backend.apps.core.models import Pricing, SaunaConfig
 
 TIME_FORMAT = "%H:%M"
 
@@ -36,3 +37,14 @@ class SaunaConfigSerializer(serializers.ModelSerializer):
             instance.min_time_between_bookings
         )
         return data
+
+
+class PricingSerializer(serializers.ModelSerializer):
+    currency = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Pricing
+        exclude = ["id", "updated"]
+
+    def get_currency(self, _obj: dict) -> str:
+        return settings.CASH_CURRENCY_CODE

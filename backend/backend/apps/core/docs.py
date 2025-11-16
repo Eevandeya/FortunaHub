@@ -1,13 +1,28 @@
-from drf_spectacular.utils import OpenApiExample, OpenApiResponse, extend_schema
-from rest_framework import status
+from drf_spectacular.utils import (
+    OpenApiExample,
+    OpenApiResponse,
+    extend_schema,
+    inline_serializer,
+)
+from rest_framework import serializers, status
 
-from backend.apps.core.serializers import SaunaConfigSerializer
+from backend.apps.core.serializers import PricingSerializer, SaunaConfigSerializer
 
-CONFIG_TAG = "Config"
+SAUNA_CONFIG_TAG = "SaunaConfig"
+PRICING_TAG = "Pricing"
+
+
+PricingListSerializer = inline_serializer(
+    name="PricingList",
+    fields={
+        "__root__": serializers.ListField(child=PricingSerializer()),
+    },
+)
+
 
 get_sauna_config_schema = extend_schema(
     summary="Get sauna config",
-    tags=[CONFIG_TAG],
+    tags=[SAUNA_CONFIG_TAG],
     description="Retrieve the current sauna configuration settings.",
     responses={
         status.HTTP_200_OK: OpenApiResponse(
@@ -25,6 +40,38 @@ get_sauna_config_schema = extend_schema(
                         "check_30_min_multiplicity": True,
                         "created": "2025-08-05T21:11:22.133836+03:00",
                     },
+                ),
+            ],
+        ),
+    },
+)
+
+
+get_pricing_schema = extend_schema(
+    summary="Get pricing list",
+    tags=[PRICING_TAG],
+    description="Retrieve the the current price list.",
+    responses={
+        status.HTTP_200_OK: OpenApiResponse(
+            response=PricingListSerializer,
+            description="List of pricing.",
+            examples=[
+                OpenApiExample(
+                    "Pricing",
+                    value=[
+                        {
+                            "currency": "RUB",
+                            "name": "hourly_rent",
+                            "description": "Цена аренды за 1 час",
+                            "price": "5000.00",
+                        },
+                        {
+                            "currency": "RUB",
+                            "name": "prepayment",
+                            "description": "Сумма предоплаты за бронирование",
+                            "price": "2000.00",
+                        },
+                    ],
                 ),
             ],
         ),
