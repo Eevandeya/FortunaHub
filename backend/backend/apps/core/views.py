@@ -13,8 +13,8 @@ class SaunaConfigView(APIView):
 
     @get_sauna_config_schema
     def get(self, request: Request) -> Response:
-        current_sauna_config = SaunaConfig.get()
-        sauna_config_serializer = SaunaConfigSerializer(current_sauna_config)
+        sauna_config = SaunaConfig.get()
+        sauna_config_serializer = SaunaConfigSerializer(sauna_config)
         return Response(sauna_config_serializer.data)
 
 
@@ -23,6 +23,6 @@ class PricingView(APIView):
 
     @get_pricing_schema
     def get(self, request: Request) -> Response:
-        query_set = Pricing.objects.all()
+        query_set = Pricing.objects.all()  # TODO: Add Cache
         serializer = PricingSerializer(query_set, many=True)
         return Response(serializer.data)
