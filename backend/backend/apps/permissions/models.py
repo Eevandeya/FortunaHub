@@ -12,19 +12,9 @@ class Role(models.Model):
 
 
 class Permission(models.Model):
-    class Category(models.TextChoices):
-        TABLE = "table", "Табличные (CRUD)"
-        BUSINESS = "business", "Бизнес-логика"
-
     display_name = models.CharField(max_length=100)
-    code = models.SlugField(
-        unique=True, max_length=50
-    )  # Create a validation for this format "can_<action>_<model>"?
+    slug = models.SlugField(unique=True, max_length=50)
     description = models.CharField(blank=True, null=True, max_length=500)
-    category = models.CharField(
-        max_length=20,
-        choices=Category.choices,
-    )
 
     def __str__(self) -> str:
-        return f"{self.display_name} ({self.code})"
+        return f"{self.display_name} ({self.slug})"
