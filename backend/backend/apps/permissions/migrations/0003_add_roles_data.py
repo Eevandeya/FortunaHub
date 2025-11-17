@@ -7,27 +7,28 @@ def create_default_roles(apps: Apps, _: BaseDatabaseSchemaEditor) -> None:
     role_model = apps.get_model("permissions", "Role")
     permission_model = apps.get_model("permissions", "Permission")
 
-    all_permissions_codes = list(
-        permission_model.objects.values_list("code", flat=True)
+    # TODO: How to ensure that the requested permissions exist?
+    all_permissions_slugs = list(
+        permission_model.objects.values_list("slug", flat=True)
     )
     roles = [
         {
             "display_name": "Директор",
             "slug": "director",
             "description": 'Директор ООО "Фортуна"',
-            "permissions": all_permissions_codes,
+            "permissions": all_permissions_slugs,
         },
         {
             "display_name": "Администратор",
             "slug": "admin",
             "description": 'Администратор ООО "Фортуна"',
-            "permissions": all_permissions_codes,
+            "permissions": all_permissions_slugs,
         },
         {
             "display_name": "Разработчик",
             "slug": "developer",
             "description": 'Разработчик IT сервисов для ООО "Фортуна"',
-            "permissions": all_permissions_codes,
+            "permissions": all_permissions_slugs,
         },
     ]
 
@@ -38,7 +39,7 @@ def create_default_roles(apps: Apps, _: BaseDatabaseSchemaEditor) -> None:
         )
         if created:
             obj.permissions.set(
-                permission_model.objects.filter(code__in=new_permissions)
+                permission_model.objects.filter(slug__in=new_permissions)
             )
             continue
 
@@ -50,10 +51,10 @@ def create_default_roles(apps: Apps, _: BaseDatabaseSchemaEditor) -> None:
         if fields_updated:
             obj.save()
 
-        old_permissions = obj.permissions.values_list("code", flat=True)
+        old_permissions = obj.permissions.values_list("slug", flat=True)
         if set(old_permissions) != set(new_permissions):
             obj.permissions.set(
-                permission_model.objects.filter(code__in=new_permissions)
+                permission_model.objects.filter(slug__in=new_permissions)
             )
 
 
