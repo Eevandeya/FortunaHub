@@ -1,6 +1,6 @@
 from django.db import models
 
-from backend.utils.django_validators import validate_phone_number
+from backend.validators.django_validators import validate_phone_number
 
 
 class Staff(models.Model):
