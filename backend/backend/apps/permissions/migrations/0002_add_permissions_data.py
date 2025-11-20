@@ -6,11 +6,7 @@ from django.db.backends.base.schema import BaseDatabaseSchemaEditor
 def create_default_permissions(apps: Apps, _: BaseDatabaseSchemaEditor) -> None:
     permission_model = apps.get_model("permissions", "Permission")
     permissions = [
-        {
-            "display_name": "Может писать Telegram-боту",
-            "slug": "can_message_bot",
-            "description": "Владеющий этим правом может взаимодействовать с Telegram-ботом и отправлять ему команды",
-        },
+        # Add in the future
     ]
 
     for permission in permissions:
