@@ -60,7 +60,7 @@ def create_default_roles(apps: Apps, _: BaseDatabaseSchemaEditor) -> None:
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("permissions", "0002_add_permissions_data"),
+        ("permissions", "0001_initial"),
     ]
 
     operations = [
