@@ -7,7 +7,7 @@ from drf_spectacular.utils import (
 )
 from rest_framework import status
 
-from api_docs.schemas import (
+from backend.api_docs.schemas import (
     INVALID_QUERY_PARAM_SCHEMA,
     VALIDATION_ERROR_SCHEMA,
 )

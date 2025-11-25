@@ -64,7 +64,9 @@ class SaunaConfig(models.Model):
 
 
 class Pricing(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(
+        max_length=100, unique=True
+    )  # Make it a Slug type, raname "name" to "slug"? Add display_name field?
     description = models.CharField(max_length=255)
     updated = models.DateTimeField(auto_now=True)
     price = models.DecimalField(
