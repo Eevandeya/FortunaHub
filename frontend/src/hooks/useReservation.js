@@ -9,11 +9,9 @@ import {
 
 import { useCallback } from 'react';
 import { useErrorHandler } from '@hooks/useErrorHandler.js';
-import { useSetBookingMutation } from '@root.api/bookingHandler.js';
 
 export const useReservation = (preferredContactMethod, visitors, formState) => {
     const dispatch = useDispatch();
-    const [reserve] = useSetBookingMutation();
     const { items, timeSlot } = useSelector((state) => state.booking.order);
     const status = useSelector(selectStatus);
     const statusMessage = useSelector(selectStatusMessage);
@@ -34,7 +32,7 @@ export const useReservation = (preferredContactMethod, visitors, formState) => {
     };
 
     const submitReservation = useCallback(
-        async (data) => {
+        (data) => {
             if (formState.isValid && isFieldsValid()) {
                 try {
                     const customerData = {
@@ -44,14 +42,16 @@ export const useReservation = (preferredContactMethod, visitors, formState) => {
 
                     setCustomer(customerData);
                     setVisitors(visitors);
-
-                    await reserve({
-                        customer: customerData,
-                        items,
-                        timeSlot,
-                        visitorsCount: visitors,
-                        preferredContactMethod,
-                    });
+                    const successMessage = 'Data reserved';
+                    const lastAttempt = new Date().toLocaleString();
+                    const status = 'success';
+                    dispatch(
+                        setBookingStatus({
+                            statusMessage: successMessage,
+                            lastAttempt,
+                            status,
+                        })
+                    );
                 } catch (error) {
                     handleApiError(error, { at: 'BookingConfirm' });
                     const errorMessage =
@@ -85,7 +85,6 @@ export const useReservation = (preferredContactMethod, visitors, formState) => {
             formState.isValid,
             dispatch,
             visitors,
-            reserve,
             items,
             timeSlot,
             preferredContactMethod,

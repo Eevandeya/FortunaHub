@@ -9,10 +9,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@root.consts/navigation.js';
 import { useCallback, useState } from 'react';
+import { useSetBookingMutation } from '@root.api/bookingHandler.js';
 
 const usePaymentChoice = () => {
     const dispatch = useDispatch();
     const status = useSelector(selectStatus);
+    const [reserve] = useSetBookingMutation();
+    const { customer, items, timeSlot, visitorsCount, preferredContactMethod } =
+        useSelector((state) => state.booking.order);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
 
@@ -23,7 +27,14 @@ const usePaymentChoice = () => {
         dispatch(resetBookings());
     }, [dispatch]);
 
-    const orderPay = useCallback(() => {
+    const orderPay = useCallback(async () => {
+        await reserve({
+            customer,
+            items,
+            timeSlot,
+            visitorsCount,
+            preferredContactMethod,
+        });
         if (status !== 'success') {
             return;
         }
