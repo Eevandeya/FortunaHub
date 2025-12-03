@@ -8,7 +8,7 @@ import { resetDateTime } from '../store/dateTimeSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@root.consts/navigation.js';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSetBookingMutation } from '@root.api/bookingHandler.js';
 
 const usePaymentChoice = () => {
@@ -27,7 +27,7 @@ const usePaymentChoice = () => {
         dispatch(resetBookings());
     }, [dispatch]);
 
-    const orderPay = useCallback(async () => {
+    const sendBookingData = useCallback(async () => {
         await reserve({
             customer,
             items,
@@ -35,6 +35,16 @@ const usePaymentChoice = () => {
             visitorsCount,
             preferredContactMethod,
         });
+    }, [
+        customer,
+        items,
+        preferredContactMethod,
+        reserve,
+        timeSlot,
+        visitorsCount,
+    ]);
+
+    useEffect(() => {
         if (status !== 'success') {
             return;
         }
@@ -46,7 +56,7 @@ const usePaymentChoice = () => {
         }, 3000);
     }, [status]);
 
-    return [status, loading, orderPay];
+    return [status, loading, sendBookingData];
 };
 
 export default usePaymentChoice;

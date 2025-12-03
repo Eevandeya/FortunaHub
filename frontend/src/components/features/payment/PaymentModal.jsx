@@ -8,7 +8,7 @@ import Loading from '../../common/loader/Loading.jsx';
 
 const PaymentModal = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [status, loading, orderPay] = usePaymentChoice();
+    const [status, loading, sendBookingData] = usePaymentChoice();
 
     const handleDivClick = (event) => {
         if (event.target.type !== 'checkbox') {
@@ -24,7 +24,7 @@ const PaymentModal = () => {
     };
 
     const openModal = () => {
-        if (status !== 'success') {
+        if (status !== 'draft' && status !== 'success') {
             return;
         }
         setIsModalOpen(true);
@@ -62,7 +62,7 @@ const PaymentModal = () => {
                                 width: '30%',
                                 color: 'white',
                             }}
-                            onClick={orderPay}>
+                            onClick={sendBookingData}>
                             <h4>Оплатить</h4>
                         </button>
                     </Modal>,

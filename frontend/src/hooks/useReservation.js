@@ -44,7 +44,7 @@ export const useReservation = (preferredContactMethod, visitors, formState) => {
                     setVisitors(visitors);
                     const successMessage = 'Data reserved';
                     const lastAttempt = new Date().toLocaleString();
-                    const status = 'success';
+                    const status = 'draft';
                     dispatch(
                         setBookingStatus({
                             statusMessage: successMessage,
