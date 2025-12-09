@@ -5,11 +5,11 @@ class BookingPriceUtils {
     /**
      * Calculates rental price based on time duration
      * @param {number} timeRange - Number an hours between endTime and startTime
-     * @param {number} [pricePer30=500] - Price per 30 minutes
+     * @param {number} [pricePerHour=500] - Price per one hour
      * @returns {number} Total rental price
      */
-    static calculateRentDate(timeRange, pricePer30 = 500) {
-        const totalPrice = timeRange * 2 * pricePer30;
+    static calculateRentDate(timeRange, pricePerHour = 500) {
+        const totalPrice = timeRange * pricePerHour;
         return totalPrice;
     }
 
@@ -34,12 +34,12 @@ class BookingPriceUtils {
      * Calculates total price including rental and items
      * @param {Array} items - Array of item objects
      * @param {number} timeRange - Number an hours between endTime and startTime
-     * @param {number} [pricePer30=500] - Price per 30 minutes
+     * @param {number} [pricePerHour=500] - Price per one hour
      * @returns {number} Total combined price
      */
-    static calculateTotalPrice(items, timeRange, pricePer30) {
+    static calculateTotalPrice(items, timeRange, pricePerHour) {
         const itemsPrice = this.calculateItemsPrice(items);
-        const basePrice = this.calculateRentDate(timeRange, pricePer30);
+        const basePrice = this.calculateRentDate(timeRange, pricePerHour);
         return itemsPrice + basePrice;
     }
 }
