@@ -137,6 +137,12 @@ class TimeUtils {
         }
         return false;
     }
+
+    /**
+     * @param {Object} time - Selected time slots
+     * @returns {number} - range between end and start time
+     * @description Calculate range between two times
+     */
     static calculateRange(time) {
         const format = 'HH:mm:ss';
         try {
@@ -152,7 +158,15 @@ class TimeUtils {
             throw new Error(`${error}.\n Expected format: ${format}`);
         }
     }
-    static concateDateTime(time, date) {
+
+    /**
+     *
+     * @param {Object} time - selected time slots
+     * @param {string} date - average date
+     * @returns {string[]|*[]}
+     * @description concatenate date with start and time slots with similar to Iso format
+     */
+    static concatenateDateTime(time, date) {
         if (!time.start || !time.end || !date) {
             return [undefined, undefined];
         }

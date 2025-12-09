@@ -53,7 +53,7 @@ export const useReservation = (preferredContactMethod, visitors, formState) => {
                         })
                     );
                 } catch (error) {
-                    handleApiError(error, { at: 'BookingConfirm' });
+                    handleApiError(error, { at: 'submitReservation' });
                     const errorMessage =
                         'Ошибка оформления брони. Пожалуйста повторите еще раз!';
                     const lastAttempt = new Date().toLocaleString();

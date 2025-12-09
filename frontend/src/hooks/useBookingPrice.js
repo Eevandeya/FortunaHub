@@ -18,7 +18,7 @@ export const useBookingPrice = (bookingData, currentLocation) => {
         }
         const { items, dateTime } = bookingData;
         // eslint-disable-next-line camelcase
-        const [start_datetime, end_datetime] = TimeUtils.concateDateTime(
+        const [start_datetime, end_datetime] = TimeUtils.concatenateDateTime(
             dateTime.time,
             dateTime.date
         );
