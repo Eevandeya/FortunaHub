@@ -4,7 +4,6 @@ export const InfoCard = ({ title, children }) => {
             style={{
                 backgroundColor: '#F5F5F5',
                 width: '80%',
-
                 marginBlock: '40px',
                 borderRadius: '30px',
                 paddingInline: '10px',

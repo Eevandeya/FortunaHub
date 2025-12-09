@@ -54,7 +54,7 @@ const PaymentModal = () => {
                                 </InfoCard>
                             </button>
                         ))}
-                        <button
+                        <div
                             style={{
                                 margin: '5px',
                                 borderRadius: '10px',
@@ -64,7 +64,7 @@ const PaymentModal = () => {
                             }}
                             onClick={sendBookingData}>
                             <h4>Оплатить</h4>
-                        </button>
+                        </div>
                     </Modal>,
                     document.body
                 )}

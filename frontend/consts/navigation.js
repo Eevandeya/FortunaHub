@@ -30,7 +30,7 @@ export const BOOKING_NAVIGATION = {
         label: 'Оформление брони',
     },
     status: {
-        path: ROUTES.BOOKING.STATUS,
+        path: ROUTES.STATUS.SUCCESS,
         previous: null,
         next: null,
         label: 'Статус брони',
