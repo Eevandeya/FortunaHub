@@ -6,17 +6,25 @@ import { VisitorsCountDisplay } from '@components.common/display/numberDisplay.j
 import TransparentButton from '@components.common/button/transparentButton.jsx';
 import { useReservation } from '@hooks/useReservation.js';
 import { CONTACT_METHODS } from '@root.consts/contactMethods.js';
+import { useSelector } from 'react-redux';
 
 const ReservationForm = () => {
     const [visitors, setVisitors] = useState(0);
     const [contactMethod, setContactMethod] = useState(CONTACT_METHODS[0]);
     const { handleError } = useErrorHandler();
+    const { nickname: bookingNickname, phoneNumber: bookingPhoneNumber } =
+        useSelector((state) => state.booking.order.customer);
     const {
         register,
         handleSubmit,
         reset,
         formState: { errors, isSubmitting, isValid },
-    } = useForm({ defaultValues: { nickname: '', phoneNumber: '' } });
+    } = useForm({
+        defaultValues: {
+            nickname: bookingNickname ?? '',
+            phoneNumber: bookingPhoneNumber ?? '',
+        },
+    });
     const {
         reserve,
         status,
