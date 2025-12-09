@@ -53,6 +53,9 @@ const bookingSlice = createSlice({
                 preferredContactMethod: 'whatsapp',
             };
         },
+        setBookingStatusState(state, action) {
+            state.status.current = action.payload.status;
+        },
         setBookingStatus(state, action) {
             state.status.current = action.payload.status;
             state.status.attempts += 1;
@@ -77,6 +80,7 @@ export const {
     setPreferredContactMethod,
     resetBookings,
     setBookingStatus,
+    setBookingStatusState,
     resetBookingStatus,
 } = bookingSlice.actions;
 

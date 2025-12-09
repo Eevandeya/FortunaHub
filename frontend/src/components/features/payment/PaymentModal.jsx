@@ -5,10 +5,13 @@ import paymentMethods from '@root.consts/paymentMethods.js';
 import InfoCard from '../../common/displayInfo/InfoCard.jsx';
 import usePaymentChoice from '../../../hooks/usePaymentChoice.js';
 import Loading from '../../common/loader/Loading.jsx';
+import { useDispatch } from 'react-redux';
+import { setBookingStatusState } from '../../../store/bookingSlice.js';
 
 const PaymentModal = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [status, loading, sendBookingData] = usePaymentChoice();
+    const dispatch = useDispatch();
 
     const handleDivClick = (event) => {
         if (event.target.type !== 'checkbox') {
@@ -21,16 +24,15 @@ const PaymentModal = () => {
 
     const closeModal = () => {
         setIsModalOpen(false);
+        dispatch(setBookingStatusState({ status: 'idle' }));
     };
 
-    const openModal = () => {
+    useEffect(() => {
         if (status !== 'draft' && status !== 'success') {
             return;
         }
         setIsModalOpen(true);
-    };
-
-    useEffect(openModal, [status]);
+    }, [status]);
 
     return (
         <>
@@ -54,7 +56,7 @@ const PaymentModal = () => {
                                 </InfoCard>
                             </button>
                         ))}
-                        <div
+                        <button
                             style={{
                                 margin: '5px',
                                 borderRadius: '10px',
@@ -64,7 +66,7 @@ const PaymentModal = () => {
                             }}
                             onClick={sendBookingData}>
                             <h4>Оплатить</h4>
-                        </div>
+                        </button>
                     </Modal>,
                     document.body
                 )}
