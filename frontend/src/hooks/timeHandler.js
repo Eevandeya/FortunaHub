@@ -8,6 +8,7 @@ import { useGetSaunaConfigQuery } from '@root.api/saunaConfig.js';
 import { useGetAvailableTimesQuery } from '@root.api/timeSlotsApi.js';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { setDate, setTime } from '@store/dateTimeSlice.js';
+import { useGetPricingQuery } from '../../api/pricingApi.js';
 
 export function useAvailableTimes(selectedDate) {
     const { handleHookError, handleApiError } = useErrorHandler();
@@ -18,6 +19,8 @@ export function useAvailableTimes(selectedDate) {
     } = useGetAvailableTimesQuery({
         date: selectedDate ? format(selectedDate, 'yyyy-MM-dd') : skipToken,
     });
+    //eslint-disable-next-line
+    const pricePer30 = useGetPricingQuery();
     const dispatch = useDispatch();
 
     useEffect(() => {
