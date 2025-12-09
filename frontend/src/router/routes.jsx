@@ -7,11 +7,18 @@ import ReservationPage from '@pages/ReservationPage.jsx';
 import BookingLayout from '@components.layout/BookingLayout.jsx';
 import { NotFoundPage } from '@pages/ErrorPage.jsx';
 import { SuccessStatusPage } from '../pages/StatusPage.jsx';
+import PricingLayout from '../components/layout/PricingLayout.jsx';
 
 const routes = createRoutesFromElements([
     <Route path='/' element={<App />}>
         <Route index element={<Homepage />} />
-        <Route path='booking' element={<BookingLayout />}>
+        <Route
+            path='booking'
+            element={
+                <PricingLayout>
+                    <BookingLayout />
+                </PricingLayout>
+            }>
             <Route index element={<Navigate to='time' replace />} />
             <Route path='time' element={<TimeBookingPage />} />
             <Route path='goods' element={<GoodsBookingPage />} />
