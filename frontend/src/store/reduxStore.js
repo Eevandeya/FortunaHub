@@ -6,11 +6,7 @@ import { rememberReducer, rememberEnhancer } from 'redux-remember';
 import dateTimeReducer from '@store/dateTimeSlice.js';
 import { bookingResponseMiddleware } from '../../middleware/bookingValidation.js';
 
-const rememberedKeys = [
-    { key: 'booking', fields: ['order', 'reload'] },
-    'items',
-    'datetime',
-];
+const rememberedKeys = ['booking', 'items', 'datetime'];
 const reducers = {
     booking: bookingReducer,
     items: itemsReducer,

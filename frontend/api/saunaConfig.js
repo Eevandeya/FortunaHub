@@ -11,7 +11,7 @@ const configApi = baseApi.injectEndpoints({
          * @returns {SaunaConfig} Application configuration
          */
 
-        getSaunaConfig: build.query({ query: () => 'config/' }),
+        getSaunaConfig: build.query({ query: () => 'sauna-config/' }),
     }),
     overrideExisting: true,
 });

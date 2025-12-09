@@ -1,22 +1,17 @@
 import { useDispatch, useSelector } from 'react-redux';
 import {
-    resetBookings,
-    setCustomerInfo,
-    setVisitorsCount,
-    setBookingStatus,
     selectStatus,
     selectStatusMessage,
+    setBookingStatus,
+    setCustomerInfo,
+    setVisitorsCount,
 } from '@store/bookingSlice.js';
 
 import { useCallback } from 'react';
 import { useErrorHandler } from '@hooks/useErrorHandler.js';
-import { useSetBookingMutation } from '@root.api/bookingHandler.js';
-import { resetItems } from '@store/itemsSlice.js';
-import { resetDateTime } from '@store/dateTimeSlice.js';
 
 export const useReservation = (preferredContactMethod, visitors, formState) => {
     const dispatch = useDispatch();
-    const [reserve] = useSetBookingMutation();
     const { items, timeSlot } = useSelector((state) => state.booking.order);
     const status = useSelector(selectStatus);
     const statusMessage = useSelector(selectStatusMessage);
@@ -36,8 +31,8 @@ export const useReservation = (preferredContactMethod, visitors, formState) => {
         dispatch(setVisitorsCount({ visitorsCount: data }));
     };
 
-    const bookingSubmitHandler = useCallback(
-        async (data) => {
+    const submitReservation = useCallback(
+        (data) => {
             if (formState.isValid && isFieldsValid()) {
                 try {
                     const customerData = {
@@ -47,20 +42,18 @@ export const useReservation = (preferredContactMethod, visitors, formState) => {
 
                     setCustomer(customerData);
                     setVisitors(visitors);
-
-                    await reserve({
-                        customer: customerData,
-                        items,
-                        timeSlot,
-                        visitorsCount: visitors,
-                        preferredContactMethod,
-                    });
-
-                    dispatch(resetDateTime());
-                    dispatch(resetItems());
-                    dispatch(resetBookings());
+                    const successMessage = 'Data reserved';
+                    const lastAttempt = new Date().toLocaleString();
+                    const status = 'draft';
+                    dispatch(
+                        setBookingStatus({
+                            statusMessage: successMessage,
+                            lastAttempt,
+                            status,
+                        })
+                    );
                 } catch (error) {
-                    handleApiError(error, { at: 'BookingConfirm' });
+                    handleApiError(error, { at: 'submitReservation' });
                     const errorMessage =
                         'Ошибка оформления брони. Пожалуйста повторите еще раз!';
                     const lastAttempt = new Date().toLocaleString();
@@ -92,7 +85,6 @@ export const useReservation = (preferredContactMethod, visitors, formState) => {
             formState.isValid,
             dispatch,
             visitors,
-            reserve,
             items,
             timeSlot,
             preferredContactMethod,
@@ -100,5 +92,5 @@ export const useReservation = (preferredContactMethod, visitors, formState) => {
         ]
     );
 
-    return { reserve: bookingSubmitHandler, status, statusMessage };
+    return { reserve: submitReservation, status, statusMessage };
 };

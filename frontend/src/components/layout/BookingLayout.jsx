@@ -3,10 +3,10 @@ import { StepsBar } from '@components.common/progressSteps/StepsBar.jsx';
 import { ROUTES } from '@root.consts/navigation.js';
 import { Sidebar } from '@components.layout/Sidebar.jsx';
 import { useBookingNavigation } from '@hooks/useBookingNavigation.js';
-import { GoodsInfoCard } from '@components.common/displayInfo/GoodsInfoCard.jsx';
-import { TimeInfoCard } from '@components.common/displayInfo/TimeInfoCard.jsx';
-import { useSelector } from 'react-redux';
+import { GoodsInfoCard } from '@components.features/bookingInfoCards/GoodsInfoCard.jsx';
+import { TimeInfoCard } from '@components.features/bookingInfoCards/TimeInfoCard.jsx';
 import { useBookingBlocker } from '@hooks/useBookingBlocker.js';
+import { PriceInfoCard } from '@components.features/bookingInfoCards/PriceInfoCard.jsx';
 
 const BookingLayout = () => {
     const steps = [
@@ -14,10 +14,7 @@ const BookingLayout = () => {
         { to: ROUTES.BOOKING.GOODS, number: 2 },
         { to: ROUTES.BOOKING.RESERVATION, number: 3 },
     ];
-
-    const { date, time } = useSelector((state) => state.datetime);
-    const { items } = useSelector((state) => state.items);
-    const blocker = useBookingBlocker({ items, time });
+    const blocker = useBookingBlocker();
     const navigation = useBookingNavigation();
 
     return (
@@ -61,8 +58,9 @@ const BookingLayout = () => {
                     )}
                 </main>
                 <Sidebar paths={navigation}>
-                    <TimeInfoCard timeSlot={time} date={date} />
-                    <GoodsInfoCard items={items} />
+                    <TimeInfoCard />
+                    <GoodsInfoCard />
+                    <PriceInfoCard navigation={navigation} />
                 </Sidebar>
             </div>
         </>

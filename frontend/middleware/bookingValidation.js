@@ -16,7 +16,10 @@ export const bookingResponseMiddleware = (store) => (next) => (action) => {
     }
 
     if (baseApi.endpoints.setBooking.matchRejected(action)) {
-        const errorMessage = action.payload?.data || action.error;
+        const errorMessage =
+            typeof action.payload?.data !== 'string'
+                ? action.error?.message
+                : action.payload?.data;
         const lastAttempt = new Date().toLocaleString();
         const status = 'error';
         store.dispatch(

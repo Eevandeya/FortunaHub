@@ -1,9 +1,12 @@
 import InfoCard from '@components.common/displayInfo/InfoCard.jsx';
+import { useSelector } from 'react-redux';
+import { selectItems } from '@store/itemsSlice.js';
 
-export const GoodsInfoCard = ({ items }) => {
+export const GoodsInfoCard = () => {
+    const items = useSelector(selectItems);
+
     return (
         <InfoCard>
-            <h2 style={{ fontSize: '24px' }}>Общая стоимость</h2>
             <ul>
                 {items?.map((item, index) => (
                     <li key={index}>
@@ -13,7 +16,6 @@ export const GoodsInfoCard = ({ items }) => {
                     </li>
                 ))}
             </ul>
-            <h3 style={{ fontSize: '18px' }}>Итог</h3>
         </InfoCard>
     );
 };

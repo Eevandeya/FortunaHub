@@ -7,6 +7,7 @@ export const ROUTES = {
         GOODS: '/booking/goods',
         RESERVATION: '/booking/reservation',
     },
+    STATUS: { SUCCESS: '/status/success' },
 };
 
 export const BOOKING_NAVIGATION = {
@@ -27,5 +28,11 @@ export const BOOKING_NAVIGATION = {
         previous: ROUTES.BOOKING.GOODS,
         next: null,
         label: 'Оформление брони',
+    },
+    status: {
+        path: ROUTES.STATUS.SUCCESS,
+        previous: null,
+        next: null,
+        label: 'Статус брони',
     },
 };

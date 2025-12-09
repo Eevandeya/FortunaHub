@@ -18,6 +18,7 @@ export function useAvailableTimes(selectedDate) {
     } = useGetAvailableTimesQuery({
         date: selectedDate ? format(selectedDate, 'yyyy-MM-dd') : skipToken,
     });
+
     const dispatch = useDispatch();
 
     useEffect(() => {

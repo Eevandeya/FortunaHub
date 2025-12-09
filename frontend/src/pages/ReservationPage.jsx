@@ -1,4 +1,5 @@
 import ReservationForm from '@components.features/customerBooking/ReservationForm.jsx';
+import PaymentModal from '../components/features/payment/PaymentModal.jsx';
 
 const ReservationPage = () => {
     return (
@@ -9,6 +10,7 @@ const ReservationPage = () => {
                 </header>
                 <div className='booking-content'>
                     <ReservationForm />
+                    <PaymentModal />
                 </div>
             </div>
         </>
