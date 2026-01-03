@@ -8,10 +8,18 @@ import BookingLayout from '@components.layout/BookingLayout.jsx';
 import { NotFoundPage } from '@pages/ErrorPage.jsx';
 import { SuccessStatusPage } from '../pages/StatusPage.jsx';
 import PricingLayout from '../components/layout/PricingLayout.jsx';
+import { SaunaServicesPage } from '@pages/servicesPages/saunaServicesPage.jsx';
+import { GymServicesPage } from '@pages/servicesPages/gymServicesPage.jsx';
+import { AccessoriesServicesPage } from '@pages/servicesPages/accessoriesServicesPage.jsx';
 
 const routes = createRoutesFromElements([
     <Route path='/' element={<App />}>
         <Route index element={<Homepage />} />
+        <Route path='services'>
+            <Route path='sauna' element={<SaunaServicesPage />} />
+            <Route path='gym' element={<GymServicesPage />} />
+            <Route path='accessories' element={<AccessoriesServicesPage />} />
+        </Route>
         <Route
             path='booking'
             element={
