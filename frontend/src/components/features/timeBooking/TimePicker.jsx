@@ -1,10 +1,11 @@
 import { useAvailableTimes, useTimeSlot } from '@hooks/timeHandler.js';
 import Cell from '@components.common/cell/Cell.jsx';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { addMinutes, format, isWithinInterval, parse } from 'date-fns';
 import TimeUtils from '@root.utils/timeUtils.js';
 import Loading from '@components.common/loader/Loading.jsx';
 import { useGetSaunaConfigQuery } from '@root.api/saunaConfig.js';
+import './timeComponent.css';
 
 const checkConditions = ({ minBookingTime, start, end }) => {
     const format = 'HH:mm';
@@ -64,7 +65,7 @@ export function TimePicker({ date }) {
         if (config && availableTime && !loading) {
             const times = Object.keys(parsedTimeSlots);
             return (
-                <div>
+                <Fragment>
                     {times?.map((tm) => (
                         <Cell
                             key={tm}
@@ -98,7 +99,7 @@ export function TimePicker({ date }) {
                             setSelectedTime={() => handleTimeSelection(tm)}
                         />
                     ))}
-                </div>
+                </Fragment>
             );
         }
     }, [
@@ -191,20 +192,23 @@ export function TimePicker({ date }) {
     }, [isBooking]);
 
     return (
-        <section
-            style={{
-                minWidth: '200px',
-                minHeight: '200px',
-                backgroundColor: 'white',
-            }}>
-            {loading ? <Loading /> : Content}
-
-            <button
-                className='button is-success'
-                onClick={booking}
-                disabled={!borderTime.start || !borderTime.end}>
-                Выбрать
-            </button>
+        <section className='time_selector'>
+            <header>
+                <div className='time_selector_header'>
+                    <p>Выберите время</p>
+                </div>
+            </header>
+            <div className='time_slots_container'>
+                {loading ? <Loading /> : Content}
+            </div>
+            <footer className='time_selector_footer'>
+                <button
+                    className='time_selector_button'
+                    onClick={booking}
+                    disabled={!borderTime.start || !borderTime.end}>
+                    Выбрать
+                </button>
+            </footer>
         </section>
     );
 }

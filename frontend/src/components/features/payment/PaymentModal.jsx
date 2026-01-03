@@ -7,6 +7,7 @@ import usePaymentChoice from '../../../hooks/usePaymentChoice.js';
 import Loading from '../../common/loader/Loading.jsx';
 import { useDispatch } from 'react-redux';
 import { setBookingStatusState } from '../../../store/bookingSlice.js';
+import './payment.css';
 
 const PaymentModal = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,40 +37,33 @@ const PaymentModal = () => {
 
     return (
         <>
-            {isModalOpen &&
-                createPortal(
-                    <Modal closeModal={closeModal}>
-                        {loading && <Loading />}
+            {createPortal(
+                <Modal closeModal={closeModal} modalState={isModalOpen}>
+                    {loading && <Loading />}
+                    <div className='payment-method-container'>
                         {paymentMethods.map((method) => (
                             <button
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItem: 'center',
-                                }}
+                                className='payment-method'
                                 key={method.title}
                                 onClick={handleDivClick}>
-                                <InfoCard>
+                                <div className='content'>
                                     <h4>{method.title}</h4>
-                                    <p>{method.description}</p>
+                                    <h6>{method.description}</h6>
+                                </div>
+                                <div className='toggle-checkbox'>
                                     <input type='checkbox' />
-                                </InfoCard>
+                                </div>
                             </button>
                         ))}
-                        <button
-                            style={{
-                                margin: '5px',
-                                borderRadius: '10px',
-                                backgroundColor: 'black',
-                                width: '30%',
-                                color: 'white',
-                            }}
-                            onClick={sendBookingData}>
-                            <h4>Оплатить</h4>
-                        </button>
-                    </Modal>,
-                    document.body
-                )}
+                    </div>
+                    <button
+                        className='payment-button'
+                        onClick={sendBookingData}>
+                        <h4>Оплатить</h4>
+                    </button>
+                </Modal>,
+                document.body
+            )}
         </>
     );
 };
