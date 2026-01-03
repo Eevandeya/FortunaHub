@@ -1,11 +1,12 @@
 import { memo } from 'react';
+import styles from './buttons-styles.module.css';
 
-const TransparentButton = memo(({ children, onClick, disabled }) => (
+const TransparentButton = memo(({ children, onClick, disabled, ...props }) => (
     <button
         type='button'
-        className='button is-small is-ghost'
         onClick={onClick}
-        disabled={disabled}>
+        disabled={disabled}
+        className={`${styles.button} ${props.className} ${styles.is_ghost}`}>
         {children}
     </button>
 ));

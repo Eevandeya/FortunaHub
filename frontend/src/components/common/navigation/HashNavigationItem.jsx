@@ -1,7 +1,7 @@
 export const HashNavigationItem = ({ to, children, ...props }) => (
     <span>
-        <a href={to} {...props}>
-            {children}
+        <a onClick={props.onClick} href={to} {...props}>
+            <p>{children}</p>
         </a>
     </span>
 );
