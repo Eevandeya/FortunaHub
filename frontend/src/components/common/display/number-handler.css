@@ -1,0 +1,42 @@
+.number_handler .controls {
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+    padding: 3px 0;
+    border-top: 1px solid #e0e0e0;
+}
+
+.controls > .number_handler_panel {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.25rem;
+}
+
+.number_handler_panel .button {
+    border-radius: 50%;
+    height: 2rem;
+    aspect-ratio: 1/1;
+    padding: 0 5px;
+    display: inline-block;
+    font-size: 20px;
+    border: 1px solid grey;
+    user-select: none;
+    color: white;
+}
+
+.number_handler_panel .counter {
+    width: 50px;
+    font-weight: 600;
+    padding: 5px;
+    background: transparent;
+    user-select: none;
+    color: white;
+    display: inline-flex;
+    justify-content: center;
+    overflow: hidden;
+
+    text-overflow: fade;
+    white-space: nowrap;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}

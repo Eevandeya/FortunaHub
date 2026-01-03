@@ -1,0 +1,126 @@
+.loader {
+    position: relative;
+    background-color: transparent;
+    aspect-ratio: 1 / 1;
+    width: 100px;
+    height: 100px;
+    z-index: var(--layer-modal);
+    display: block;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: end;
+}
+/*
+.loader::before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    border-radius: 50%;
+    border: solid 3px black;
+    animation: spin infinite 2s linear;
+    background: conic-gradient(
+    #ff6b6b 0deg 120deg, #985f0d 120deg 240deg, #4ac1f7 240deg 360deg);
+    mask: radial-gradient(white 60%, transparent 61%, black 60%);
+}
+
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes  reversed-spin{
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
+}*/
+
+.bubble {
+    width: 30%;
+    height: 30%;
+    border: solid 2px black;
+    border-radius: 50%;
+    position: relative;
+}
+.bubble::after {
+    background-color: transparent;
+    content: '';
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    border: solid 1px black;
+    position: absolute;
+    right: 6px;
+    top: 6px;
+}
+
+.bubble:nth-child(1) {
+    opacity: 0;
+    animation: appear-first 3s infinite ease-out;
+}
+
+@keyframes appear-first {
+    16% {
+        opacity: 1;
+        transform: translateY(-100%);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(-100%);
+    }
+    66% {
+        opacity: 0;
+        transform: translateY(0);
+    }
+}
+
+.bubble:nth-child(2) {
+    opacity: 0;
+    animation: appear-second 3s infinite ease-out;
+}
+
+@keyframes appear-second {
+    16% {
+        opacity: 0;
+        transform: translateY(0);
+    }
+    32% {
+        opacity: 1;
+        transform: translateY(-100%);
+    }
+    66% {
+        opacity: 1;
+        transform: translateY(-100%);
+    }
+    82% {
+        opacity: 0;
+        transform: translateY(0);
+    }
+}
+
+.bubble:nth-child(3) {
+    opacity: 0;
+    animation: appear-third 3s infinite ease-out;
+}
+
+@keyframes appear-third {
+    32% {
+        opacity: 0;
+        transform: translateY(0);
+    }
+    48% {
+        opacity: 1;
+        transform: translateY(-100%);
+    }
+    82% {
+        opacity: 1;
+        transform: translateY(-100%);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(0);
+    }
+}
