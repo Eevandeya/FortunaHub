@@ -2,85 +2,243 @@ import { Link } from 'react-router-dom';
 import { NavigationItem } from '@components.common/navigation/NavigationItem.jsx';
 import { HashNavigationItem } from '@components.common/navigation/HashNavigationItem.jsx';
 import { ROUTES } from '@root.consts/navigation.js';
+import FortunaLogo from '@components.common/logo/FortunaLogo.jsx';
+import BurgerButton from '../components/common/button/BurgerButton.jsx';
+import MenuList from '../components/common/menu/menuList.jsx';
+import { useState } from 'react';
 
 function Homepage() {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     return (
         <>
             <header>
                 <nav>
                     <div className='navbar'>
                         <div className='navbar-content'>
-                            <svg
-                                xmlns='http://www.w3.org/2000/svg'
-                                viewBox='0 0 640 640'>
-                                <path d='M447.8 415.7C450.3 413.2 553 323.3 553 323.3L535.5 315.8C525.5 310.9 528.1 304.3 530.5 298.4C532.9 290.8 550.6 231.1 550.6 231.1C550.6 231.1 502.9 241.1 492.9 243.6C485.4 246 482.9 241.1 480.4 236.1C477.9 231.1 465.4 203.7 465.4 203.7C465.4 203.7 412.8 263.6 410.3 266C400.3 273.5 390.2 266 392.7 256C392.7 246 420.3 126.4 420.3 126.4C420.3 126.4 390.2 143.8 380.2 148.8C372.7 153.8 367.6 153.8 362.6 143.8C357.5 136.3 319.9 64 319.9 64C319.9 64 282.4 136.3 277.4 143.8C272.4 153.8 267.4 153.8 259.8 148.8C249.8 143.8 219.7 126.4 219.7 126.4C219.7 126.4 247.3 246 247.3 256C249.8 266 239.8 273.5 229.7 266C227.2 263.5 174.6 203.7 174.6 203.7C174.6 203.7 162.1 231 159.6 236C157.1 241 154.6 245.9 147.1 243.5C137 241 89.4 231 89.4 231C89.4 231 107 290.7 109.5 298.3C111.9 304.3 114.5 310.8 104.5 315.7L87 323.3C87 323.3 189.6 413.2 192.2 415.7C197.3 420.7 202.2 423.2 197.3 438.2C192.2 453.2 187.2 473.3 187.2 473.3C187.2 473.3 282.4 453.2 292.5 450.7C301.2 449.8 310.8 453.2 310.8 463.2C310.8 473.2 305 576 305 576L335 576C335 576 329.2 473.3 329.2 463.2C329.2 453.1 338.7 449.8 347.6 450.7C357.6 453.2 452.8 473.3 452.8 473.3C452.8 473.3 447.8 453.2 442.8 438.2C437.8 423.2 442.8 420.7 447.8 415.7z' />
-                            </svg>
+                            <FortunaLogo
+                                logoHeader='FORTUNA'
+                                logoImage='/icons/Fortuna%2064x64.svg'
+                                hasHeader
+                            />
                         </div>
                         <div className='navbar-right'>
                             <NavigationItem to={ROUTES.HOME} end>
-                                В главное меню
+                                В ГЛАВНОЕ МЕНЮ
                             </NavigationItem>
                             <NavigationItem to={ROUTES.BOOKING.TIME} end>
-                                Забронировать
+                                ЗАБРОНИРОВАТЬ
                             </NavigationItem>
                             <HashNavigationItem to={ROUTES.ABOUT}>
-                                О нас
+                                О НАС
                             </HashNavigationItem>
                         </div>
-                        <div id='burger-menu'>
-                            <input
-                                type='checkbox'
-                                id='burger-checkbox'
-                                className='burger-checkbox'
-                            />
-                            <label
-                                htmlFor='burger-checkbox'
-                                className='burger'></label>
-                            <ul className='menu-list'>
-                                <li>
-                                    <NavigationItem
-                                        to={ROUTES.BOOKING}
-                                        className='menu-item'>
+                        <MenuList isMenuOpen={isMenuOpen}>
+                            <div className='menu-list'>
+                                <div className='menu-container'>
+                                    <HashNavigationItem
+                                        to={ROUTES.HOME_HASH}
+                                        className='menu-item'
+                                        onClick={() => setIsMenuOpen(false)}>
                                         Главная
-                                    </NavigationItem>
-                                </li>
-                                <li>
+                                    </HashNavigationItem>
+                                </div>
+                                <div className='menu-container'>
                                     <NavigationItem
                                         to={ROUTES.BOOKING.TIME}
                                         className='menu-item'>
                                         Забронировать
                                     </NavigationItem>
-                                </li>
-                                <li>
+                                </div>
+                                <div className='menu-container'>
                                     <HashNavigationItem
                                         className='menu-item'
-                                        to={ROUTES.ABOUT}>
+                                        to={ROUTES.ABOUT}
+                                        onClick={() => setIsMenuOpen(false)}>
                                         О нас
                                     </HashNavigationItem>
-                                </li>
-                            </ul>
-                        </div>
+                                </div>
+                            </div>
+                        </MenuList>
+                        <BurgerButton
+                            isActive={isMenuOpen}
+                            setIsActive={setIsMenuOpen}
+                        />
                     </div>
                 </nav>
             </header>
             <main className='homepage-container'>
                 <div className='homepage-hero'>
-                    <Link
-                        to='/booking/time'
-                        style={{
-                            backgroundColor: 'transparent',
-                            border: 'solid 2px black',
-                            borderRadius: '30px',
-                        }}>
-                        Забронировать
-                    </Link>
+                    <div className='hero-image-container'>
+                        <img
+                            alt='hero-image'
+                            src='/images/16.jpg'
+                            className='hero-image'
+                        />
+                    </div>
+                    <div className='hero-overlay' />
                 </div>
-                <div className='homepage-description'></div>
-                <div className='homepage-map'></div>
+                <div className='homepage-description'>
+                    <h2>Баня на свежем воздухе</h2>
+                    <section className='homepage-description-block'>
+                        <div className='image-container'>
+                            <div className='image-16-9'>
+                                <img alt='Фото бани' src='/images/17.jpg' />
+                            </div>
+                        </div>
+                        <div className='description-container'>
+                            <div className='description-block'>
+                                <h3>Жаркая банька</h3>
+                                <details className='homepage-service-details'>
+                                    <summary className='details-title'>
+                                        Жар раскаленных камней и аромат банных
+                                        веников позволят насладится атмосферой
+                                        бани
+                                    </summary>
+                                    <div className='details-content'>
+                                        <ul className='details-list'>
+                                            <li className='details-list-item'>
+                                                Беговая дорожка
+                                            </li>
+                                            <li className='details-list-item'>
+                                                Гантели весом 1-32кг
+                                            </li>
+                                            <li className='details-list-item'>
+                                                Скамья для жима
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </details>
+
+                                <a>
+                                    <span>Мы на карте</span>
+                                </a>
+                            </div>
+                            <div className='btn-combine-left'>
+                                <Link
+                                    to={ROUTES.SERVICES.SAUNA}
+                                    className='description-button'>
+                                    Подробнее
+                                </Link>
+                                <Link
+                                    to={ROUTES.BOOKING.TIME}
+                                    className='booking-button'>
+                                    Забронировать
+                                </Link>
+                            </div>
+                        </div>
+                    </section>
+                    <section className='homepage-description-block'>
+                        <div className='image-container'>
+                            <div className='image-16-9'>
+                                <img alt='Фото бани' src='/images/14.jpg' />
+                            </div>
+                        </div>
+                        <div className='description-container'>
+                            <div className='description-block'>
+                                <h3>Юутные халаты</h3>
+                                <details className='homepage-service-details'>
+                                    <summary className='details-title'>
+                                        Мягкие и уютные халаты помогут
+                                        расслабиться и отвлечься от суеты
+                                    </summary>
+                                    <div className='details-content'>
+                                        <ul className='details-list'>
+                                            <li className='details-list-item'>
+                                                Беговая дорожка
+                                            </li>
+                                            <li className='details-list-item'>
+                                                Гантели весом 1-32кг
+                                            </li>
+                                            <li className='details-list-item'>
+                                                Скамья для жима
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </details>
+                                <a>
+                                    <span>Мы на карте</span>
+                                </a>
+                            </div>
+                            <div className='btn-combine-left'>
+                                <Link
+                                    to={ROUTES.SERVICES.ACCESSORIES}
+                                    className='description-button'>
+                                    Подробнее
+                                </Link>
+                                <Link
+                                    to={ROUTES.BOOKING.TIME}
+                                    className='booking-button'>
+                                    Забронировать
+                                </Link>
+                            </div>
+                        </div>
+                    </section>
+                    <section className='homepage-description-block'>
+                        <div className='image-container'>
+                            <div className='image-16-9'>
+                                <img alt='Фото бани' src='/images/9.jpg' />
+                            </div>
+                        </div>
+                        <div className='description-container'>
+                            <div className='description-block'>
+                                <h3>Спортзальчик</h3>
+                                <details className='homepage-service-details'>
+                                    <summary className='details-title'>
+                                        Воспользуйтесь нашим залом
+                                    </summary>
+                                    <div className='details-content'>
+                                        <ul className='details-list'>
+                                            <li className='details-list-item'>
+                                                Беговая дорожка
+                                            </li>
+                                            <li className='details-list-item'>
+                                                Гантели весом 1-32кг
+                                            </li>
+                                            <li className='details-list-item'>
+                                                Скамья для жима
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </details>
+                                <a>
+                                    <span>Мы на карте</span>
+                                </a>
+                            </div>
+                            <div className='btn-combine-left'>
+                                <Link
+                                    to={ROUTES.SERVICES.GYM}
+                                    className='description-button'>
+                                    Подробнее
+                                </Link>
+                                <Link
+                                    to={ROUTES.BOOKING.TIME}
+                                    className='booking-button'>
+                                    Забронировать
+                                </Link>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div className='homepage-map'>
+                    <h2>Мы на карте</h2>
+                    <section className='homepage-map-block'>
+                        <div className='map-text-block'>
+                            <h3>Сведения</h3>
+                            <h4>Lorem Ipsum Lorem Ipsum</h4>
+                            <h4>Lorem Ipsum</h4>
+                            <h4>Lorem Ipsum</h4>
+                        </div>
+                        <div className='image-container'>
+                            <div className='image-1-1'>
+                                <img alt='we on map' src='/images/map.png' />
+                            </div>
+                        </div>
+                    </section>
+                </div>
             </main>
             <footer>
                 <div className='basement' id='about'>
-                    <span>
+                    <div>
                         <h3>О нас:</h3>
                         <p>
                             Лучшая баня для семейного отдыха или посиделок с
@@ -88,21 +246,21 @@ function Homepage() {
                             ощущения отдыха на природе. Работаем с 2025 и имеем
                             крупный опыт в банных услугах.
                         </p>
-                    </span>
-                    <span>
+                    </div>
+                    <div>
                         <h3>Забронировать:</h3>
                         <p>Выберите время</p>
-                    </span>
-                    <span>
+                    </div>
+                    <div>
                         <h3>Наше местоположение:</h3>
                         <p>Адрес: город, улица, номер дома</p>
                         <p>Время работы: 00:00 — 08:00</p>
-                    </span>
-                    <span>
+                    </div>
+                    <div>
                         <h3>Профиль:</h3>
                         <p>Регистрация</p>
                         <p>Вход</p>
-                    </span>
+                    </div>
                 </div>
             </footer>
         </>
