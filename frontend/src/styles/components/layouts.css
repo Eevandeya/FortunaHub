@@ -1,12 +1,9 @@
+/*Layouts for homepage*/
 header {
     top: 0;
     left: 0;
     position: sticky;
     z-index: var(--layer-header);
-
-    /*header and footer padding*/
-    --inline-padding: 10px;
-    --block-padding: 20px;
 }
 
 nav > *,
@@ -14,28 +11,33 @@ footer > * {
     padding-inline: var(--inline-padding);
     padding-block: var(--block-padding);
 }
+nav p {
+    font-size: clamp(24px, 2.25vw, 28px);
+    font-family: 'Montserrat Alternates', serif;
+    font-weight: 400;
+}
+
+nav img {
+    user-select: none;
+}
 
 .navbar {
     --backgroundHeaderColor: #000;
     --foregroundHeaderColor: #fff;
-
+    --max-gap: 50px;
     background-color: var(--backgroundHeaderColor);
     color: var(--foregroundHeaderColor);
     display: flex;
     width: 100%;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     height: 100px;
+    gap: var(--max-gap);
 
     animation-name: navbar-scale-y;
     animation-fill-mode: both;
     animation-timing-function: ease-in-out;
     animation-timeline: scroll();
-}
-
-.booking-navbar {
-    justify-content: center;
-    animation-name: none;
 }
 
 @keyframes navbar-scale-y {
@@ -47,17 +49,22 @@ footer > * {
 
 .navbar .navbar-content {
     background-color: transparent;
-    width: 80px;
+    flex-shrink: 0;
+    display: flex;
+    column-gap: 10px;
+    width: auto;
     height: 100%;
+    align-items: center;
 }
 
 .navbar .navbar-right {
+    --max-column-gap: 100px;
     background-color: transparent;
     height: 100%;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    column-gap: var(--max-column-gap);
+    justify-content: center;
     align-items: center;
 }
 
@@ -65,16 +72,12 @@ footer > * {
     background-color: transparent;
     position: relative;
     border-radius: 10px;
+    display: flex;
+    text-align: center;
 }
 
 .navbar-right span > a {
     color: var(--color-bay-leaf);
-}
-
-.navbar-content svg {
-    width: 100%;
-    height: 100%;
-    fill: red;
 }
 
 footer {
@@ -84,141 +87,58 @@ footer {
 .basement {
     --backgroundFooterColor: #000;
     --foregroundFooterColor: var(--color-bay-leaf);
-
+    gap: 100px;
     background-color: var(--backgroundFooterColor);
     color: var(--foregroundFooterColor);
     height: 100vh;
     width: 100%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 }
 
 .menu-list {
-    background-color: rgb(127 127 127 / 0.9);
     display: flex;
-    gap: 30px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100dvh;
-    padding-inline: 10px;
-    padding-block: 20px;
-    justify-content: space-evenly;
     flex-direction: column;
+    width: 100%;
+    height: 100%;
+    justify-content: space-evenly;
     align-items: center;
+    gap: 0;
+}
 
-    /*animation*/
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-20px);
-    transition: all 0.4s ease;
+.menu-container {
+    width: 100%;
+    text-align: center;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80px;
 }
 
 .menu-item {
-    padding: 8px;
     color: white;
     font-size: 3.5rem;
-    text-align: center;
     text-decoration: none;
-}
-
-.burger-checkbox {
-    position: absolute;
-    visibility: hidden;
-}
-.burger {
-    position: relative;
-    z-index: 1;
-    cursor: pointer;
-    display: none;
-    border: none;
-    background: transparent;
-    width: 40px;
-    height: 26px;
-}
-.burger::before,
-.burger::after {
-    content: '';
-    left: 0;
-    position: absolute;
-    display: block;
+    padding: 20px 10px;
     width: 100%;
-    height: 4px;
-    border-radius: 10px;
-    background: var(--color-bay-leaf);
-}
-.burger::before {
-    top: 0;
-    box-shadow: 0 11px 0 var(--color-bay-leaf);
-    transition:
-        box-shadow 0.3s 0.15s,
-        top 0.3s 0.15s,
-        transform 0.3s;
-}
-.burger::after {
-    bottom: 0;
-    transition:
-        bottom 0.3s 0.15s,
-        transform 0.3s;
-}
-.burger-checkbox:checked + .burger::before {
-    top: 11px;
-    transform: rotate(45deg);
-    box-shadow: 0 20px 0 rgba(0, 0, 0, 0);
-    transition:
-        box-shadow 0.15s,
-        top 0.3s,
-        transform 0.3s 0.15s;
-}
-.burger-checkbox:checked + .burger::after {
-    bottom: 11px;
-    transform: rotate(-45deg);
-    transition:
-        bottom 0.3s,
-        transform 0.3s 0.15s;
-}
-.burger-checkbox:checked ~ .menu-list {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
 }
 
 @media (hover: hover) {
     .navbar-right span > a:hover {
         color: white;
     }
-
     .navbar-right span:hover {
         background-color: rgb(255 255 255 / 0.1);
     }
-}
-.sidebar {
-    background-color: white;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    position: sticky;
-    top: 0;
-    height: 100vh;
-}
-
-.sidebar-right {
-    gap: 10px;
-    right: 0;
-}
-
-.sidebar-left {
-    left: 0;
-    padding: 10px;
-}
-
-.sidebar-footer {
-    height: 20vh;
-    width: 100%;
-    z-index: var(--layer-modal);
-    background-color: white;
-    box-shadow: 0 -10px 15px gray;
+    .menu-item:hover {
+        background-color: rgb(255 255 255 / 0.1);
+    }
 }
 
 @media (pointer: coarse) {
@@ -233,36 +153,283 @@ footer {
         background-color: rgb(255 255 255 / 0.1);
     }
 }
+/*Layouts for main page*/
 
-/*desktop-first*/
-@media (max-width: 1439px) {
-    .navbar {
-        width: 100vw;
-    }
-    .basement {
-        width: 100vw;
+/*Layouts for booking pages*/
+.booking-navbar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    background-color: var(--color-needles);
+    color: var(--foregroundHeaderColor);
+    gap: 0;
+}
+
+.booking-navbar-content {
+    grid-column: 2;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 100%;
+    order: 2;
+    min-width: 300px;
+}
+
+.booking-navbar-content h1 {
+    color: white;
+}
+
+.navbar-left {
+    grid-column: 1;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    order: 1;
+}
+
+.navbar-left span {
+    background-color: transparent;
+    position: relative;
+    border-radius: 10px;
+    display: flex;
+    text-align: start;
+}
+
+.navbar-left p {
+    display: inline-flex;
+    font-size: clamp(16px, 2.5vw, 24px);
+    font-family: 'Montserrat Alternates', sans-serif;
+    font-weight: 600;
+}
+
+.navbar-left #to-main::before {
+    padding: 0 3px;
+    content: '🏠';
+    width: 100%;
+    aspect-ratio: 1/1;
+    background: transparent;
+}
+
+.sidebar {
+    background-color: white;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: calc(100vh - var(--header-height));
+    justify-content: space-between;
+    z-index: var(--layer-content);
+    padding-block: calc(var(--header-height) + 1rem) 1rem;
+
+    animation-name: sidebar-scale-y;
+    animation-fill-mode: both;
+    animation-timing-function: linear;
+    animation-range: 0 50px;
+    animation-timeline: scroll();
+}
+
+@keyframes sidebar-scale-y {
+    to {
+        height: 100vh;
     }
 }
 
-@media (max-width: 1023px) {
+.sidebar-right {
+    gap: 10px;
+    right: 0;
+}
+
+.sidebar-left {
+    left: 0;
+    padding-inline: 1rem;
+}
+
+.sidebar-content {
+    position: relative;
+    top: 0;
+    height: 100%;
+    padding: 0 1.5rem;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.sidebar-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    padding: 1rem 2rem;
+    width: 100%;
+    z-index: var(--layer-content);
+    background-color: white;
+    box-shadow: 0 -6px 12px rgba(0, 0, 0, 0.15);
+    gap: 2rem;
+}
+
+/*Temporary styles*/
+.booking-next,
+.booking-prev {
+    flex: 1;
+    border-radius: 30px;
+    padding: 8px 2px;
+}
+
+.booking-next {
+    background-color: white;
+    border: 1px solid black;
+    color: black;
+}
+
+.booking-prev {
+    background-color: black;
+    color: white;
+}
+
+.step-icon {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding: 0 14px;
+    align-items: center;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    background-color: #b7b7b7;
+    color: #6c6c6c;
+    box-shadow: 0 0 1px 10px white;
+}
+
+.step-icon.active {
+    background-color: white;
+    color: black;
+    outline: solid 2px black;
+}
+
+.step-container {
+    height: 100%;
+    width: 100%;
+    padding: 0 0;
+}
+
+.step-bar {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: space-between;
+}
+
+.step-bar::before {
+    content: '';
+    border: 1px solid #b7b7b7;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 50%;
+}
+
+/*Temporary styles*/
+
+/*Layouts for booking pages*/
+
+@media (max-width: 1440px) {
+}
+
+@media (max-width: 1024px) {
     nav > *,
     footer > * {
         padding-inline: 15px;
         padding-block: 7px;
     }
+    .navbar {
+        gap: 25px;
+    }
+    .navbar .navbar-right {
+        gap: 1.5rem;
+    }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 768px),
+    (orientation: landscape) and (768px <= width < 1024px) {
     nav > *,
     footer > * {
         padding-inline: 10px;
         padding-block: 5px;
     }
+    .navbar {
+        justify-content: space-between;
+    }
     .navbar .navbar-right {
         display: none;
     }
-    .burger {
-        display: block;
+    .booking-navbar-content {
+        gap: 5px;
+        min-width: 200px;
+    }
+    .navbar-left {
+        gap: 5px;
+    }
+    .navbar-left span {
+        text-align: center;
+    }
+    .sidebar {
+        position: relative;
+        padding-inline: 0;
+        height: auto;
+        min-height: 0;
+        max-height: 768px;
+        background-color: transparent;
+        animation-name: none;
+    }
+    .sidebar-right {
+        top: 0;
+        padding-block: 2rem 0;
+    }
+    .sidebar-left {
+        margin-block: 2rem 0;
+        right: 0;
+    }
+    .sidebar-content {
+        padding: 0 1rem;
+        padding-bottom: 10rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 1rem;
+        align-items: stretch;
+        width: 100%;
+    }
+    .sidebar-footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        background-color: white;
+    }
+    .step-container {
+        height: auto;
+        padding: 5px 3rem;
+    }
+    .step-icon {
+        box-shadow: 0 0 1px 10px #f5f5f5ff;
+    }
+    .step-bar {
+        flex-direction: row;
+        align-items: stretch;
+        justify-content: space-between;
+    }
+    .step-bar::before {
+        content: '';
+        border: 1px solid #b7b7b7;
+        width: 100%;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        height: 0;
+        z-index: -1;
     }
 }
 
@@ -277,10 +444,21 @@ footer {
         min-width: 240px;
         width: 100%;
     }
-
     nav > *,
     footer > * {
         padding-inline: 5px;
         padding-block: 3px;
+    }
+    .sidebar {
+        max-width: 480px;
+    }
+}
+
+@media (orientation: landscape) and (768px <= width < 1024px) {
+    .navbar {
+        justify-content: space-around;
+    }
+    .navbar .navbar-right {
+        display: grid;
     }
 }
