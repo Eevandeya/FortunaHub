@@ -4,17 +4,21 @@ import Homepage from '@pages/Homepage.jsx';
 import TimeBookingPage from '@pages/TimeBookingPage.jsx';
 import GoodsBookingPage from '@pages/GoodsBookingPage.jsx';
 import ReservationPage from '@pages/ReservationPage.jsx';
-import BookingLayout from '@components.layout/BookingLayout.jsx';
+import BookingLayout from '@components.layout/pagesLayout/BookingLayout.jsx';
 import { NotFoundPage } from '@pages/ErrorPage.jsx';
-import { SuccessStatusPage } from '../pages/StatusPage.jsx';
-import PricingLayout from '../components/layout/PricingLayout.jsx';
+import { SuccessStatusPage } from '@pages/StatusPage.jsx';
+import PricingLayout from '@components.layout/pagesLayout/PricingLayout.jsx';
 import { SaunaServicesPage } from '@pages/servicesPages/saunaServicesPage.jsx';
 import { GymServicesPage } from '@pages/servicesPages/gymServicesPage.jsx';
 import { AccessoriesServicesPage } from '@pages/servicesPages/accessoriesServicesPage.jsx';
+import MainLayout from '@components.layout/pagesLayout/MainLayout.jsx';
+import ErrorBookingProvider from '../context/ErrorBookingContext.jsx';
 
 const routes = createRoutesFromElements([
     <Route path='/' element={<App />}>
-        <Route index element={<Homepage />} />
+        <Route element={<MainLayout />}>
+            <Route index element={<Homepage />} />
+        </Route>
         <Route path='services'>
             <Route path='sauna' element={<SaunaServicesPage />} />
             <Route path='gym' element={<GymServicesPage />} />
@@ -23,9 +27,11 @@ const routes = createRoutesFromElements([
         <Route
             path='booking'
             element={
-                <PricingLayout>
-                    <BookingLayout />
-                </PricingLayout>
+                <ErrorBookingProvider>
+                    <PricingLayout>
+                        <BookingLayout />
+                    </PricingLayout>
+                </ErrorBookingProvider>
             }>
             <Route index element={<Navigate to='time' replace />} />
             <Route path='time' element={<TimeBookingPage />} />
