@@ -6,6 +6,7 @@ const dateTimeSlice = createSlice({
     selectors: {
         selectDate: (state) => state.date,
         selectTime: (state) => state.time,
+        selectDateTime: (state) => state,
     },
     reducers: {
         setDate(state, action) {
@@ -23,5 +24,6 @@ const dateTimeSlice = createSlice({
 });
 
 export const { setDate, setTime, resetDateTime } = dateTimeSlice.actions;
-export const { selectDate, selectTime } = dateTimeSlice.selectors;
+export const { selectDate, selectTime, selectDateTime } =
+    dateTimeSlice.selectors;
 export default dateTimeSlice.reducer;

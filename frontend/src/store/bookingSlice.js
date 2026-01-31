@@ -20,6 +20,11 @@ const bookingSlice = createSlice({
     selectors: {
         selectStatus: (state) => state.status.current,
         selectStatusMessage: (state) => state.status.statusMessage,
+        selectCustomerData: (state) => ({
+            customer: state.order.customer,
+            visitors: state.order.visitorsCount,
+            contactMethod: state.order.preferredContactMethod,
+        }),
     },
     reducers: {
         setCustomerInfo(state, action) {
@@ -84,5 +89,6 @@ export const {
     resetBookingStatus,
 } = bookingSlice.actions;
 
-export const { selectStatus, selectStatusMessage } = bookingSlice.selectors;
+export const { selectStatus, selectStatusMessage, selectCustomerData } =
+    bookingSlice.selectors;
 export default bookingSlice.reducer;
