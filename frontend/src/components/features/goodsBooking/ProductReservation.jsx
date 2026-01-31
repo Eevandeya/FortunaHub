@@ -1,12 +1,13 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useInventory } from '@hooks/useInventory.js';
-import ItemHandler from '@components.common/goods/itemHandler.jsx';
+import ItemHandler from './itemHandler.jsx';
 import { useErrorHandler } from '@hooks/useErrorHandler.js';
 import { ITEM_TYPE } from '@root.consts/constants';
-import './products.css';
+import styles from './products.module.css';
+import SelectButton from '../../common/button/SelectButton.jsx';
 
-const ProductReservation = () => {
-    const [inventory, isLoading, reserve, deleteItem] = useInventory();
+const ProductReservation = (props) => {
+    const [inventory, bookedItems, isLoading, reserve] = useInventory();
     const [items, setItems] = useState(null);
     const { handleApiError } = useErrorHandler();
 
@@ -14,11 +15,18 @@ const ProductReservation = () => {
         if (isLoading || !inventory) {
             return;
         }
+        let bookedItemsObj;
+        if (bookedItems.length) {
+            bookedItemsObj = bookedItems.reduce((items, item) => {
+                items[item.slug] = item.quantity;
+                return items;
+            }, {});
+        }
         const itemsObject = inventory.map((item) => {
             return {
                 total: item.quantity ?? 0,
                 name: item.display_name,
-                quantity: 0,
+                quantity: bookedItemsObj?.[item.slug] ?? 0,
                 slug: item.slug,
                 itemType: item.itemType,
                 unitPrice: item.unitPrice,
@@ -35,12 +43,6 @@ const ProductReservation = () => {
             setItems(parsedInventory);
         }
     }, [parsedInventory]);
-
-    const resetItems = () => {
-        setItems((currentItems) =>
-            currentItems.map((item) => ({ ...item, quantity: 0 }))
-        );
-    };
 
     const handleIncrement = (item) => {
         setItems((prevItems) =>
@@ -66,8 +68,6 @@ const ProductReservation = () => {
         try {
             if (items) {
                 reserve(items);
-                deleteItem(items);
-                resetItems();
             }
         } catch (error) {
             handleApiError(error, { at: 'AccessoriesRental' });
@@ -75,30 +75,27 @@ const ProductReservation = () => {
     }, [items, reserve, handleApiError]);
 
     return (
-        <div className='products_selector'>
+        <div className={styles.products_selector}>
             <header>
-                <div className='products_selector_header'>
+                <div className={styles.products_selector_header}>
                     <p>Выберите товары</p>
                 </div>
             </header>
-            <section className='products_selector_container'>
+            <section className={styles.products_selector_container}>
                 {items?.map((item) => (
                     <ItemHandler
                         key={item.slug}
                         item={item}
                         count={item.quantity}
-                        total={item.total}
+                        maxCount={item.total}
                         itemType={ITEM_TYPE[`${item.item_type}`]}
                         onIncrement={() => handleIncrement(item)}
                         onDecrement={() => handleDecrement(item)}
                     />
                 ))}
             </section>
-            <button
-                className='products_selector_button'
-                onClick={modalHandleReserve}>
-                Арендовать
-            </button>
+            {props.hasError && <p style={{ color: 'red' }}>{props.error}</p>}
+            <SelectButton onClick={modalHandleReserve} value='Выбрать' />
         </div>
     );
 };

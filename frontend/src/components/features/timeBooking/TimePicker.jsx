@@ -1,11 +1,12 @@
 import { useAvailableTimes, useTimeSlot } from '@hooks/timeHandler.js';
-import Cell from '@components.common/cell/Cell.jsx';
+import Cell from './Cell.jsx';
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { addMinutes, format, isWithinInterval, parse } from 'date-fns';
 import TimeUtils from '@root.utils/timeUtils.js';
 import Loading from '@components.common/loader/Loading.jsx';
 import { useGetSaunaConfigQuery } from '@root.api/saunaConfig.js';
-import './timeComponent.css';
+import styles from './time_booking.module.css';
+import SelectButton from '../../common/button/SelectButton.jsx';
 
 const checkConditions = ({ minBookingTime, start, end }) => {
     const format = 'HH:mm';
@@ -19,7 +20,7 @@ const checkConditions = ({ minBookingTime, start, end }) => {
     return Math.abs(startTime - endTime) >= parsedMinBookingTime;
 };
 
-export function TimePicker({ date }) {
+export function TimePicker({ date, ...other }) {
     const { data: config } = useGetSaunaConfigQuery();
     const [availableTime, loading] = useAvailableTimes(date);
     const [bookTimeSlot, setIsBooking, isBooking] = useTimeSlot();
@@ -192,22 +193,23 @@ export function TimePicker({ date }) {
     }, [isBooking]);
 
     return (
-        <section className='time_selector'>
+        <section className={styles.time_selector}>
             <header>
-                <div className='time_selector_header'>
+                <div className={styles.time_selector_header}>
                     <p>Выберите время</p>
                 </div>
             </header>
-            <div className='time_slots_container'>
+            <div className={styles.time_slots_container}>
                 {loading ? <Loading /> : Content}
             </div>
-            <footer className='time_selector_footer'>
-                <button
-                    className='time_selector_button'
+            {other.hasError && <p style={{ color: 'red' }}>{other.error}</p>}
+            <footer className={styles.time_selector_footer}>
+                <SelectButton
+                    className={styles.time_selector_button}
                     onClick={booking}
-                    disabled={!borderTime.start || !borderTime.end}>
-                    Выбрать
-                </button>
+                    aria-disabled={!borderTime.start || !borderTime.end}
+                    value='Выбрать'
+                />
             </footer>
         </section>
     );

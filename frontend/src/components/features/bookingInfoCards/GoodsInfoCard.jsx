@@ -1,4 +1,4 @@
-import InfoCard from '@components.common/displayInfo/InfoCard.jsx';
+import InfoCard from '@components.common/displayInfo/infoCard/InfoCard.jsx';
 import { useSelector } from 'react-redux';
 import { selectItems } from '@store/itemsSlice.js';
 

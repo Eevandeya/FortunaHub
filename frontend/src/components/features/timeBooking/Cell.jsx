@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import classes from './cell.module.css';
+import classes from './time_booking.module.css';
 
 const Cell = memo(({ time, isDisabled, isSelected, setSelectedTime }) => {
     return (
