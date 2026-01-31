@@ -32,7 +32,7 @@ export const BOOKING_NAVIGATION = {
     reservation: {
         path: ROUTES.BOOKING.RESERVATION,
         previous: ROUTES.BOOKING.GOODS,
-        next: null,
+        next: ROUTES.HOME,
         label: 'Оформление брони',
     },
     status: {
