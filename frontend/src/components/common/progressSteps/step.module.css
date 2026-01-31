@@ -1,0 +1,72 @@
+.step_icon {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding: 0 14px;
+    align-items: center;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    background-color: #b7b7b7;
+    color: #6c6c6c;
+    box-shadow: 0 0 1px 10px white;
+}
+
+.step_icon.active {
+    background-color: white;
+    color: black;
+    outline: solid 2px black;
+}
+
+.step_container {
+    height: 100%;
+    width: 100%;
+    padding: 0 0;
+}
+
+.step_bar {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: space-between;
+}
+
+.step_bar::before {
+    content: '';
+    border: 1px solid #b7b7b7;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 50%;
+}
+
+@media (max-width: 768px),
+    (orientation: landscape) and (768px <= width < 1024px) {
+    .step_container {
+        height: auto;
+        padding: 5px 3rem;
+    }
+
+    .step_icon {
+        box-shadow: 0 0 1px 10px #f5f5f5ff;
+    }
+
+    .step_bar {
+        flex-direction: row;
+        align-items: stretch;
+        justify-content: space-between;
+    }
+
+    .step_bar::before {
+        content: '';
+        border: 1px solid #b7b7b7;
+        width: 100%;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        height: 0;
+        z-index: -1;
+    }
+}

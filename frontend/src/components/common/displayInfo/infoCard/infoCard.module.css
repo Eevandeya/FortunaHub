@@ -1,4 +1,4 @@
-.booking-card-container {
+.card_container {
     width: 100%;
     height: auto;
     padding: 10px 24px;
@@ -9,7 +9,7 @@
     min-height: 150px;
 }
 
-.booking-card-meta {
+.card_meta {
     width: 100%;
     height: 100%;
     display: flex;
@@ -20,21 +20,22 @@
     top: 0;
 }
 
-.card-title {
+.card_title {
     display: inline-block;
     color: black;
 }
 
-.card-title > h3 {
+.card_title > h3 {
     font-size: clamp(20px, 1.5vw, 28px);
 }
 
-.card-content {
+.card_content {
     flex: 1;
 }
 
-@media (max-width: 768px) {
-    .booking-card-container {
+@media (max-width: 768px),
+    (orientation: landscape) and (768px < width < 1024px) {
+    .card_container {
         border: none;
         width: 100%;
         height: auto;

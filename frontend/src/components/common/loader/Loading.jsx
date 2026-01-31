@@ -1,7 +1,13 @@
-import cl from '../UI.module.css';
+import styles from './loader.module.css';
 
 const Loading = () => {
-    return <div className={cl.loader}></div>;
+    return (
+        <div className={styles.loader}>
+            <span className={styles.bubble} />
+            <span className={styles.bubble} />
+            <span className={styles.bubble} />
+        </div>
+    );
 };
 
 export default Loading;

@@ -1,0 +1,137 @@
+.button {
+    cursor: pointer;
+    position: relative;
+
+    border-style: none;
+    background: none;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button:disabled {
+    border-color: rgb(217 217 217 / 0.69);
+}
+
+.button:hover:not(:disabled) {
+    opacity: 0.8;
+}
+
+.select_button {
+    min-width: 100%;
+    background-color: black;
+    color: white;
+    font-size: 24px;
+    border-radius: 12px;
+    padding-inline: 2rem;
+}
+
+.button.transparent {
+    background-color: transparent;
+    border: none;
+}
+
+.go_to_button {
+    width: fit-content;
+    padding-block: 8px;
+    padding-inline: 16px;
+    border-radius: 20px;
+    font-size: 16px;
+    flex: 1;
+}
+
+.go_to_button.black {
+    background-color: black;
+    color: #fff;
+    display: inline-flex;
+}
+
+.go_to_button.white {
+    background-color: white;
+    color: #000;
+    display: inline-flex;
+}
+
+.go_to_button::after {
+    content: '';
+    width: 20px;
+    height: 20px;
+    clip-path: polygon(
+        0 49%,
+        58% 48%,
+        44% 36%,
+        100% 50%,
+        45% 68%,
+        59% 55%,
+        0 56%
+    );
+
+    opacity: 0;
+    transform: translateX(0);
+    transition: all 0.3s ease;
+}
+
+.go_to_button.white::after {
+    background-color: black;
+}
+
+.go_to_button.black::after {
+    background-color: white;
+}
+
+.go_to_button.white:hover {
+    background: #b0b8b3;
+    transform: scale(1.05);
+    box-shadow: 0 10px 12px 1px rgb(90, 96, 90, 0.5);
+}
+
+.go_to_button:hover::after {
+    transform: translateX(10px);
+    opacity: 1;
+}
+
+.go_to_button.black:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 12px 1px rgba(0, 0, 0, 0.2);
+}
+
+.go_to_button:hover:not(:disabled) {
+    opacity: 1;
+}
+
+.go_to_button.black.border {
+    border: solid 1px white;
+}
+
+.go_to_button.white.border {
+    border: solid 1px black;
+}
+
+@media (hover: hover) {
+    .transparent:hover {
+        background-color: var(--color-ghost);
+    }
+}
+
+@media (pointer: coarse) {
+    .transparent:active {
+        background-color: rgb(188 219 239 / 0.1);
+        border-color: var(--color-ghost);
+    }
+}
+
+@media (max-width: 1024px) {
+    .go_to_button::after {
+        content: '';
+        width: 15px;
+        height: 15px;
+    }
+
+    .go_to_button {
+        font-size: 14px;
+        width: fit-content;
+        padding-block: 4px;
+        padding-inline: 10px;
+    }
+}

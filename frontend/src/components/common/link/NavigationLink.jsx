@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import styles from './linkers.module.css';
 
-export const NavigationItem = ({ to, children, end = false, ...props }) => (
+export const NavigationLink = ({ to, children, end = false, ...props }) => (
     <span>
         <NavLink
             className={({ isActive }) =>
