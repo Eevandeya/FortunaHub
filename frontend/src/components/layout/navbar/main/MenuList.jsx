@@ -1,4 +1,4 @@
-import styles from './menu-list.module.css';
+import styles from './main_layout.module.css';
 
 const MenuList = ({ isMenuOpen, children }) => {
     return (

@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import GoToButton from '../common/button/GoToButton.jsx';
 
 export const Sidebar = ({ paths, children }) => {
     const navigate = useNavigate();
@@ -6,18 +7,18 @@ export const Sidebar = ({ paths, children }) => {
         <aside className='sidebar sidebar-right'>
             <div className='sidebar-content'>{children}</div>
             <footer className='sidebar-footer'>
-                <button
-                    className='booking-prev'
+                <GoToButton
                     onClick={() =>
                         navigate(paths.previous, { relative: 'path' })
-                    }>
-                    <p>Вернуться</p>
-                </button>
-                <button
-                    className='booking-next'
-                    onClick={() => navigate(paths.next, { relative: 'path' })}>
-                    <p>Далее</p>
-                </button>
+                    }
+                    value='Вернуться'
+                    theme='black'
+                />
+                <GoToButton
+                    onClick={() => navigate(paths.next, { relative: 'path' })}
+                    value='Далее'
+                    isBordering
+                />
             </footer>
         </aside>
     );

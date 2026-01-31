@@ -1,5 +1,6 @@
 import { useLayoutEffect } from 'react';
-import styles from './buttons-styles.module.css';
+import styles from './main_layout.module.css';
+import Button from '@components.common/button/Button.jsx';
 
 const BurgerButton = ({ isActive, setIsActive }) => {
     useLayoutEffect(() => {
