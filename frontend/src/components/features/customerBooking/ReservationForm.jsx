@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useErrorHandler } from '@hooks/useErrorHandler.js';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import Select from '@components.common/select/Select.jsx';
-import { VisitorsCountDisplay } from '@components.common/display/numberDisplay.jsx';
+import { NumberDisplay } from '@components.common/displayInfo/numberDisplay/NumberDisplay.jsx';
 import { useReservation } from '@hooks/useReservation.js';
 import { CONTACT_METHODS } from '@root.consts/contactMethods.js';
 import { useSelector } from 'react-redux';
 import './reservationForm.css';
+import { isPossiblePhoneNumber } from 'react-phone-number-input';
+import Input from 'react-phone-number-input/input';
+import Button from '../../common/button/Button.jsx';
 
 const ReservationForm = () => {
     const [visitors, setVisitors] = useState(0);
@@ -19,6 +22,7 @@ const ReservationForm = () => {
         handleSubmit,
         reset,
         formState: { errors, isSubmitting, isValid },
+        control,
     } = useForm({
         defaultValues: {
             nickname: bookingNickname ?? '',
@@ -40,9 +44,11 @@ const ReservationForm = () => {
     }, [status]);
 
     const increase = () => {
+        if (visitors > config?.max_visitors_count) return;
         setVisitors((value) => value + 1);
     };
     const decrease = () => {
+        if (visitors <= 0) return;
         setVisitors((value) => value - 1);
     };
 
@@ -84,35 +90,41 @@ const ReservationForm = () => {
                     </div>
                 )}
                 <div className='field'>
-                    <label className='label' htmlFor='phoneNumber'>
-                        Номер телефона
-                    </label>
                     <div className='control'>
-                        <div className='phone-input'>
-                            <span className='country-code'>+7</span>
-                            <input
-                                {...register('phoneNumber', {
-                                    required: 'Номер телефона обязателен',
-                                    validate: (value) => {
-                                        if (!/\d{10}/.test(value))
-                                            return 'Некорректный номер телефона';
-                                    },
-                                })}
-                                type='tel'
-                                className='input'
-                                placeholder='Введите номер телефона'
-                                id='phoneNumber'
-                            />
-                        </div>
+                        <Controller
+                            name='phoneNumber'
+                            control={control}
+                            rules={{
+                                required: 'Номер телефона обязателен',
+                                validate: (value) => {
+                                    if (!isPossiblePhoneNumber(value))
+                                        return 'Некорректный номер телефона';
+                                },
+                            }}
+                            render={({ field, fieldState }) => (
+                                <>
+                                    <label className='label'>
+                                        Номер телефона
+                                        <Input
+                                            {...field}
+                                            country='RU'
+                                            international
+                                            withCountryCallingCode
+                                            className='input'
+                                        />
+                                    </label>
+                                    {fieldState.error && (
+                                        <div className='field'>
+                                            <p className='has-text-danger'>
+                                                {fieldState.error?.message}
+                                            </p>
+                                        </div>
+                                    )}
+                                </>
+                            )}
+                        />
                     </div>
                 </div>
-                {errors.phoneNumber && (
-                    <div className='field'>
-                        <p className='has-text-danger'>
-                            {errors.phoneNumber?.message}
-                        </p>
-                    </div>
-                )}
                 <div className='field'>
                     <label className='label'>Выберите способ связи</label>
                     <div className='control'>
@@ -127,20 +139,25 @@ const ReservationForm = () => {
                 <div className='field'>
                     <label className='label'>Выберите количество человек</label>
                     <div className='control'>
-                        <VisitorsCountDisplay
+                        <NumberDisplay
                             count={visitors}
                             increase={increase}
                             decrease={decrease}
                             maxValue={config?.max_visitors_count}
+                            fontColor='black'
                         />
                     </div>
                 </div>
                 <div className='field is-grouped is-right'>
                     <div className='control'>
-                        <input type='reset' value='Сбросить' />
+                        <Button
+                            type='reset'
+                            onClick={() => reset()}
+                            message='Сбросить'
+                        />
                     </div>
                     <div className='control'>
-                        <input type='submit' value='Выбрать' />
+                        <Button type='submit' message='Выбрать' />
                     </div>
                 </div>
             </form>
