@@ -36,8 +36,11 @@
     /*z-index*/
     --layer-default: 0;
     --layer-content: 100;
-    --layer-header: 200;
-    --layer-modal: 300;
+    --layer-sticky: 150;
+    --layer-overlay: 200;
+    --layer-overlay-content: 250;
+    --layer-header: 300;
+    --layer-modal: 400;
     scroll-behavior: smooth;
 }
 
@@ -97,20 +100,20 @@ p {
     border: 0;
 }
 
-@media (max-width: 1439px) {
+@media (max-width: 1440px) {
     body {
         font-size: 20px;
     }
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 1024px) {
     body {
         line-height: 1.6;
         font-size: 18px;
     }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
     body {
         line-height: 1.7;
         font-size: 16px;
