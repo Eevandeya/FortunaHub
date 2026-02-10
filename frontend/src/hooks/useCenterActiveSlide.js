@@ -12,15 +12,15 @@ const useCenterActiveSlide = (rootMargin = '0px -45% 0px -45%') => {
                 const visible = entries.filter((e) => e.isIntersecting);
 
                 if (!visible.length) return;
-                const centerX = window.innerWidth / 2;
-
+                const rootRect = rootRef.current.getBoundingClientRect();
+                const rootCenter = rootRect.left + rootRect.width / 2;
                 let closest = null;
                 let minDistance = Infinity;
 
                 visible.forEach((entry) => {
                     const rect = entry.target.getBoundingClientRect();
                     const elCenter = rect.left + rect.width / 2;
-                    const distance = Math.abs(elCenter - centerX);
+                    const distance = Math.abs(elCenter - rootCenter);
 
                     if (distance < minDistance) {
                         minDistance = distance;
