@@ -2,69 +2,54 @@ import Modal from '@components.common/modal/Modal.jsx';
 import { createPortal } from 'react-dom';
 import { useEffect, useState } from 'react';
 import paymentMethods from '@root.consts/paymentMethods.js';
-import InfoCard from '../../common/displayInfo/InfoCard.jsx';
 import usePaymentChoice from '../../../hooks/usePaymentChoice.js';
 import Loading from '../../common/loader/Loading.jsx';
 import { useDispatch } from 'react-redux';
 import { setBookingStatusState } from '../../../store/bookingSlice.js';
-import './payment.css';
+import styles from './payment.module.css';
+import PaymentMethodCard from './PaymentMethodCard.jsx';
+import SelectButton from '../../common/button/SelectButton.jsx';
 
 const PaymentModal = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedMethod, setSelectedMethod] = useState(null);
+
     const [status, loading, sendBookingData] = usePaymentChoice();
     const dispatch = useDispatch();
 
-    const handleDivClick = (event) => {
-        if (event.target.type !== 'checkbox') {
-            const checkbox = event.currentTarget.querySelector(
-                'input[type="checkbox"]'
-            );
-            checkbox.click();
-        }
-    };
-
     const closeModal = () => {
         setIsModalOpen(false);
+        setSelectedMethod(null);
         dispatch(setBookingStatusState({ status: 'idle' }));
     };
 
     useEffect(() => {
-        if (status !== 'draft' && status !== 'success') {
-            return;
+        if (status === 'draft' || status === 'success') {
+            setIsModalOpen(true);
         }
-        setIsModalOpen(true);
     }, [status]);
+    return createPortal(
+        <Modal closeModal={closeModal} modalState={isModalOpen}>
+            {loading && <Loading />}
 
-    return (
-        <>
-            {createPortal(
-                <Modal closeModal={closeModal} modalState={isModalOpen}>
-                    {loading && <Loading />}
-                    <div className='payment-method-container'>
-                        {paymentMethods.map((method) => (
-                            <button
-                                className='payment-method'
-                                key={method.title}
-                                onClick={handleDivClick}>
-                                <div className='content'>
-                                    <h4>{method.title}</h4>
-                                    <h6>{method.description}</h6>
-                                </div>
-                                <div className='toggle-checkbox'>
-                                    <input type='checkbox' />
-                                </div>
-                            </button>
-                        ))}
-                    </div>
-                    <button
-                        className='payment-button'
-                        onClick={sendBookingData}>
-                        <h4>Оплатить</h4>
-                    </button>
-                </Modal>,
-                document.body
-            )}
-        </>
+            <div className={styles.payment_methods_container}>
+                {paymentMethods.map((method) => (
+                    <PaymentMethodCard
+                        key={method.id}
+                        method={method}
+                        checked={selectedMethod === method.id}
+                        onSelect={() => setSelectedMethod(method.id)}
+                    />
+                ))}
+            </div>
+
+            <SelectButton
+                aria-disabled={!selectedMethod}
+                onClick={() => sendBookingData(selectedMethod)}
+                value='Оплатить'
+            />
+        </Modal>,
+        document.body
     );
 };
 

@@ -6,14 +6,15 @@
     gap: 2rem;
     padding: 2.5rem 0;
     min-width: 240px;
+    max-width: 1440px;
 }
 
 .form-container > form {
-    width: 75%;
+    width: 60%;
     max-width: 768px;
     height: auto;
     border-radius: 12px;
-    background-color: var(--color-needles);
+    background-color: white;
     border: 1px solid gray;
     display: flex;
     flex-direction: column;
@@ -29,7 +30,7 @@
 .field .label {
     font-weight: lighter;
     font-size: 20px;
-    color: white;
+    color: black;
 }
 
 .control input {
@@ -92,24 +93,27 @@ input::selection {
     justify-content: flex-start;
 }
 
-input[type='submit'],
-input[type='reset'] {
+button[type='submit'],
+button[type='reset'] {
     flex: 1;
     padding: 0.5rem 2rem;
     user-select: none;
     cursor: pointer;
+    border-radius: 24px;
 }
 
-input[type='submit'] {
-    background-color: var(--color-primary);
+button[type='submit'] {
+    background-color: white;
+    border: 1px solid black;
 }
 
-input[type='reset'] {
-    background-color: var(--color-error);
+button[type='reset'] {
+    background-color: black;
+    color: white;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .form-container > form {
-        width: 100%;
+        width: 75%;
     }
 }

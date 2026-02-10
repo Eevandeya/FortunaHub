@@ -1,4 +1,4 @@
-import './modal.css';
+import styles from './modal.module.css';
 
 const Modal = ({ closeModal, modalState, children }) => {
     const onClick = (e) => {
@@ -6,14 +6,10 @@ const Modal = ({ closeModal, modalState, children }) => {
     };
     return (
         <div
-            className={
-                modalState
-                    ? 'modal-background modal-active'
-                    : 'modal-background'
-            }
+            className={`${styles.modal_background} ${modalState && styles.active}`}
             onClick={closeModal}>
             <div
-                className={modalState ? 'modal-window active' : 'modal-window'}
+                className={`${styles.modal_window} ${modalState && styles.active}`}
                 onClick={onClick}>
                 {children}
             </div>

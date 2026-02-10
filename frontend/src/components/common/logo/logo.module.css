@@ -1,0 +1,25 @@
+.logo {
+    display: inline-flex;
+    align-items: center;
+    font-size: 36px;
+    font-weight: 300;
+    font-family: var(--font-heading), sans-serif;
+    letter-spacing: 0.2rem;
+    user-select: none;
+}
+
+.logo_image {
+    width: 48px;
+    height: 48px;
+}
+
+@media (max-width: 480px) {
+    .logo {
+        font-size: 24px;
+    }
+
+    .logo_image {
+        width: 36px;
+        height: 36px;
+    }
+}

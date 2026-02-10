@@ -1,0 +1,48 @@
+.footer_navbar > * {
+    padding-inline: var(--inline-padding);
+    padding-block: var(--block-padding);
+    z-index: var(--layer-header);
+}
+
+.footer_navbar {
+    grid-row: 3;
+}
+
+.basement {
+    --backgroundFooterColor: #000;
+    --foregroundFooterColor: var(--color-bay-leaf);
+    gap: 100px;
+    background-color: var(--backgroundFooterColor);
+    color: var(--foregroundFooterColor);
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+@media (max-width: 1024px) {
+    .footer_navbar > * {
+        padding-inline: 15px;
+        padding-block: 7px;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer_navbar > * {
+        padding-inline: 10px;
+        padding-block: 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .basement {
+        flex-direction: column;
+        min-width: 240px;
+        width: 100%;
+    }
+
+    .footer_navbar > * {
+        padding-inline: 5px;
+        padding-block: 3px;
+    }
+}

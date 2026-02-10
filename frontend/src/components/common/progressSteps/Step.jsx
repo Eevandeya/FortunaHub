@@ -1,10 +1,11 @@
 import { NavLink } from 'react-router-dom';
+import styles from './step.module.css';
 
 export const Step = ({ number, to }) => (
     <NavLink
         to={to}
         className={({ isActive }) =>
-            isActive ? 'step-icon active' : 'step-icon'
+            `${styles.step_icon} ${isActive && styles.active}`
         }>
         {number}
     </NavLink>

@@ -1,0 +1,104 @@
+.product_slider {
+    --product-slider-card-height: calc(400px * 3 / 2);
+    --product-slider-width: 60vw;
+    max-width: var(--product-slider-width);
+    min-height: calc(var(--product-slider-card-height) * 1.2 + 50px);
+}
+
+.product_el {
+    position: relative;
+    display: inline-block;
+    width: calc(var(--product-slider-width) / 2);
+    aspect-ratio: 2/3;
+    scroll-snap-align: center;
+    margin-inline: 1.5rem;
+}
+
+.product_el > .product_card {
+    border-radius: 24px;
+    row-gap: 1rem;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    justify-content: center;
+    padding: 1.5rem 1rem;
+    overflow: hidden;
+    max-width: 100%;
+    height: 100%;
+    transition:
+        transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+        filter 0.4s ease,
+        opacity 0.4s ease;
+}
+
+.product_el .closest_card {
+    transform: scale(1.1, 1.1) translateY(50px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    filter: saturate(1.2) contrast(1.05);
+    opacity: 1;
+}
+
+.product_el .image {
+    border-radius: 16px;
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    object-position: center;
+}
+
+.product_el .content {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    gap: 0.5rem;
+    max-width: 100%;
+    overflow-y: clip;
+}
+
+.product_el .title {
+    font-weight: 500;
+}
+
+.content .subtitle {
+    flex: 1;
+    white-space: normal;
+}
+
+.product_el > .product_card:not(.closest_card) {
+    opacity: 0.6;
+    filter: blur(1px);
+}
+
+@media (max-width: 1440px) {
+    .product_el {
+        margin-inline: 1.25rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    .product_el {
+        margin-inline: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .product_slider {
+        --product-slider-card-height: calc(400px * 3 / 2);
+        --product-slider-width: 80vw;
+        max-width: var(--product-slider-width);
+        min-height: calc(var(--product-slider-card-height) * 1.2 + 50px);
+    }
+
+    .product_el {
+        width: calc(var(--product-slider-width) / 1.5);
+        aspect-ratio: 2/3;
+        margin-inline: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .product_el {
+        width: calc(var(--product-slider-width) / 1.15);
+        aspect-ratio: 1/2;
+        margin-inline: 0.5rem;
+    }
+}

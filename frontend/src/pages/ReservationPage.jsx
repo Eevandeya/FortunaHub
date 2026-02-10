@@ -1,5 +1,5 @@
 import ReservationForm from '@components.features/customerBooking/ReservationForm.jsx';
-import PaymentModal from '../components/features/payment/PaymentModal.jsx';
+import PaymentModal from '@components.features/payment/PaymentModal.jsx';
 
 const ReservationPage = () => {
     return (

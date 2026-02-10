@@ -1,0 +1,180 @@
+.main_navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: transparent;
+    padding-inline: var(--inline-padding);
+    padding-block: var(--block-padding);
+    min-height: 100%;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.main_navbar.active {
+    transition: background-color 0.5s ease-in-out;
+    background-color: var(--backgroundNavbarColor);
+}
+
+.booking_navbar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    background-color: var(--color-needles);
+    padding-inline: var(--inline-padding);
+    padding-block: var(--block-padding);
+    min-height: 100%;
+}
+
+.navbar_brand {
+    flex-shrink: 0;
+    display: flex;
+    column-gap: 10px;
+    width: auto;
+    height: 100%;
+    align-items: center;
+}
+
+.navbar_menu {
+    margin-inline: auto;
+    display: flex;
+    column-gap: 1rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar_menu span {
+    border-radius: 10px;
+    display: flex;
+    text-align: center;
+    padding-inline: 1rem;
+}
+
+.navbar_menu span > a {
+    color: var(--color-bay-leaf);
+}
+
+.menu_list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 0;
+}
+
+.menu_container {
+    width: 100%;
+    text-align: center;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80px;
+}
+
+.menu_item {
+    color: white;
+    text-decoration: none;
+    padding: 20px 10px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.booking_navbar .navbar_brand {
+    grid-column: 2;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 100%;
+    order: 2;
+    min-width: 300px;
+}
+
+.booking_navbar .navbar_brand h1 {
+    color: white;
+}
+
+.booking_navbar .navbar_left {
+    grid-column: 1;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    order: 1;
+}
+
+.booking_navbar .navbar_left span {
+    background-color: transparent;
+    position: relative;
+    border-radius: 10px;
+    display: flex;
+    text-align: start;
+}
+
+.booking_navbar .navbar_left p {
+    display: inline-flex;
+    font-size: clamp(16px, 2.5vw, 24px);
+    font-family: 'Montserrat Alternates', sans-serif;
+    font-weight: 600;
+}
+
+.booking_navbar .navbar_left a[id='to-main']::before {
+    padding: 0 3px;
+    content: '🏠';
+    width: 100%;
+    aspect-ratio: 1/1;
+    background: transparent;
+}
+
+@media (hover: hover) {
+    .navbar_menu span > a:hover {
+        color: white;
+    }
+    .navbar_menu span:hover {
+        background-color: rgb(255 255 255 / 0.1);
+    }
+    .menu_item:hover {
+        background-color: rgb(255 255 255 / 0.1);
+    }
+}
+
+@media (pointer: coarse) {
+    .menu_item:active {
+        background-color: rgb(255 255 255 / 0.1);
+    }
+    .navbar_menu span > a:active {
+        color: white;
+    }
+    .navbar_menu span:active {
+        background-color: rgb(255 255 255 / 0.1);
+    }
+}
+
+@media (max-width: 1024px) {
+    .navbar_menu {
+        column-gap: 0.5rem;
+    }
+}
+
+@media (max-width: 768px),
+    (orientation: landscape) and (768px <= width < 1024px) {
+    .navbar_menu {
+        display: none;
+    }
+    .booking_navbar_menu {
+        gap: 5px;
+        min-width: 200px;
+    }
+    .navbar_left {
+        gap: 5px;
+    }
+    .navbar_left span {
+        text-align: center;
+    }
+    .menu_item p {
+        font-size: clamp(24px, 2vw, 36px);
+    }
+}

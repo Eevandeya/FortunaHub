@@ -1,73 +1,9 @@
 import './ServicePage.css';
 import { Link } from 'react-router-dom';
-import { NavigationItem } from '@components.common/navigation/NavigationItem.jsx';
-import { HashNavigationItem } from '@components.common/navigation/HashNavigationItem.jsx';
-import { ROUTES } from '@root.consts/navigation.js';
-import FortunaLogo from '@components.common/logo/FortunaLogo.jsx';
-import BurgerButton from '@components.common/button/BurgerButton.jsx';
-import MenuList from '@components.common/menu/menuList.jsx';
-import { useState } from 'react';
 
 export const AccessoriesServicesPage = () => {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-
     return (
         <>
-            <header>
-                <nav>
-                    <div className='navbar'>
-                        <div className='navbar-content'>
-                            <FortunaLogo
-                                logoHeader='FORTUNA'
-                                logoImage='/icons/Fortuna%2064x64.svg'
-                                hasHeader
-                            />
-                        </div>
-                        <div className='navbar-right'>
-                            <NavigationItem to={ROUTES.HOME} end>
-                                В ГЛАВНОЕ МЕНЮ
-                            </NavigationItem>
-                            <NavigationItem to={ROUTES.BOOKING.TIME} end>
-                                ЗАБРОНИРОВАТЬ
-                            </NavigationItem>
-                            <HashNavigationItem to={ROUTES.ABOUT}>
-                                О НАС
-                            </HashNavigationItem>
-                        </div>
-                        <MenuList isMenuOpen={isMenuOpen}>
-                            <div className='menu-list'>
-                                <div className='menu-container'>
-                                    <HashNavigationItem
-                                        to={ROUTES.HOME_HASH}
-                                        className='menu-item'
-                                        onClick={() => setIsMenuOpen(false)}>
-                                        Главная
-                                    </HashNavigationItem>
-                                </div>
-                                <div className='menu-container'>
-                                    <NavigationItem
-                                        to={ROUTES.BOOKING.TIME}
-                                        className='menu-item'>
-                                        Забронировать
-                                    </NavigationItem>
-                                </div>
-                                <div className='menu-container'>
-                                    <HashNavigationItem
-                                        className='menu-item'
-                                        to={ROUTES.ABOUT}
-                                        onClick={() => setIsMenuOpen(false)}>
-                                        О нас
-                                    </HashNavigationItem>
-                                </div>
-                            </div>
-                        </MenuList>
-                        <BurgerButton
-                            isActive={isMenuOpen}
-                            setIsActive={setIsMenuOpen}
-                        />
-                    </div>
-                </nav>
-            </header>
             <main className='service-page'>
                 <section className='service-hero'>
                     <div className='hero-image-container'>

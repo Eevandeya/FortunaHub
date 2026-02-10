@@ -10,6 +10,7 @@ import {
 import { useCallback } from 'react';
 import { useErrorHandler } from '@hooks/useErrorHandler.js';
 import { useGetSaunaConfigQuery } from '../../api/saunaConfig.js';
+import useBookingValidation from './useBookingValidation.js';
 
 export const useReservation = (preferredContactMethod, visitors, formState) => {
     const dispatch = useDispatch();
@@ -18,11 +19,7 @@ export const useReservation = (preferredContactMethod, visitors, formState) => {
     const statusMessage = useSelector(selectStatusMessage);
     const { handleApiError } = useErrorHandler();
     const { data: config } = useGetSaunaConfigQuery();
-    const isFieldsValid = () => {
-        const isTime = timeSlot?.start && timeSlot?.end;
-        const isItems = Array.isArray(items);
-        return isTime && isItems;
-    };
+    const { validationSteps: isFieldsValid } = useBookingValidation();
 
     const setCustomer = (data) => {
         dispatch(setCustomerInfo({ customer: data }));
@@ -34,11 +31,14 @@ export const useReservation = (preferredContactMethod, visitors, formState) => {
 
     const submitReservation = useCallback(
         (data) => {
-            if (formState.isValid && isFieldsValid()) {
+            if (
+                formState.isValid &&
+                Object.values(isFieldsValid).every((field) => field.valid)
+            ) {
                 try {
                     const customerData = {
                         nickname: data.nickname,
-                        phoneNumber: '7'.concat(data.phoneNumber),
+                        phoneNumber: data.phoneNumber,
                     };
 
                     setCustomer(customerData);
