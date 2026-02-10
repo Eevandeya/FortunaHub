@@ -8,13 +8,17 @@ import { NavigationLink } from '@components.common/link/NavigationLink.jsx';
 import { HashNavigationLink } from '@components.common/link/HashNavigationLink.jsx';
 import styles from '../navbar.module.css';
 import Logo from '@assets/icons/Fortuna 64x64.svg?react';
+import useScrollNavigate from '../../../../hooks/useScrollNavigate.js';
 
-const MainNavbar = () => {
+const MainNavbar = ({ transparentNavbar }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isHeroVisible, setIsHeroVisible] = useState(true);
+    const scroll = useScrollNavigate();
 
     useEffect(() => {
+        if (!transparentNavbar) return;
         const target = document.getElementById('hero');
+
         if (!target) return;
 
         const observer = new IntersectionObserver((entries) => {
@@ -28,18 +32,18 @@ const MainNavbar = () => {
     return (
         <Navbar isNavbarActive={isHeroVisible}>
             <div
-                className={`${styles.main_navbar} ${!isHeroVisible && styles.active}`}>
+                className={`${styles.main_navbar} ${(!isHeroVisible || !transparentNavbar) && styles.active}`}>
                 <div className={styles.navbar_brand}>
                     <FortunaLogo logoHeader='FORTUNA' Logo={Logo} hasHeader />
                 </div>
                 <div className={styles.navbar_menu}>
-                    <NavigationLink to={ROUTES.HOME} end>
+                    <HashNavigationLink onClick={() => scroll('/', 'main')}>
                         В ГЛАВНОЕ МЕНЮ
-                    </NavigationLink>
+                    </HashNavigationLink>
                     <NavigationLink to={ROUTES.BOOKING.TIME} end>
                         ЗАБРОНИРОВАТЬ
                     </NavigationLink>
-                    <HashNavigationLink to={ROUTES.ABOUT}>
+                    <HashNavigationLink onClick={() => scroll('./', 'about')}>
                         О НАС
                     </HashNavigationLink>
                 </div>
@@ -47,9 +51,11 @@ const MainNavbar = () => {
                     <div className={styles.menu_list}>
                         <div className={styles.menu_container}>
                             <HashNavigationLink
-                                to={ROUTES.HOME_HASH}
                                 className={styles.menu_item}
-                                onClick={() => setIsMenuOpen(false)}>
+                                onClick={() => {
+                                    setIsMenuOpen(false);
+                                    scroll('/', 'main');
+                                }}>
                                 Главная
                             </HashNavigationLink>
                         </div>
@@ -63,8 +69,10 @@ const MainNavbar = () => {
                         <div className={styles.menu_container}>
                             <HashNavigationLink
                                 className={styles.menu_item}
-                                to={ROUTES.ABOUT}
-                                onClick={() => setIsMenuOpen(false)}>
+                                onClick={() => {
+                                    setIsMenuOpen(false);
+                                    scroll('./', 'about');
+                                }}>
                                 О нас
                             </HashNavigationLink>
                         </div>

@@ -20,7 +20,7 @@
     align-items: center;
     background-color: var(--color-needles);
     padding-inline: var(--inline-padding);
-    padding-block: var(--block-padding);
+
     min-height: 100%;
 }
 
@@ -91,7 +91,7 @@
     gap: 10px;
     height: 100%;
     order: 2;
-    min-width: 300px;
+    min-width: 200px;
 }
 
 .booking_navbar .navbar_brand h1 {
@@ -116,7 +116,6 @@
 
 .booking_navbar .navbar_left p {
     display: inline-flex;
-    font-size: clamp(16px, 2.5vw, 24px);
     font-family: 'Montserrat Alternates', sans-serif;
     font-weight: 600;
 }
