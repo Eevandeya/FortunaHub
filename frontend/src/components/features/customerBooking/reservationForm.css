@@ -70,6 +70,8 @@ input::selection {
     font-weight: bold;
     padding-right: 10px;
     border-right: 1px solid #ccc;
+    -webkit-user-select: none;
+    -ms-user-select: none;
     user-select: none;
     cursor: default;
 }
@@ -97,6 +99,8 @@ button[type='submit'],
 button[type='reset'] {
     flex: 1;
     padding: 0.5rem 2rem;
+    -webkit-user-select: none;
+    -ms-user-select: none;
     user-select: none;
     cursor: pointer;
     border-radius: 24px;

@@ -9,12 +9,6 @@
     gap: 10px;
 }
 
-header > .time_selector_header {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
-
 .time_slots_container {
     border-radius: 12px;
     padding: 12px 24px;

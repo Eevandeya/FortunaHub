@@ -18,7 +18,7 @@ header > .products_selector_header {
 .products_selector_container {
     width: 100%;
     height: auto;
-    padding: 2rem 0;
+    margin-bottom: 2rem;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
@@ -103,6 +103,8 @@ header > .products_selector_header {
     font-weight: 600;
     padding: 5px;
     background: transparent;
+    -webkit-user-select: none;
+    -ms-user-select: none;
     user-select: none;
 
     display: inline-flex;
