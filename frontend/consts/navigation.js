@@ -1,7 +1,7 @@
 export const ROUTES = {
     HOME: '/',
-    HOME_HASH: '#',
-    ABOUT: '#about',
+    PRICE: '/price',
+    GALLERY: '/gallery',
     BOOKING: {
         BASE: '/booking',
         TIME: '/booking/time',
@@ -9,11 +9,6 @@ export const ROUTES = {
         RESERVATION: '/booking/reservation',
     },
     STATUS: { SUCCESS: '/status/success' },
-    SERVICES: {
-        SAUNA: '/services/sauna',
-        ACCESSORIES: '/services/accessories',
-        GYM: '/services/gym',
-    },
 };
 
 export const BOOKING_NAVIGATION = {
