@@ -12,13 +12,15 @@
 .navbar-content {
     color: var(--foregroundNavbarColor);
     width: 100vw;
-    height: 100px;
 
     min-width: 240px;
 
-    animation-name: navbar-scale-y;
+    animation-name: navbar-scroll-y;
+    -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
+    -webkit-animation-timing-function: ease-in-out;
     animation-timing-function: ease-in-out;
+    -webkit-animation-timeline: scroll();
     animation-timeline: scroll();
 }
 
@@ -29,12 +31,13 @@
 }
 
 .navbar-content img {
+    -webkit-user-select: none;
+    -ms-user-select: none;
     user-select: none;
 }
 
-@keyframes navbar-scale-y {
+@keyframes navbar-scroll-y {
     to {
-        height: 80px;
         box-shadow: 0 4px 4px var(--backgroundNavbarColor);
     }
 }
@@ -114,8 +117,7 @@
         right: 0;
     }
     .sidebar-content {
-        padding: 0 1rem;
-        padding-bottom: 10rem;
+        padding: 0 1rem 10rem 1rem;
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
         gap: 1rem;

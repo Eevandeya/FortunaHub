@@ -21,7 +21,9 @@ html {
 
 body {
     line-height: 1.5;
+    display: -ms-grid;
     display: grid;
+    -ms-grid-rows: auto 1fr auto;
     grid-template-rows: auto 1fr auto;
     -webkit-font-smoothing: antialiased;
 }
@@ -52,6 +54,7 @@ a {
     text-decoration: none;
     color: inherit;
     font-weight: 500;
+    cursor: pointer;
 }
 
 p,
