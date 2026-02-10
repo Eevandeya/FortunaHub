@@ -2,33 +2,19 @@ import { useNavigate } from 'react-router-dom';
 
 export const Sidebar = ({ paths, children }) => {
     const navigate = useNavigate();
-
     return (
         <aside className='sidebar sidebar-right'>
-            {children}
+            <div className='sidebar-content'>{children}</div>
             <footer className='sidebar-footer'>
                 <button
-                    style={{
-                        width: '100px',
-                        height: '40px',
-                        borderRadius: '30px',
-                        backgroundColor: 'black',
-                        color: 'white',
-                    }}
+                    className='booking-prev'
                     onClick={() =>
                         navigate(paths.previous, { relative: 'path' })
                     }>
                     <p>Вернуться</p>
                 </button>
                 <button
-                    style={{
-                        width: '100px',
-                        height: '40px',
-                        borderRadius: '30px',
-                        backgroundColor: 'white',
-                        border: '1px solid black',
-                        color: 'black',
-                    }}
+                    className='booking-next'
                     onClick={() => navigate(paths.next, { relative: 'path' })}>
                     <p>Далее</p>
                 </button>

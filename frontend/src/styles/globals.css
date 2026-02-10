@@ -1,5 +1,7 @@
 @import 'reset.css';
-@import '../../public/assets/stylesheet.css';
+@import '../../public/assets/Lora/stylesheet.css';
+@import '../../public/assets/MonteserratAlternates/stylesheet.css';
+@import '../../public/assets/PlayfairDisplaySc/stylesheet.css';
 @import './components/layouts.css';
 @import './components/pages.css';
 
@@ -10,66 +12,77 @@
     --color-primary: rgb(84 216 56 / 1);
     --color-bay-leaf: rgb(198 206 201 / 1);
     --color-link: rgb(70 143 241 / 1);
-    --color-ghost: rgb(101 101 101 / 0.5);
-    --color-needles: rgba(64, 85, 64, 0.9);
+    --color-ghost: rgba(101, 101, 101, 0.25);
+    --color-needles: rgb(51 58 51 / 1);
 
     /*container-parameters*/
     --container-gap-y: 10px;
-    --padding-container-y: 24px;
-    --padding-container-x: 16px;
+    --padding-container-y: 2.5rem;
+    --padding-container-x: 1rem;
     --container-width: calc(1440px + 2 * var(--padding-container-x));
-    --container-padding: 4%;
+    --inline-padding: 10px;
+    --block-padding: 10px;
+
+    /*header-parameters*/
+    --header-height: 80px;
 
     /*font settings*/
     --line-height: 1.5;
     --font-primary: 'Lora', serif;
-    --font-heading: 'Playfair Display', serif;
-    --max-font-size: 28px;
-    --font-weight: 500;
+    --font-heading: 'Playfair Display SC', sans-serif;
+    --default-font-size: 28px;
+    --font-weight-primary: 300;
 
     /*z-index*/
     --layer-default: 0;
     --layer-content: 100;
     --layer-header: 200;
     --layer-modal: 300;
+    scroll-behavior: smooth;
 }
 
 body {
     position: relative;
     font-family: var(--font-primary);
-    font-weight: var(--font-weight);
-    font-size: var(--max-font-size);
+    font-weight: 300;
+    font-size: var(--default-font-size);
+    background-color: black;
+    hyphens: auto;
 }
 
 h1 {
-    font-family: 'Playfair Display', sans-serif;
-    font-size: clamp(36px, 6.5vw, 48px);
-    font-weight: 500;
-}
-
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-family: 'Lora', sans-serif;
-    font-weight: 300;
+    font-family: var(--font-heading);
 }
 
 h2 {
-    font-size: clamp(28px, 5vw, 36px);
+    font-family: 'Montserrat Alternates', serif;
+    font-weight: 400;
+}
+
+h1 {
+    font-size: clamp(24px, 2.5vw, 36px);
+}
+h2 {
+    font-size: clamp(36px, 3.33vw, 48px);
 }
 h3 {
-    font-size: clamp(24px, 4vw, 32px);
+    font-size: clamp(24px, 2.75vw, 36px);
 }
 h4 {
-    font-size: clamp(18px, 3.75vw, 24px);
+    font-size: clamp(20px, 2.5vw, 24px);
 }
 h5 {
-    font-size: clamp(16px, 3.5vw, 18px);
+    font-size: clamp(16px, 2vw, 20px);
 }
 p {
-    font-size: clamp(14px, 3vw, 16px);
+    font-size: clamp(12px, 1.5vw, 16px);
+}
+h3,
+h4,
+h5,
+h6,
+p {
+    font-weight: inherit;
 }
 
 .sr-only {
@@ -84,11 +97,7 @@ p {
     border: 0;
 }
 
-/*desktop-first*/
 @media (max-width: 1439px) {
-    .container {
-        max-width: 1439px;
-    }
     body {
         font-size: 20px;
     }
@@ -99,10 +108,6 @@ p {
         line-height: 1.6;
         font-size: 18px;
     }
-    .container {
-        max-width: 1023px;
-        padding-inline: 4%;
-    }
 }
 
 @media (max-width: 767px) {
@@ -110,24 +115,11 @@ p {
         line-height: 1.7;
         font-size: 16px;
     }
-
-    .container {
-        max-width: 767px;
-        padding-inline: 3%;
-    }
 }
 
 @media (max-width: 480px) {
     body {
         line-height: 1.75;
         font-size: 14px;
-    }
-
-    .container {
-        min-width: 240px;
-        grid-template-columns: 1fr;
-        grid-auto-flow: column;
-        grid-template-rows: [first] 100vh [second] 50vh [third] auto [fourth] 100vh;
-        padding-inline: 10px;
     }
 }

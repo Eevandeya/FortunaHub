@@ -1,0 +1,115 @@
+.form-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    padding: 2.5rem 0;
+    min-width: 240px;
+}
+
+.form-container > form {
+    width: 75%;
+    max-width: 768px;
+    height: auto;
+    border-radius: 12px;
+    background-color: var(--color-needles);
+    border: 1px solid gray;
+    display: flex;
+    flex-direction: column;
+    padding: 0 1rem;
+    padding-block: 1rem 3rem;
+    gap: 1.5rem;
+}
+
+.field {
+    width: 100%;
+}
+
+.field .label {
+    font-weight: lighter;
+    font-size: 20px;
+    color: white;
+}
+
+.control input {
+    width: 100%;
+    border-radius: 24px;
+    display: inline-block;
+    padding-inline: 5px;
+}
+
+input[placeholder] {
+    font-size: clamp(20px, 2vw, 24px);
+}
+
+input::selection {
+    background-color: orangered;
+    color: white;
+}
+
+.field .has-text-danger {
+    color: red;
+}
+
+.phone-input {
+    display: flex;
+    align-items: center;
+    border: 2px solid #ccc;
+    border-radius: 24px;
+    padding: 5px 15px;
+    background: white;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.country-code {
+    font-size: 20px;
+    color: #333;
+    font-weight: bold;
+    padding-right: 10px;
+    border-right: 1px solid #ccc;
+    user-select: none;
+    cursor: default;
+}
+
+.phone-input input {
+    border: none;
+    outline: none;
+    flex: 1;
+    padding: 5px 10px;
+    font-size: 20px;
+    background: transparent;
+}
+
+.field.is-grouped {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.field.is-right {
+    justify-content: flex-start;
+}
+
+input[type='submit'],
+input[type='reset'] {
+    flex: 1;
+    padding: 0.5rem 2rem;
+    user-select: none;
+    cursor: pointer;
+}
+
+input[type='submit'] {
+    background-color: var(--color-primary);
+}
+
+input[type='reset'] {
+    background-color: var(--color-error);
+}
+
+@media (max-width: 768px) {
+    .form-container > form {
+        width: 100%;
+    }
+}

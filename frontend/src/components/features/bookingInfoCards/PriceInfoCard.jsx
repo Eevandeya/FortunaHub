@@ -12,11 +12,11 @@ export const PriceInfoCard = ({ navigation }) => {
     );
 
     return (
-        <InfoCard>
-            <h3>
+        <InfoCard title='Цена'>
+            <p>
                 {notification}
                 {currentPrice}
-            </h3>
+            </p>
         </InfoCard>
     );
 };

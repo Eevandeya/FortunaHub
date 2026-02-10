@@ -9,6 +9,7 @@ import {
 
 import { useCallback } from 'react';
 import { useErrorHandler } from '@hooks/useErrorHandler.js';
+import { useGetSaunaConfigQuery } from '../../api/saunaConfig.js';
 
 export const useReservation = (preferredContactMethod, visitors, formState) => {
     const dispatch = useDispatch();
@@ -16,7 +17,7 @@ export const useReservation = (preferredContactMethod, visitors, formState) => {
     const status = useSelector(selectStatus);
     const statusMessage = useSelector(selectStatusMessage);
     const { handleApiError } = useErrorHandler();
-
+    const { data: config } = useGetSaunaConfigQuery();
     const isFieldsValid = () => {
         const isTime = timeSlot?.start && timeSlot?.end;
         const isItems = Array.isArray(items);
@@ -37,7 +38,7 @@ export const useReservation = (preferredContactMethod, visitors, formState) => {
                 try {
                     const customerData = {
                         nickname: data.nickname,
-                        phoneNumber: data.phoneNumber,
+                        phoneNumber: '7'.concat(data.phoneNumber),
                     };
 
                     setCustomer(customerData);
@@ -92,5 +93,5 @@ export const useReservation = (preferredContactMethod, visitors, formState) => {
         ]
     );
 
-    return { reserve: submitReservation, status, statusMessage };
+    return { reserve: submitReservation, status, statusMessage, config };
 };

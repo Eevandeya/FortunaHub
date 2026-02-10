@@ -3,6 +3,7 @@ import { useInventory } from '@hooks/useInventory.js';
 import ItemHandler from '@components.common/goods/itemHandler.jsx';
 import { useErrorHandler } from '@hooks/useErrorHandler.js';
 import { ITEM_TYPE } from '@root.consts/constants';
+import './products.css';
 
 const ProductReservation = () => {
     const [inventory, isLoading, reserve, deleteItem] = useInventory();
@@ -74,14 +75,13 @@ const ProductReservation = () => {
     }, [items, reserve, handleApiError]);
 
     return (
-        <div
-            style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                width: '100%',
-            }}>
-            <div>
+        <div className='products_selector'>
+            <header>
+                <div className='products_selector_header'>
+                    <p>Выберите товары</p>
+                </div>
+            </header>
+            <section className='products_selector_container'>
                 {items?.map((item) => (
                     <ItemHandler
                         key={item.slug}
@@ -93,14 +93,9 @@ const ProductReservation = () => {
                         onDecrement={() => handleDecrement(item)}
                     />
                 ))}
-            </div>
+            </section>
             <button
-                style={{
-                    border: 'solid 1px black',
-                    borderRadius: '30px',
-                    width: '200px',
-                    height: '100px',
-                }}
+                className='products_selector_button'
                 onClick={modalHandleReserve}>
                 Арендовать
             </button>

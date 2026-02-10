@@ -9,7 +9,7 @@ const TimeBookingPage = () => {
     return (
         <>
             <div className='booking-main'>
-                <div className='booking-header'>
+                <div className='booking-header-title'>
                     <h1>Забронируйте баню</h1>
                 </div>
                 <div className='booking-content'>
@@ -19,9 +19,6 @@ const TimeBookingPage = () => {
                     <DateSelector date={date} setDate={setDate} />
                 </div>
                 <div className='booking-content'>
-                    <header>
-                        <h3>Выберите время</h3>
-                    </header>
                     <TimePicker date={startOfDay(date)} />
                 </div>
             </div>

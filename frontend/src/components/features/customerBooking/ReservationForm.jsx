@@ -3,10 +3,10 @@ import { useErrorHandler } from '@hooks/useErrorHandler.js';
 import { useForm } from 'react-hook-form';
 import Select from '@components.common/select/Select.jsx';
 import { VisitorsCountDisplay } from '@components.common/display/numberDisplay.jsx';
-import TransparentButton from '@components.common/button/transparentButton.jsx';
 import { useReservation } from '@hooks/useReservation.js';
 import { CONTACT_METHODS } from '@root.consts/contactMethods.js';
 import { useSelector } from 'react-redux';
+import './reservationForm.css';
 
 const ReservationForm = () => {
     const [visitors, setVisitors] = useState(0);
@@ -29,6 +29,7 @@ const ReservationForm = () => {
         reserve,
         status,
         statusMessage: message,
+        config,
     } = useReservation(contactMethod, visitors, { isSubmitting, isValid });
 
     useEffect(() => {
@@ -50,13 +51,10 @@ const ReservationForm = () => {
     };
 
     return (
-        <div
-            style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '10px',
-                alignItems: 'center',
-            }}>
+        <div className='form-container'>
+            <header>
+                <h4>Введите персональные данные</h4>
+            </header>
             <form onSubmit={handleSubmit(reserve, onError)}>
                 <div className='field'>
                     <label className='label' htmlFor='name'>
@@ -90,19 +88,22 @@ const ReservationForm = () => {
                         Номер телефона
                     </label>
                     <div className='control'>
-                        <input
-                            {...register('phoneNumber', {
-                                required: 'Номер телефона обязателен',
-                                validate: (value) => {
-                                    if (!/[78]\d{10}/.test(value))
-                                        return 'Некорректный номер телефона';
-                                },
-                            })}
-                            type='text'
-                            className='input'
-                            placeholder='Введите номер телефона'
-                            id='phoneNumber'
-                        />
+                        <div className='phone-input'>
+                            <span className='country-code'>+7</span>
+                            <input
+                                {...register('phoneNumber', {
+                                    required: 'Номер телефона обязателен',
+                                    validate: (value) => {
+                                        if (!/\d{10}/.test(value))
+                                            return 'Некорректный номер телефона';
+                                    },
+                                })}
+                                type='tel'
+                                className='input'
+                                placeholder='Введите номер телефона'
+                                id='phoneNumber'
+                            />
+                        </div>
                     </div>
                 </div>
                 {errors.phoneNumber && (
@@ -114,31 +115,29 @@ const ReservationForm = () => {
                 )}
                 <div className='field'>
                     <label className='label'>Выберите способ связи</label>
-                    <Select
-                        options={CONTACT_METHODS}
-                        value={contactMethod}
-                        onChange={setContactMethod}
-                        defaultValue={'Метод связи'}
-                    />
-                </div>
-                <div className='field is-grouped is-left'>
                     <div className='control'>
-                        <TransparentButton
-                            onClick={decrease}
-                            disabled={visitors <= 0}>
-                            &#8212;
-                        </TransparentButton>
+                        <Select
+                            options={CONTACT_METHODS}
+                            value={contactMethod}
+                            onChange={setContactMethod}
+                            defaultValue='Способ связи'
+                        />
                     </div>
-                    <VisitorsCountDisplay data={visitors} />
+                </div>
+                <div className='field'>
+                    <label className='label'>Выберите количество человек</label>
                     <div className='control'>
-                        <TransparentButton onClick={increase} disabled={false}>
-                            &#43;
-                        </TransparentButton>
+                        <VisitorsCountDisplay
+                            count={visitors}
+                            increase={increase}
+                            decrease={decrease}
+                            maxValue={config?.max_visitors_count}
+                        />
                     </div>
                 </div>
                 <div className='field is-grouped is-right'>
                     <div className='control'>
-                        <input type='reset' value='Отменить' />
+                        <input type='reset' value='Сбросить' />
                     </div>
                     <div className='control'>
                         <input type='submit' value='Выбрать' />

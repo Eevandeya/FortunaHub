@@ -1,33 +1,19 @@
-const Modal = ({ closeModal, children }) => {
+import './modal.css';
+
+const Modal = ({ closeModal, modalState, children }) => {
     const onClick = (e) => {
         e.stopPropagation();
     };
-
     return (
         <div
-            style={{
-                width: '100vw',
-                height: '100vh',
-                backgroundColor: 'rgba(0,0,0,0.66)',
-                display: 'flex',
-                position: 'absolute',
-                top: '0',
-                left: '0',
-                alignItems: 'center',
-                justifyContent: 'center',
-            }}
+            className={
+                modalState
+                    ? 'modal-background modal-active'
+                    : 'modal-background'
+            }
             onClick={closeModal}>
             <div
-                style={{
-                    width: '45%',
-                    backgroundColor: 'white',
-                    borderRadius: '10px',
-                    paddingInline: '10px',
-                    paddingBlock: '30px',
-                    display: 'flex',
-                    gap: '2px',
-                    flexDirection: 'column',
-                }}
+                className={modalState ? 'modal-window active' : 'modal-window'}
                 onClick={onClick}>
                 {children}
             </div>

@@ -6,14 +6,14 @@ export const TimeInfoCard = () => {
     const { date, time: timeSlot } = useSelector((state) => state.datetime);
 
     return (
-        <InfoCard>
+        <InfoCard title='Время'>
             <ul>
                 <li key={1}>
-                    <p>Выбранная дата: {date && format(date, 'yyyy-MM-dd')}</p>
+                    <p>Дата: {date && format(date, 'yyyy-MM-dd')}</p>
                 </li>
                 <li key={2}>
                     <p>
-                        Выбранное время:
+                        Время:
                         {timeSlot && timeSlot.start}—{timeSlot && timeSlot.end}
                     </p>
                 </li>
