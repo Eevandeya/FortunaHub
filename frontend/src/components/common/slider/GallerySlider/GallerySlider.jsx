@@ -2,6 +2,7 @@ import styles from './gallery_slider.module.css';
 // eslint-disable-next-line camelcase
 import slider_styles from '../slider.module.css';
 import useCenterActiveSlide from '@hooks/useCenterActiveSlide.js';
+import Button from '../../button/Button.jsx';
 
 const images = [
     '/images/1.jpg',

@@ -28,7 +28,7 @@ const ProductSlider = (products = []) => {
             {images.map((el, i) => {
                 return (
                     <li
-                        className={styles.product_el}
+                        className={`${styles.product_el} ${i === activeIndex ? styles.closest_el : ''}`}
                         key={el}
                         ref={(e) => (targetsRef.current[i] = e)}>
                         <ProductSliderCard
@@ -36,7 +36,7 @@ const ProductSlider = (products = []) => {
                             cardIndex={i}
                             activeIndex={activeIndex}
                             title='Lorem Ipsum'
-                            desc='Lorem ipsum dolor sit amet fhdfbdfbsyfbsydffndsfdsnhjfsdhfnsdbfhdsfdsjbfdshfndsjhbfsdhjfdfsfsd'
+                            desc='Lorem ipsum dolor sit amet fhdf bdfb syfb sydf fnds fdsnh jfsdh fnsd bfhd sfds jbfd shfnd sjhb fsdhj fdfsfsd'
                         />
                     </li>
                 );
