@@ -4,180 +4,103 @@ import MainWindowSlider from '../components/common/slider/MainWindowSlider.jsx';
 import YandexStaticMap from '../components/features/staticMap/YandexStaticMap.jsx';
 import Button from '../components/common/button/Button.jsx';
 import GoToButton from '../components/common/button/GoToButton.jsx';
+import GallerySlider from '../components/common/slider/GallerySlider/GallerySlider.jsx';
+import ProductSlider from '../components/common/slider/ProductSlider/ProductSlider.jsx';
+import useScrollOnRoute from '../hooks/useScrollOnRoute.js';
 
 function Homepage() {
     const navigate = useNavigate();
+    useScrollOnRoute();
+
     return (
         <>
-            <main className='homepage-container'>
+            <main className='homepage-container' id='main'>
                 <div id='hero' className='homepage-hero'>
                     <MainWindowSlider />
                 </div>
-                <div className='homepage-description'>
-                    <h2>Баня на свежем воздухе</h2>
-                    <section className='homepage-description-block'>
-                        <div className='image-container'>
-                            <div className='image-16-9'>
+                <div className='homepage-content'>
+                    <div className='homepage-description'>
+                        <h2>Баня на свежем воздухе</h2>
+                        <section className='homepage-description-block'>
+                            <div className='image-container'>
                                 <img alt='Фото бани' src='/images/17.jpg' />
                             </div>
-                        </div>
-                        <div className='description-container'>
-                            <div className='description-block'>
-                                <h3>Жаркая банька</h3>
-                                <details className='homepage-service-details'>
-                                    <summary className='details-title'>
+                            <div className='description-container'>
+                                <div className='description-block'>
+                                    <p className='description-text'>
                                         Жар раскаленных камней и аромат банных
                                         веников позволят насладится атмосферой
                                         бани
-                                    </summary>
-                                    <div className='details-content'>
-                                        <ul className='details-list'>
-                                            <li className='details-list-item'>
-                                                Беговая дорожка
-                                            </li>
-                                            <li className='details-list-item'>
-                                                Гантели весом 1-32кг
-                                            </li>
-                                            <li className='details-list-item'>
-                                                Скамья для жима
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </details>
-
-                                <a>
-                                    <span>Мы на карте</span>
-                                </a>
+                                    </p>
+                                    <details
+                                        className='homepage-service-details'
+                                        open>
+                                        <summary className='details-title'>
+                                            Что внутри
+                                        </summary>
+                                        <div className='details-content'>
+                                            <ul className='details-list'>
+                                                <li className='details-list-item'>
+                                                    Русская баня с каменкой
+                                                </li>
+                                                <li className='details-list-item'>
+                                                    Спортивный зал
+                                                </li>
+                                                <li className='details-list-item'>
+                                                    Небольшая кухня
+                                                </li>
+                                                <li className='details-list-item'>
+                                                    Душевые кабины
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </details>
+                                </div>
+                                <div className='btn-combine-left'>
+                                    <GoToButton
+                                        onClick={() => navigate(ROUTES.PRICE)}
+                                        value='Посмотреть цены'
+                                        theme='white'
+                                    />
+                                    <GoToButton
+                                        onClick={() =>
+                                            navigate(ROUTES.BOOKING.TIME)
+                                        }
+                                        value='Забронировать'
+                                        theme='black'
+                                    />
+                                </div>
                             </div>
-                            <div className='btn-combine-left'>
-                                <GoToButton
-                                    onClick={() =>
-                                        navigate(ROUTES.SERVICES.SAUNA)
-                                    }
-                                    className='description-button'
-                                    value='Подробнее'
-                                    theme='black'
-                                />
-                                <GoToButton
-                                    onClick={() =>
-                                        navigate(ROUTES.BOOKING.TIME)
-                                    }
-                                    className='booking-button'
-                                    value='Забронировать'
-                                />
-                            </div>
-                        </div>
-                    </section>
-                    <section className='homepage-description-block'>
-                        <div className='image-container'>
-                            <div className='image-16-9'>
-                                <img alt='Фото бани' src='/images/14.jpg' />
-                            </div>
-                        </div>
-                        <div className='description-container'>
-                            <div className='description-block'>
-                                <h3>Юутные халаты</h3>
-                                <details className='homepage-service-details'>
-                                    <summary className='details-title'>
-                                        Мягкие и уютные халаты помогут
-                                        расслабиться и отвлечься от суеты
-                                    </summary>
-                                    <div className='details-content'>
-                                        <ul className='details-list'>
-                                            <li className='details-list-item'>
-                                                Беговая дорожка
-                                            </li>
-                                            <li className='details-list-item'>
-                                                Гантели весом 1-32кг
-                                            </li>
-                                            <li className='details-list-item'>
-                                                Скамья для жима
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </details>
-                                <a>
-                                    <span>Мы на карте</span>
-                                </a>
-                            </div>
-                            <div className='btn-combine-left'>
-                                <GoToButton
-                                    onClick={() =>
-                                        navigate(ROUTES.SERVICES.SAUNA)
-                                    }
-                                    className='description-button'
-                                    value='Подробнее'
-                                    theme='black'
-                                />
-                                <GoToButton
-                                    onClick={() =>
-                                        navigate(ROUTES.BOOKING.TIME)
-                                    }
-                                    className='booking-button'
-                                    value='Забронировать'
-                                />
-                            </div>
-                        </div>
-                    </section>
-                    <section className='homepage-description-block'>
-                        <div className='image-container'>
-                            <div className='image-16-9'>
-                                <img alt='Фото бани' src='/images/9.jpg' />
-                            </div>
-                        </div>
-                        <div className='description-container'>
-                            <div className='description-block'>
-                                <h3>Спортзальчик</h3>
-                                <details className='homepage-service-details'>
-                                    <summary className='details-title'>
-                                        Воспользуйтесь нашим залом
-                                    </summary>
-                                    <div className='details-content'>
-                                        <ul className='details-list'>
-                                            <li className='details-list-item'>
-                                                Беговая дорожка
-                                            </li>
-                                            <li className='details-list-item'>
-                                                Гантели весом 1-32кг
-                                            </li>
-                                            <li className='details-list-item'>
-                                                Скамья для жима
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </details>
-                                <a>
-                                    <span>Мы на карте</span>
-                                </a>
-                            </div>
-                            <div className='btn-combine-left'>
-                                <GoToButton
-                                    onClick={() =>
-                                        navigate(ROUTES.SERVICES.GYM)
-                                    }
-                                    className='description-button'
-                                    value='Подробнее'
-                                    theme='black'
-                                />
-                                <GoToButton
-                                    onClick={() =>
-                                        navigate(ROUTES.BOOKING.TIME)
-                                    }
-                                    className='booking-button'
-                                    value='Забронировать'
-                                />
-                            </div>
-                        </div>
-                    </section>
+                        </section>
+                    </div>
+                    <div className='homepage-gallery'>
+                        <h2>Загляните к нам в галерею</h2>
+                        <GallerySlider />
+                        <GoToButton
+                            theme='white'
+                            value='В галерею'
+                            onClick={() => navigate(ROUTES.GALLERY)}
+                        />
+                    </div>
+                    <div className='homepage-product'>
+                        <h2>Каталог товаров</h2>
+                        <ProductSlider />
+                    </div>
                 </div>
-                <div className='homepage-map'>
+                <div className='homepage-map' id='map'>
                     <h2>Мы на карте</h2>
                     <section className='homepage-map-block'>
-                        <div className='map-text-block'>
-                            <h3>Сведения</h3>
-                            <h4>Lorem Ipsum Lorem Ipsum</h4>
-                            <h4>Lorem Ipsum</h4>
-                            <h4>Lorem Ipsum</h4>
+                        <div className='content-container'>
+                            <img
+                                src='/images/bath_entrance.png'
+                                alt='Вход в баню'
+                            />
+                            <div className='map-text-block'>
+                                <h3>Сведения</h3>
+                                <h4>Lorem Ipsum Lorem Ipsum</h4>
+                                <h4>Lorem Ipsum</h4>
+                                <h4>Lorem Ipsum</h4>
+                            </div>
                         </div>
                         <div className='image-container'>
                             <div className='image-1-1'>
