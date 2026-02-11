@@ -13,6 +13,8 @@ class InventoryItem(models.Model):
 
     display_name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True, max_length=50)
+    description = models.TextField(max_length=500)
+    image = models.ImageField(upload_to="images/inventory_items", null=True, blank=True)
     quantity = models.PositiveIntegerField(default=0)
     item_type = models.CharField(choices=ItemType.choices, max_length=10)
     updated = models.DateTimeField(auto_now=True)
