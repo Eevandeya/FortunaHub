@@ -6,7 +6,7 @@ from backend.apps.inventory.models import BookingItem, InventoryItem
 class InventoryItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = InventoryItem
-        fields = "__all__"
+        exclude = ["id", "updated", "is_active"]
 
 
 class BookingItemRequestSerializer(serializers.Serializer):
