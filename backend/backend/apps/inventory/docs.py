@@ -30,6 +30,7 @@ get_inventory_schema = extend_schema(
                     "Inventory items",
                     value=[
                         {
+                            "currency": "RUB",
                             "display_name": "Халат",
                             "slug": "bathrobe",
                             "description": "Лучший халат для наших гостей! Отлично согревает!",
@@ -39,6 +40,7 @@ get_inventory_schema = extend_schema(
                             "unit_price": "500.00",
                         },
                         {
+                            "currency": "RUB",
                             "display_name": "Веник",
                             "slug": "broom",
                             "description": "Приятный и хороший веник! Замечательный!",
