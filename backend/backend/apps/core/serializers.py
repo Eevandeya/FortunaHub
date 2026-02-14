@@ -53,4 +53,4 @@ class PricingSerializer(serializers.ModelSerializer):
 class SaunaGallerySerializer(serializers.ModelSerializer):
     class Meta:
         model = SaunaGallery
-        exclude = ["id", "updated"]
+        exclude = ["id", "updated", "is_active"]

@@ -41,6 +41,6 @@ class SaunaGalleryView(APIView):
 
     @get_sauna_gallery_schema
     def get(self, request: Request) -> Response:
-        query_set = SaunaGallery.objects.all()
+        query_set = SaunaGallery.objects.filter(is_active=True)
         serializer = SaunaGallerySerializer(query_set, many=True)
         return Response(serializer.data)
