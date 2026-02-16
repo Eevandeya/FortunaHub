@@ -18,10 +18,10 @@
     /*container-parameters*/
     --container-gap-y: 10px;
     --padding-container-y: 2.5rem;
-    --padding-container-x: 1rem;
+    --padding-container-x: 3rem;
     --container-width: calc(1440px + 2 * var(--padding-container-x));
-    --inline-padding: 10px;
-    --block-padding: 10px;
+    --inline-padding: 1rem;
+    --block-padding: 1rem;
 
     /*header-parameters*/
     --header-height: 80px;
@@ -30,7 +30,7 @@
     --line-height: 1.5;
     --font-primary: 'Lora', serif;
     --font-heading: 'Playfair Display SC', sans-serif;
-    --default-font-size: 28px;
+    --default-font-size: 14px;
     --font-weight-primary: 300;
 
     /*z-index*/
@@ -46,15 +46,17 @@
 
 body {
     position: relative;
-    font-family: var(--font-primary);
+    font-family: var(--font-primary), serif;
     font-weight: 300;
     font-size: var(--default-font-size);
     background-color: black;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
     hyphens: auto;
 }
 
 h1 {
-    font-family: var(--font-heading);
+    font-family: var(--font-heading), sans-serif;
 }
 
 h2 {
@@ -69,16 +71,19 @@ h2 {
     font-size: clamp(36px, 3.33vw, 48px);
 }
 h3 {
-    font-size: clamp(24px, 2.75vw, 36px);
+    font-size: clamp(28px, 2.75vw, 36px);
 }
 h4 {
-    font-size: clamp(20px, 2.5vw, 24px);
+    font-size: clamp(24px, 2.5vw, 28px);
 }
 h5 {
-    font-size: clamp(16px, 2vw, 20px);
+    font-size: clamp(20px, 2vw, 24px);
+}
+h6 {
+    font-size: clamp(14px, 1.75vw, 16px);
 }
 p {
-    font-size: clamp(12px, 1.5vw, 16px);
+    font-size: clamp(12px, 1.5vw, 14px);
 }
 h3,
 h4,
@@ -102,27 +107,39 @@ p {
 
 @media (max-width: 1440px) {
     body {
-        font-size: 20px;
+        font-size: 12px;
     }
 }
 
 @media (max-width: 1024px) {
     body {
         line-height: 1.6;
-        font-size: 18px;
+        font-size: 12px;
     }
 }
 
 @media (max-width: 768px) {
     body {
         line-height: 1.7;
-        font-size: 16px;
+        font-size: 14px;
+    }
+    h5 {
+        font-size: 18px;
+    }
+    p {
+        font-size: 14px;
     }
 }
 
 @media (max-width: 480px) {
     body {
         line-height: 1.75;
-        font-size: 14px;
+        font-size: 12px;
+    }
+    h5 {
+        font-size: 16px;
+    }
+    p {
+        font-size: 12px;
     }
 }

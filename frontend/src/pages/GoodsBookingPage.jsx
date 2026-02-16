@@ -20,6 +20,9 @@ const GoodsBookingPage = () => {
         <>
             <div className='booking-main'>
                 <div className='booking-content' ref={itemsRef}>
+                    <header>
+                        <h5>Выберите товары</h5>
+                    </header>
                     <ProductReservation
                         hasError={invalidStep.fields?.items}
                         error='Выберите хотя бы один товар'

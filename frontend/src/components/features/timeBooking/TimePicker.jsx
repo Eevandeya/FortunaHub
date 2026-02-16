@@ -194,11 +194,6 @@ export function TimePicker({ date, ...other }) {
 
     return (
         <section className={styles.time_selector}>
-            <header>
-                <div className={styles.time_selector_header}>
-                    <p>Выберите время</p>
-                </div>
-            </header>
             <div className={styles.time_slots_container}>
                 {loading ? <Loading /> : Content}
             </div>

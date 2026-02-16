@@ -6,43 +6,112 @@
 
 .footer_navbar {
     grid-row: 3;
+    min-width: 240px;
 }
 
 .basement {
     --backgroundFooterColor: #000;
     --foregroundFooterColor: var(--color-bay-leaf);
-    gap: 100px;
     background-color: var(--backgroundFooterColor);
     color: var(--foregroundFooterColor);
-    height: 100vh;
     width: 100%;
     display: flex;
     flex-direction: column;
+    padding: 2rem 5rem;
+}
+
+.basement_text {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    column-gap: 5rem;
+    padding-block: 1rem;
+}
+
+.basement h5 {
+    font-weight: bold;
+    color: var(--foregroundFooterColor);
+    font-family: 'Montserrat Alternates', serif;
+}
+
+.text_block {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.text_block * {
+    position: relative;
+    display: inline-flex;
+}
+
+.text_block p::after {
+    content: '';
+    width: 0;
+    border-bottom: 1px solid white;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    transform: translateY(50%);
+    visibility: hidden;
+}
+
+.text_block p:hover::after {
+    width: 100%;
+    visibility: visible;
+    transition: width 0.5s ease;
+}
+
+.basement_connect {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding-block: 2rem;
+    border-top: 1px solid #c6cec9;
+}
+
+@media (pointer: coarse) {
+    .text_block p:active::after {
+        width: 100%;
+        visibility: visible;
+        transition: width 0.5s ease;
+    }
 }
 
 @media (max-width: 1024px) {
-    .footer_navbar > * {
-        padding-inline: 15px;
-        padding-block: 7px;
+    .basement {
+        padding-inline: 4rem;
+    }
+    .basement_text {
+        column-gap: 4rem;
     }
 }
 
 @media (max-width: 768px) {
-    .footer_navbar > * {
-        padding-inline: 10px;
-        padding-block: 5px;
+    .basement {
+        padding-inline: 2rem;
+    }
+    .basement_text {
+        gap: 4rem;
+    }
+    .basement_text {
+        grid-template-columns: repeat(2, 1fr);
+        padding-block: 2rem;
+    }
+    .text_block {
+        gap: 1rem;
     }
 }
 
 @media (max-width: 480px) {
     .basement {
-        flex-direction: column;
-        min-width: 240px;
-        width: 100%;
+        padding-inline: 1rem;
     }
-
-    .footer_navbar > * {
-        padding-inline: 5px;
-        padding-block: 3px;
+    .basement_text {
+        gap: 5rem;
+    }
+    .basement_text {
+        grid-template-columns: 1fr;
     }
 }

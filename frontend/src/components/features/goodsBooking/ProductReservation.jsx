@@ -76,11 +76,6 @@ const ProductReservation = (props) => {
 
     return (
         <div className={styles.products_selector}>
-            <header>
-                <div className={styles.products_selector_header}>
-                    <p>Выберите товары</p>
-                </div>
-            </header>
             <section className={styles.products_selector_container}>
                 {items?.map((item) => (
                     <ItemHandler

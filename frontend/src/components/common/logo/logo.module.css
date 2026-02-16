@@ -5,6 +5,8 @@
     font-weight: 300;
     font-family: var(--font-heading), sans-serif;
     letter-spacing: 0.2rem;
+    -webkit-user-select: none;
+    -ms-user-select: none;
     user-select: none;
 }
 
@@ -13,7 +15,7 @@
     height: 48px;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
     .logo {
         font-size: 24px;
     }

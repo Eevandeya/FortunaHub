@@ -37,7 +37,7 @@
     padding-block: 8px;
     padding-inline: 16px;
     border-radius: 20px;
-    font-size: 16px;
+    /*font-size: 16px;*/
     flex: 1;
 }
 
@@ -129,7 +129,7 @@
     }
 
     .go_to_button {
-        font-size: 14px;
+        /*font-size: 14px;*/
         width: fit-content;
         padding-block: 4px;
         padding-inline: 10px;

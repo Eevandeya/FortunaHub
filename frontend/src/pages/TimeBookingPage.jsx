@@ -42,7 +42,7 @@ const TimeBookingPage = () => {
                 </div>
                 <div className='booking-content' ref={dateRef}>
                     <header>
-                        <h3>Выберите дату</h3>
+                        <h5>Выберите дату</h5>
                     </header>
                     <DateSelector
                         date={date}
@@ -52,6 +52,9 @@ const TimeBookingPage = () => {
                     />
                 </div>
                 <div className='booking-content' ref={timeSlotsRef}>
+                    <header>
+                        <h5>Выберите время</h5>
+                    </header>
                     <TimePicker
                         date={startOfDay(date)}
                         hasError={invalidStep.fields?.timeSlots}

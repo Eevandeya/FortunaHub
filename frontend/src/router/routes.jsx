@@ -8,21 +8,20 @@ import BookingLayout from '@components.layout/pagesLayout/BookingLayout.jsx';
 import { NotFoundPage } from '@pages/ErrorPage.jsx';
 import { SuccessStatusPage } from '@pages/StatusPage.jsx';
 import PricingLayout from '@components.layout/pagesLayout/PricingLayout.jsx';
-import { SaunaServicesPage } from '@pages/servicesPages/saunaServicesPage.jsx';
-import { GymServicesPage } from '@pages/servicesPages/gymServicesPage.jsx';
-import { AccessoriesServicesPage } from '@pages/servicesPages/accessoriesServicesPage.jsx';
 import MainLayout from '@components.layout/pagesLayout/MainLayout.jsx';
 import ErrorBookingProvider from '../context/ErrorBookingContext.jsx';
+import PriceListPage from '@pages/PriceListPage.jsx';
+import GalleryPage from '@pages/GalleryPage.jsx';
+import DefaultLayout from '@components.layout/pagesLayout/DefaultLayout.jsx';
 
 const routes = createRoutesFromElements([
     <Route path='/' element={<App />}>
         <Route element={<MainLayout />}>
             <Route index element={<Homepage />} />
         </Route>
-        <Route path='services'>
-            <Route path='sauna' element={<SaunaServicesPage />} />
-            <Route path='gym' element={<GymServicesPage />} />
-            <Route path='accessories' element={<AccessoriesServicesPage />} />
+        <Route element={<DefaultLayout />}>
+            <Route path='price' element={<PriceListPage />} />
+            <Route path='gallery' element={<GalleryPage />} />
         </Route>
         <Route
             path='booking'

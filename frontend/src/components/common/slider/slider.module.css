@@ -76,26 +76,51 @@
 }
 
 .parallax_slider {
-    --parallax-slider-width: 80%;
+    --parallax-slider-width: 100%;
     max-width: var(--parallax-slider-width);
-    white-space: nowrap;
+    display: flex;
     overflow-x: scroll;
     scrollbar-width: none;
     -ms-overflow-style: none;
     scroll-snap-type: x mandatory;
+    contain: layout paint;
+    gap: 10rem;
 }
 
 .parallax_slider::-webkit-scrollbar {
     display: none;
 }
 
+@media (max-width: 1440px) {
+    .parallax_slider {
+        gap: 9rem;
+    }
+}
+
+@media (max-width: 1248px) {
+    .parallax_slider {
+        gap: 8rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    .parallax_slider {
+        gap: 6.5rem;
+    }
+}
+
 @media (max-width: 768px) {
+    .parallax_slider {
+        gap: 6rem;
+    }
     .hero_overlay {
         outline-offset: -1px;
         outline-width: 1px;
     }
+}
+
+@media (max-width: 480px) {
     .parallax_slider {
-        --parallax-slider-width: 90%;
-        max-width: var(--parallax-slider-width);
+        gap: 4rem;
     }
 }

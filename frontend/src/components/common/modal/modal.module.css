@@ -18,6 +18,7 @@
     opacity: 1;
     visibility: visible;
     transition: opacity 0.25s ease-in;
+    -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
 }
 
