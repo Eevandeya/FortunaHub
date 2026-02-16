@@ -89,3 +89,14 @@ class Pricing(models.Model):
 
     def __str__(self) -> str:
         return f"{self.name} {self.price} RUB"
+
+
+class SaunaGallery(models.Model):
+    display_name = models.CharField(max_length=100)
+    slug = models.SlugField(unique=True, max_length=50)
+    image = models.ImageField(upload_to="images/sauna_gallery", null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        return self.display_name

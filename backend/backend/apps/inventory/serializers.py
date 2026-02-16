@@ -1,12 +1,18 @@
+from django.conf import settings
 from rest_framework import serializers
 
 from backend.apps.inventory.models import BookingItem, InventoryItem
 
 
 class InventoryItemSerializer(serializers.ModelSerializer):
+    currency = serializers.SerializerMethodField()
+
     class Meta:
         model = InventoryItem
-        fields = "__all__"
+        exclude = ["id", "updated", "is_active"]
+
+    def get_currency(self, _obj: dict) -> str:
+        return settings.CASH_CURRENCY_CODE
 
 
 class BookingItemRequestSerializer(serializers.Serializer):

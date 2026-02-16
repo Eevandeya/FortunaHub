@@ -3,7 +3,7 @@ import datetime
 from django.conf import settings
 from rest_framework import serializers
 
-from backend.apps.core.models import Pricing, SaunaConfig
+from backend.apps.core.models import Pricing, SaunaConfig, SaunaGallery
 
 TIME_FORMAT = "%H:%M"
 
@@ -48,3 +48,9 @@ class PricingSerializer(serializers.ModelSerializer):
 
     def get_currency(self, _obj: dict) -> str:
         return settings.CASH_CURRENCY_CODE
+
+
+class SaunaGallerySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SaunaGallery
+        exclude = ["id", "updated", "is_active"]

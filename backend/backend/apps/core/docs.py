@@ -10,6 +10,7 @@ from backend.apps.core.serializers import PricingSerializer, SaunaConfigSerializ
 
 SAUNA_CONFIG_TAG = "SaunaConfig"
 PRICING_TAG = "Pricing"
+SAUNA_GALLERY_TAG = "SaunaGallery"
 
 
 PricingListSerializer = inline_serializer(
@@ -70,6 +71,36 @@ get_pricing_schema = extend_schema(
                             "name": "prepayment",
                             "description": "Сумма предоплаты за бронирование",
                             "price": "2000.00",
+                        },
+                    ],
+                ),
+            ],
+        ),
+    },
+)
+
+
+get_sauna_gallery_schema = extend_schema(
+    summary="Get sauna gallery list",
+    tags=[SAUNA_GALLERY_TAG],
+    description="Retrieve the the current gallery list.",
+    responses={
+        status.HTTP_200_OK: OpenApiResponse(
+            response=PricingListSerializer,
+            description="List of gallery.",
+            examples=[
+                OpenApiExample(
+                    "Gallery",
+                    value=[
+                        {
+                            "display_name": "Фото бани FortunaHub",
+                            "slug": "foto-bani-fortunahub",
+                            "image": "/media/images/sauna_gallery/IMG_0001.jpeg",
+                        },
+                        {
+                            "display_name": "Фото парилки",
+                            "slug": "foto-parilki",
+                            "image": "/media/images/sauna_gallery/IMG_0002.jpeg",
                         },
                     ],
                 ),

@@ -1,6 +1,7 @@
 .venv
 .idea
 .env
+backend/backend/media
 
 # Logs
 logs

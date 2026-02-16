@@ -13,6 +13,6 @@ class InventoryView(APIView):
 
     @get_inventory_schema
     def get(self, request: Request) -> Response:
-        query_set = InventoryItem.objects.all()
+        query_set = InventoryItem.objects.filter(is_active=True)
         serializer = InventoryItemSerializer(query_set, many=True)
         return Response(serializer.data)
