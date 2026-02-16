@@ -4,8 +4,6 @@ import { useEffect, useState } from 'react';
 import paymentMethods from '@root.consts/paymentMethods.js';
 import usePaymentChoice from '../../../hooks/usePaymentChoice.js';
 import Loading from '../../common/loader/Loading.jsx';
-import { useDispatch } from 'react-redux';
-import { setBookingStatusState } from '../../../store/bookingSlice.js';
 import styles from './payment.module.css';
 import PaymentMethodCard from './PaymentMethodCard.jsx';
 import SelectButton from '../../common/button/SelectButton.jsx';
@@ -14,13 +12,11 @@ const PaymentModal = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedMethod, setSelectedMethod] = useState(null);
 
-    const [status, loading, sendBookingData] = usePaymentChoice();
-    const dispatch = useDispatch();
+    const [status, loading, pay] = usePaymentChoice();
 
     const closeModal = () => {
         setIsModalOpen(false);
         setSelectedMethod(null);
-        dispatch(setBookingStatusState({ status: 'idle' }));
     };
 
     useEffect(() => {
@@ -28,6 +24,7 @@ const PaymentModal = () => {
             setIsModalOpen(true);
         }
     }, [status]);
+
     return createPortal(
         <Modal closeModal={closeModal} modalState={isModalOpen}>
             {loading && <Loading />}
@@ -45,7 +42,7 @@ const PaymentModal = () => {
 
             <SelectButton
                 aria-disabled={!selectedMethod}
-                onClick={() => sendBookingData(selectedMethod)}
+                onClick={pay}
                 value='Оплатить'
             />
         </Modal>,
