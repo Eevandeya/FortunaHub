@@ -1,10 +1,9 @@
 import { useAvailableTimes, useTimeSlot } from '@hooks/timeHandler.js';
 import Cell from './Cell.jsx';
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
-import { addMinutes, format, isWithinInterval, parse } from 'date-fns';
+import { isWithinInterval } from 'date-fns';
 import TimeUtils from '@root.utils/timeUtils.js';
 import Loading from '@components.common/loader/Loading.jsx';
-import { useGetSaunaConfigQuery } from '@root.api/saunaConfig.js';
 import styles from './time_booking.module.css';
 import SelectButton from '../../common/button/SelectButton.jsx';
 
@@ -21,47 +20,55 @@ const checkConditions = ({ minBookingTime, start, end }) => {
 };
 
 export function TimePicker({ date, ...other }) {
-    const { data: config } = useGetSaunaConfigQuery();
     const [availableTime, loading] = useAvailableTimes(date);
-    const [bookTimeSlot, setIsBooking, isBooking] = useTimeSlot();
+    const [bookTimeSlot, config, setIsBooking, isBooking] = useTimeSlot();
     const [borderTime, setBorderTime] = useState({ start: null, end: null });
+    const [now, setNow] = useState(Date.now());
+
+    useEffect(() => {
+        const timeStamp = 60_000;
+        const interval = setInterval(() => {
+            setNow(Date.now());
+        }, timeStamp);
+
+        return () => clearInterval(interval);
+    }, []);
 
     const parsedTimeSlots = useMemo(() => {
         if (config) {
-            const parsedOpeningTime = parse(config.opening_time, 'HH:mm', date);
-
-            const parsedClosingTime = parse(config.closing_time, 'HH:mm', date);
-
-            const [checkedOpeningTime, checkedClosingTime] =
-                TimeUtils.setTimeBorders(parsedOpeningTime, parsedClosingTime);
-
-            const times = {};
-
-            for (let temp = checkedOpeningTime; temp <= checkedClosingTime; ) {
-                times[format(temp, 'HH:mm')] = temp;
-                temp = addMinutes(temp, 30);
-            }
-            return times;
+            return TimeUtils.convertToTimeObj(
+                [{ start: config?.openingTime, end: config?.closingTime }],
+                date
+            );
         }
     }, [config, date]);
 
-    const isTimeAvailable = (time, availableSlots) => {
-        const checkTime = parsedTimeSlots[time];
+    const isTimeAvailable = useCallback(
+        (time, availableSlots) => {
+            const checkTime = parsedTimeSlots[time];
+            return availableSlots.some((slot) => {
+                const start = parsedTimeSlots[slot.start];
+                const end = parsedTimeSlots[slot.end];
 
-        return availableSlots.some((slot) => {
-            const start = parsedTimeSlots[slot.start];
-            const end = parsedTimeSlots[slot.end];
-
-            const [boundaryStart, boundaryEnd] = TimeUtils.setTimeBorders(
-                start,
-                end
-            );
-            return isWithinInterval(checkTime, {
-                start: boundaryStart,
-                end: boundaryEnd,
+                const [boundaryStart, boundaryEnd] = TimeUtils.setTimeBorders(
+                    start,
+                    end
+                );
+                return (
+                    isWithinInterval(checkTime, {
+                        start: boundaryStart,
+                        end: boundaryEnd,
+                    }) &&
+                    TimeUtils.isBookingAvailable(
+                        checkTime,
+                        config.minTimeForBooking
+                    )
+                );
             });
-        });
-    };
+        },
+        [now, availableTime]
+    );
+
     const Content = useMemo(() => {
         if (config && availableTime && !loading) {
             const times = Object.keys(parsedTimeSlots);
@@ -71,14 +78,7 @@ export function TimePicker({ date, ...other }) {
                         <Cell
                             key={tm}
                             time={tm}
-                            isDisabled={
-                                !isTimeAvailable(tm, availableTime) ||
-                                !TimeUtils.isBookingAvailable(
-                                    parsedTimeSlots[tm],
-
-                                    config.min_time_from_now_to_booking
-                                )
-                            }
+                            isDisabled={!isTimeAvailable(tm, availableTime)}
                             isSelected={(function () {
                                 const parsedTime = parsedTimeSlots[tm];
                                 if (borderTime.start && borderTime.end) {
@@ -161,7 +161,7 @@ export function TimePicker({ date, ...other }) {
     const booking = useCallback(
         (e) => {
             e.preventDefault();
-            const minBookingTime = config.min_booking_time;
+            const minBookingTime = config.minBookingTime;
             const canBooking = checkConditions({
                 minBookingTime,
                 ...borderTime,
