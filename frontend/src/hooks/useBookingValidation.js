@@ -1,28 +1,53 @@
-import { useSelector } from 'react-redux';
-import { selectItems } from '../store/itemsSlice.js';
 import { ROUTES } from '../../consts/navigation.js';
-import { selectDateTime } from '../store/dateTimeSlice.js';
 import { useContext } from 'react';
 import { ErrorBookingContext } from '../context/Context.js';
+import { useAvailableTimes } from './timeHandler.js';
+import { useSelector } from 'react-redux';
+import { selectDateTime } from '../store/dateTimeSlice.js';
+import { selectItems } from '../store/itemsSlice.js';
+import { useGetSaunaConfigQuery } from '../../api/saunaConfig.js';
+import { useInventory } from './useInventory.js';
+import {
+    checkDateSelected,
+    checkTimeBooked,
+    checkTimeDeprecated,
+    checkTimeSelected,
+} from '../validators/timeValidators.js';
+import createValidator from '../validators/createValidator.js';
+import {
+    checkGoodsQuantity,
+    checkGoodsSelected,
+} from '../validators/goodsValidators.js';
 
 const useBookingValidation = () => {
-    const dateTime = useSelector(selectDateTime);
-    const items = useSelector(selectItems);
+    const context = {
+        dateTime: useSelector(selectDateTime),
+        items: useSelector(selectItems),
+        config: useGetSaunaConfigQuery(),
+    };
+    const [slots] = useAvailableTimes(context.dateTime?.date);
+    const [inventory] = useInventory();
     const { registerError, clearErrors } = useContext(ErrorBookingContext);
+
+    const timeValidator = createValidator()
+        .add(checkDateSelected)
+        .add(checkTimeSelected)
+        .add(checkTimeDeprecated)
+        .add(checkTimeBooked);
+
+    const goodsValidator = createValidator()
+        .add(checkGoodsSelected)
+        .add(checkGoodsQuantity);
+
     const validationSteps = {
-        [ROUTES.BOOKING.TIME]: {
-            valid: dateTime.time?.start && dateTime.time?.end && dateTime.date,
-            fields: {
-                timeSlots: !(dateTime?.start && dateTime?.end),
-                date: !dateTime.date,
-            },
-            pageId: 'time',
-        },
-        [ROUTES.BOOKING.GOODS]: {
-            valid: items.length > 0,
-            fields: { items: !(items.length < 0) },
-            pageId: 'goods',
-        },
+        [ROUTES.BOOKING.TIME]: timeValidator.validate({
+            ...context,
+            freeSlots: slots,
+        }),
+        [ROUTES.BOOKING.GOODS]: goodsValidator.validate({
+            ...context,
+            inventory,
+        }),
     };
 
     return { validationSteps, registerError, clearErrors };

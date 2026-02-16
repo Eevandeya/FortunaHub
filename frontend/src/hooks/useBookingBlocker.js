@@ -16,7 +16,7 @@ export const useBookingBlocker = () => {
         }
         if (
             (matchPath(currentRoute?.next, nextLocation.pathname) &&
-                !isBookingFieldsValid[currentLocation.pathname]?.valid) ||
+                !isBookingFieldsValid[currentLocation.pathname]?.isValid) ||
             !isBookingFieldsValid[currentLocation.pathname]
         ) {
             registerError(isBookingFieldsValid[currentLocation.pathname]);
