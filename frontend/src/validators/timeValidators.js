@@ -30,7 +30,12 @@ export const checkTimeDeprecated = (data) => {
             'HH:mm:ss',
             parse(data.dateTime.date, 'yyyy-MM-dd', new Date())
         );
-        if (!TimeUtils.isBookingAvailable(checkTime, data.config)) {
+        if (
+            !TimeUtils.isBookingAvailable(
+                checkTime,
+                data.config?.data?.min_time_from_now_to_booking
+            )
+        ) {
             return {
                 message: 'Вы выбрали недопустимое время. Выберите время заново',
                 pageId: 'time',
