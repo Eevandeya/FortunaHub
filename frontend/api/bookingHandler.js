@@ -1,4 +1,5 @@
 import baseApi from './api.js';
+import { setBookingStatus } from '../src/store/bookingSlice.js';
 
 /**
  * Booking API extension with mutation endpoints for booking operations.
@@ -34,22 +35,50 @@ const bookingApi = baseApi.injectEndpoints({
                 method: 'POST',
                 body: {
                     customer: {
-                        nickname: consumerData['customer'].nickname,
+                        nickname: consumerData.customer?.nickname,
                         //eslint-disable-next-line camelcase
-                        phone_number: consumerData['customer'].phoneNumber,
+                        phone_number: consumerData.customer?.phoneNumber,
                     },
-                    items: consumerData['items'],
+                    items: consumerData.items,
                     // eslint-disable-next-line camelcase
                     start_datetime: consumerData.timeSlot?.start,
                     // eslint-disable-next-line camelcase
                     end_datetime: consumerData.timeSlot?.end,
                     // eslint-disable-next-line camelcase
-                    visitors_count: consumerData['visitorsCount'],
+                    visitors_count: consumerData.visitorsCount,
                     // eslint-disable-next-line camelcase
                     preferred_contact_method:
-                        consumerData['preferredContactMethod'],
+                        consumerData.preferredContactMethod,
                 },
             }),
+            async onQueryStarted(consumerDate, { dispatch, queryFulfilled }) {
+                const lastAttempt = new Date().toLocaleString();
+                try {
+                    await queryFulfilled;
+
+                    dispatch(
+                        setBookingStatus({
+                            statusMessage: 'Данные отправлены успешно',
+                            lastAttempt,
+                            status: 'draft',
+                        })
+                    );
+                } catch (error) {
+                    const errs = [];
+                    for (const type of Object.values(error.error.data)) {
+                        for (const err of type) {
+                            errs.push(err.message);
+                        }
+                    }
+                    dispatch(
+                        setBookingStatus({
+                            statusMessage: errs.join('\n'),
+                            lastAttempt,
+                            status: 'error',
+                        })
+                    );
+                }
+            },
             /**
              * @name invalidatesTags
              * @type {Array<string>}

@@ -9,18 +9,15 @@ import { resetDateTime } from '../store/dateTimeSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@root.consts/navigation.js';
-import { useCallback, useEffect, useState } from 'react';
-import { useSetBookingMutation } from '@root.api/bookingHandler.js';
+import { useCallback, useState } from 'react';
 import { useErrorHandler } from './useErrorHandler.js';
 
 const usePaymentChoice = () => {
     const dispatch = useDispatch();
     const status = useSelector(selectStatus);
-    const [reserve] = useSetBookingMutation();
-    const { customer, items, timeSlot, visitorsCount, preferredContactMethod } =
-        useSelector((state) => state.booking.order);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    //eslint-disable-next-line
     const { handleApiError } = useErrorHandler();
 
     const resetAllData = useCallback(() => {
@@ -30,51 +27,22 @@ const usePaymentChoice = () => {
         dispatch(resetBookings());
     }, [dispatch]);
 
-    const sendBookingData = useCallback(async () => {
-        try {
-            await reserve({
-                customer,
-                items,
-                timeSlot,
-                visitorsCount,
-                preferredContactMethod,
-            });
-        } catch (error) {
-            handleApiError(error, { at: 'sendBookingData' });
-            const errorMessage =
-                'Ошибка оформления брони. Пожалуйста повторите еще раз!';
-            const lastAttempt = new Date().toLocaleString();
-            const status = 'error';
-            dispatch(
-                setBookingStatus({
-                    statusMessage: errorMessage,
-                    lastAttempt,
-                    status,
-                })
-            );
-        }
-    }, [
-        customer,
-        items,
-        preferredContactMethod,
-        reserve,
-        timeSlot,
-        visitorsCount,
-    ]);
-
-    useEffect(() => {
-        if (status !== 'success') {
+    const pay = useCallback(() => {
+        if (status !== 'draft' || loading) {
             return;
         }
-        resetAllData();
+        const lastAttempt = new Date().toLocaleString();
+        dispatch(setBookingStatus({ lastAttempt, status: 'success' }));
+
         setLoading(true);
         setTimeout(() => {
             navigate(ROUTES.STATUS.SUCCESS);
+            resetAllData();
             setLoading(false);
         }, 3000);
     }, [status]);
 
-    return [status, loading, sendBookingData];
+    return [status, loading, pay];
 };
 
 export default usePaymentChoice;

@@ -1,10 +1,12 @@
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 import { startOfDay, addMonths } from 'date-fns';
 import './calendar.css';
 
 const DateSelector = memo(({ date, setDate, ...other }) => {
+    useEffect(() => setDate(date), []);
+
     return (
         <section>
             <DatePicker

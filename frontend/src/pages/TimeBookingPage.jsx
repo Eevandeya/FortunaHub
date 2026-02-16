@@ -1,29 +1,29 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { TimePicker } from '@components.features/timeBooking/TimePicker.jsx';
 import DateSelector from '@components.features/timeBooking/DatePicker.jsx';
-import { startOfDay } from 'date-fns';
 import { ErrorBookingContext } from '../context/Context.js';
+import { useDispatch } from 'react-redux';
+import { format, startOfDay } from 'date-fns';
+import { setDate } from '../store/dateTimeSlice.js';
 
 const TimeBookingPage = () => {
-    const [date, setDate] = useState(new Date());
+    const [calendarDate, setCalendarDate] = useState(new Date());
     const { invalidStep } = useContext(ErrorBookingContext);
     const dateRef = useRef();
     const timeSlotsRef = useRef();
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        if (!invalidStep || invalidStep.pageId !== 'time') return;
-
-        const errorFields = Object.entries(invalidStep.fields)
-            .filter(([, hasError]) => hasError)
-            .map(([fieldId]) => fieldId);
+        if (!invalidStep.error || invalidStep.error.pageId !== 'time') return;
 
         let el;
-        switch (errorFields[0]) {
+        switch (invalidStep.error.place) {
             case 'date':
                 el = dateRef.current;
                 break;
             case 'timeSlots':
                 el = timeSlotsRef.current;
+
                 break;
             default:
                 return;
@@ -45,10 +45,15 @@ const TimeBookingPage = () => {
                         <h5>Выберите дату</h5>
                     </header>
                     <DateSelector
-                        date={date}
-                        setDate={setDate}
-                        hasError={invalidStep.fields?.date}
-                        error='Выберите необходимую дату брони'
+                        date={calendarDate}
+                        setDate={(newDate) => {
+                            setCalendarDate(newDate);
+                            dispatch(
+                                setDate({ date: format(newDate, 'yyyy-MM-dd') })
+                            );
+                        }}
+                        hasError={invalidStep.error?.place === 'date'}
+                        error={invalidStep.error?.message}
                     />
                 </div>
                 <div className='booking-content' ref={timeSlotsRef}>
@@ -56,9 +61,9 @@ const TimeBookingPage = () => {
                         <h5>Выберите время</h5>
                     </header>
                     <TimePicker
-                        date={startOfDay(date)}
-                        hasError={invalidStep.fields?.timeSlots}
-                        error='Выберите время брони'
+                        date={startOfDay(calendarDate)}
+                        hasError={invalidStep.error?.place === 'timeSlots'}
+                        error={invalidStep.error?.message}
                     />
                 </div>
             </div>

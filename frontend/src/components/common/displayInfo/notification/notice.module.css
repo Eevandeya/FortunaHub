@@ -1,0 +1,23 @@
+.notice {
+    position: relative;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 1rem 2rem;
+    border-radius: 24px;
+    outline-offset: -5px;
+    outline-width: 3px;
+    outline-style: solid;
+    z-index: var(--layer-modal);
+    transition: opacity 0.5s ease;
+}
+
+.notice.success {
+    background-color: #84e16e;
+    outline-color: #54d838;
+}
+
+.notice.error {
+    background-color: #ff3a3a;
+    outline-color: rgba(128, 0, 0, 0.15);
+}

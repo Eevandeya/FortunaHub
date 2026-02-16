@@ -7,7 +7,7 @@ const GoodsBookingPage = () => {
     const itemsRef = useRef();
 
     useEffect(() => {
-        if (!invalidStep || invalidStep.pageId !== 'goods') return;
+        if (!invalidStep.error || invalidStep.error.pageId !== 'goods') return;
 
         const el = itemsRef.current;
         requestAnimationFrame(() => {
@@ -24,8 +24,8 @@ const GoodsBookingPage = () => {
                         <h5>Выберите товары</h5>
                     </header>
                     <ProductReservation
-                        hasError={invalidStep.fields?.items}
-                        error='Выберите хотя бы один товар'
+                        hasError={invalidStep.error?.place === 'itemCards'}
+                        error={invalidStep.error?.message}
                     />
                 </div>
             </div>
