@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { CONTACT_METHODS } from '../../consts/contactMethods.js';
 
 const bookingSlice = createSlice({
     name: 'booking',
@@ -8,7 +9,7 @@ const bookingSlice = createSlice({
             items: [],
             timeSlot: { start: '', end: '' },
             visitorsCount: 0,
-            preferredContactMethod: 'whatsapp',
+            preferredContactMethod: CONTACT_METHODS[0],
         },
         status: {
             current: 'idle',
@@ -18,8 +19,11 @@ const bookingSlice = createSlice({
         },
     },
     selectors: {
+        selectVisitorsCount: (state) => state.order.visitorsCount,
+        selectContactMethod: (state) => state.order.preferredContactMethod,
         selectStatus: (state) => state.status.current,
         selectStatusMessage: (state) => state.status.statusMessage,
+        selectAttempts: (state) => state.status.attempts,
         selectCustomerData: (state) => ({
             customer: state.order.customer,
             visitors: state.order.visitorsCount,
@@ -55,7 +59,7 @@ const bookingSlice = createSlice({
                 items: [],
                 timeSlot: { start: '', end: '' },
                 visitorsCount: 0,
-                preferredContactMethod: 'whatsapp',
+                preferredContactMethod: CONTACT_METHODS[0],
             };
         },
         setBookingStatusState(state, action) {
@@ -89,6 +93,12 @@ export const {
     resetBookingStatus,
 } = bookingSlice.actions;
 
-export const { selectStatus, selectStatusMessage, selectCustomerData } =
-    bookingSlice.selectors;
+export const {
+    selectStatus,
+    selectAttempts,
+    selectStatusMessage,
+    selectCustomerData,
+    selectVisitorsCount,
+    selectContactMethod,
+} = bookingSlice.selectors;
 export default bookingSlice.reducer;

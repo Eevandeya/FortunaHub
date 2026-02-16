@@ -11,6 +11,7 @@ const dateTimeSlice = createSlice({
     reducers: {
         setDate(state, action) {
             state.date = action.payload.date;
+            state.time = { start: '', end: '' };
         },
         setTime(state, action) {
             const actionTime = action.payload;
