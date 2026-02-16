@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useErrorHandler } from '@hooks/useErrorHandler.js';
 import { Controller, useForm } from 'react-hook-form';
 import Select from '@components.common/select/Select.jsx';
@@ -6,14 +6,20 @@ import { NumberDisplay } from '@components.common/displayInfo/numberDisplay/Numb
 import { useReservation } from '@hooks/useReservation.js';
 import { CONTACT_METHODS } from '@root.consts/contactMethods.js';
 import { useSelector } from 'react-redux';
-import './reservationForm.css';
+import './form.css';
 import { isPossiblePhoneNumber } from 'react-phone-number-input';
 import Input from 'react-phone-number-input/input';
 import Button from '../../common/button/Button.jsx';
+import {
+    selectContactMethod,
+    selectVisitorsCount,
+} from '../../../store/bookingSlice.js';
 
-const ReservationForm = () => {
-    const [visitors, setVisitors] = useState(0);
-    const [contactMethod, setContactMethod] = useState(CONTACT_METHODS[0]);
+const ReservationForm = ({ setShowNotification }) => {
+    const visitorsCount = useSelector(selectVisitorsCount);
+    const preferredContactMethod = useSelector(selectContactMethod);
+    const [visitors, setVisitors] = useState(visitorsCount);
+    const [contactMethod, setContactMethod] = useState(preferredContactMethod);
     const { handleError } = useErrorHandler();
     const { nickname: bookingNickname, phoneNumber: bookingPhoneNumber } =
         useSelector((state) => state.booking.order.customer);
@@ -29,24 +35,17 @@ const ReservationForm = () => {
             phoneNumber: bookingPhoneNumber ?? '',
         },
     });
-    const {
-        reserve,
-        status,
-        statusMessage: message,
-        config,
-    } = useReservation(contactMethod, visitors, { isSubmitting, isValid });
 
-    useEffect(() => {
-        if (status === 'success' && isSubmitting) {
-            reset({ nickname: '', phoneNumber: '' });
-            setVisitors(0);
-        }
-    }, [status]);
+    const { submit, config } = useReservation(
+        { preferredContactMethod: contactMethod, visitorsCount: visitors },
+        { isSubmitting, isValid }
+    );
 
     const increase = () => {
-        if (visitors > config?.max_visitors_count) return;
+        if (visitors > config?.maxVisitors) return;
         setVisitors((value) => value + 1);
     };
+
     const decrease = () => {
         if (visitors <= 0) return;
         setVisitors((value) => value - 1);
@@ -56,12 +55,17 @@ const ReservationForm = () => {
         handleError(errors, 'component', { at: 'onError', type: 'validate' });
     };
 
+    const bookingHandle = (data) => {
+        submit(data);
+        setShowNotification(true);
+    };
+
     return (
         <div className='form-container'>
             <header>
                 <h4>Введите персональные данные</h4>
             </header>
-            <form onSubmit={handleSubmit(reserve, onError)}>
+            <form onSubmit={handleSubmit(bookingHandle, onError)}>
                 <div className='field'>
                     <label className='label' htmlFor='name'>
                         Имя
@@ -143,7 +147,7 @@ const ReservationForm = () => {
                             count={visitors}
                             increase={increase}
                             decrease={decrease}
-                            maxValue={config?.max_visitors_count}
+                            maxValue={config?.maxVisitors}
                             fontColor='black'
                         />
                     </div>
@@ -161,9 +165,6 @@ const ReservationForm = () => {
                     </div>
                 </div>
             </form>
-            <span>
-                <h2>{message}</h2>
-            </span>
         </div>
     );
 };
