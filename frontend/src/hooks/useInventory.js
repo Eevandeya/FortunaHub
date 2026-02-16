@@ -12,7 +12,7 @@ export const useInventory = () => {
         isLoading,
         error,
         isError,
-    } = useGetItemsQuantityQuery();
+    } = useGetItemsQuantityQuery(undefined, { pollingInterval: 300_000 });
     const { handleHookError } = useErrorHandler();
     const dispatch = useDispatch();
     const bookedItems = useSelector(selectItems);
