@@ -9,7 +9,7 @@ import { NotFoundPage } from '@pages/ErrorPage.jsx';
 import { SuccessStatusPage } from '@pages/StatusPage.jsx';
 import PricingLayout from '@components.layout/pagesLayout/PricingLayout.jsx';
 import MainLayout from '@components.layout/pagesLayout/MainLayout.jsx';
-import ErrorBookingProvider from '../context/ErrorBookingContext.jsx';
+import ErrorBookingProvider from '../context/ErrorBookingProvider.jsx';
 import PriceListPage from '@pages/PriceListPage.jsx';
 import GalleryPage from '@pages/GalleryPage.jsx';
 import DefaultLayout from '@components.layout/pagesLayout/DefaultLayout.jsx';
