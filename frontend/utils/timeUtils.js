@@ -64,12 +64,16 @@ class TimeUtils {
      * Checks if a time slot is available for booking considering minimum preparation time
      * @param {Date} slotTime - Time slot to book
      * @param {string} [minPreparationTime='01:00'] - Minimum preparation time in HH:mm format
+     * @param {string} format - datetime format
      * @returns {boolean} true if booking is available, false otherwise
      */
-    static isBookingAvailable(slotTime, minPreparationTime = '01:00') {
+    static isBookingAvailable(
+        slotTime,
+        minPreparationTime = '01:00',
+        format = 'HH:mm'
+    ) {
         const now = Date.now();
 
-        const format = 'HH:mm';
         const convertPreparationTime = this.convertToMinutes({
             value: minPreparationTime,
             format,
@@ -106,17 +110,23 @@ class TimeUtils {
      * @param {Date} selectedTime.start - Start of selected time
      * @param {Date} selectedTime.end - End of selected time
      * @param {Date} selectedDate - Date to check availability for
+     * @param {string} format - datetime format
      * @returns {boolean} true if time slot is available, false otherwise
      */
-    static isTimeSlotAvailable(freeTimes, selectedTime, selectedDate) {
+    static isTimeSlotAvailable(
+        freeTimes,
+        selectedTime,
+        selectedDate,
+        format = 'HH:mm'
+    ) {
         const [start, end] = this.setTimeBorders(
             selectedTime.start,
             selectedTime.end
         );
 
         for (const times of freeTimes) {
-            let freeStartTime = parse(times.start, 'HH:mm', selectedDate);
-            let freeEndTime = parse(times.end, 'HH:mm', selectedDate);
+            let freeStartTime = parse(times.start, format, selectedDate);
+            let freeEndTime = parse(times.end, format, selectedDate);
             [freeStartTime, freeEndTime] = this.setTimeBorders(
                 freeStartTime,
                 freeEndTime
@@ -140,11 +150,11 @@ class TimeUtils {
 
     /**
      * @param {Object} time - Selected time slots
+     * @param {string} format - datetime format
      * @returns {number} - range between end and start time
      * @description Calculate range between two times
      */
-    static calculateRange(time) {
-        const format = 'HH:mm:ss';
+    static calculateRange(time, format = 'HH:mm:ss') {
         try {
             let startTime = parse(time.start, format, Date.now());
             let endTime = parse(time.end, format, Date.now());
@@ -191,6 +201,27 @@ class TimeUtils {
         } catch (error) {
             throw new Error(error.message);
         }
+    }
+
+    static convertToTimeObj(times, date) {
+        const dateTimes = times.map((slot) => {
+            const parsedOpeningTime = parse(slot.start, 'HH:mm', date);
+            const parsedClosingTime = parse(slot.end, 'HH:mm', date);
+
+            const [checkedOpeningTime, checkedClosingTime] =
+                this.setTimeBorders(parsedOpeningTime, parsedClosingTime);
+            return { start: checkedOpeningTime, end: checkedClosingTime };
+        });
+
+        const timesList = dateTimes.reduce((acc, item) => {
+            for (let temp = item.start; temp <= item.end; ) {
+                acc[format(temp, 'HH:mm')] = temp;
+                temp = addMinutes(temp, 30);
+            }
+            return acc;
+        }, {});
+
+        return timesList;
     }
 }
 
