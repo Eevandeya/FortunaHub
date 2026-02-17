@@ -1,31 +1,25 @@
-const images = [
-    '/images/1.jpg',
-    '/images/2.jpg',
-    '/images/3.jpg',
-    '/images/4.jpg',
-    '/images/1.jpg',
-    '/images/2.jpg',
-    '/images/3.jpg',
-    '/images/4.jpg',
-    '/images/1.jpg',
-    '/images/2.jpg',
-    '/images/3.jpg',
-    '/images/4.jpg',
-];
+import { useGetGalleryImagesQuery } from '../../api/galleryApi.js';
 
 const GalleryPage = () => {
+    const { data: images } = useGetGalleryImagesQuery();
+
     return (
         <div className='container'>
             <h2>Галерея</h2>
             <div className='gallery-grid'>
-                {images.map((image, index) => (
-                    <img
-                        key={image + index.toString()}
-                        src={image}
-                        className='image-1-1'
-                        alt={`Изображение: ${image.split('/')[image.length - 1]}`}
-                    />
-                ))}
+                {images?.map((image) => {
+                    const { display_name: displayName, image: imageUrl } =
+                        image;
+
+                    return (
+                        <img
+                            key={`${imageUrl}-galleryPage`}
+                            src={`${import.meta.env.VITE_BACKEND_API_URL}${imageUrl}`}
+                            className='image-1-1'
+                            alt={`Изображение: ${displayName}`}
+                        />
+                    );
+                })}
             </div>
         </div>
     );
