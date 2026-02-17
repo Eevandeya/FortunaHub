@@ -1,12 +1,17 @@
-import { useEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 
-const useCenterActiveSlide = (rootMargin = '0px -45% 0px -45%') => {
+const useCenterActiveSlide = (
+    rootMargin = '0px -45% 0px -45%',
+    observableObjects
+) => {
     const targetsRef = useRef([]);
     const observerRef = useRef(null);
     const rootRef = useRef();
     const [activeIndex, setActiveIndex] = useState(null);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
+        if (!observableObjects) return;
+
         observerRef.current = new IntersectionObserver(
             (entries) => {
                 const visible = entries.filter((e) => e.isIntersecting);
@@ -37,7 +42,7 @@ const useCenterActiveSlide = (rootMargin = '0px -45% 0px -45%') => {
         targetsRef.current.forEach((el) => observerRef.current.observe(el));
 
         return () => observerRef.current.disconnect();
-    }, []);
+    }, [observableObjects]);
 
     return [targetsRef, rootRef, activeIndex];
 };
