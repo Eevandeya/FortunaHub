@@ -8,6 +8,7 @@
 .controls > .number_handler_panel {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     gap: 0.25rem;
 }
 
