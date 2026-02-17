@@ -10,7 +10,7 @@ const baseApi = createApi({
     /** @type {string} Path in Redux store */
     reducerPath: 'api',
     /** @type {string[]} Tags for cache invalidation */
-    tagTypes: ['Booking'],
+    tagTypes: ['Booking', 'Gallery'],
     /** @type {Object} Base query configuration */
     baseQuery: fetchBaseQuery({
         /** @type {string} Base API URL */
