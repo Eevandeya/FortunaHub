@@ -1,4 +1,6 @@
 import datetime as dt
+from decimal import Decimal
+from uuid import uuid4
 
 from django.core.exceptions import (
     NON_FIELD_ERRORS,
@@ -6,6 +8,7 @@ from django.core.exceptions import (
 from django.core.exceptions import (
     ValidationError as DjangoValidationError,
 )
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -155,3 +158,38 @@ class Booking(models.Model):
             start=self.dt_to_local(self.start_datetime).strftime("%H:%M"),
             end=self.dt_to_local(self.end_datetime).strftime("%H:%M"),
         )
+
+
+class BookingPayment(models.Model):
+    class PaymentStatus(models.TextChoices):
+        NOT_REQUIRED = "not_required", "Not Required"
+        PENDING = "pending", "Pending"
+        PAID = "paid", "Paid"
+        FAILED = "failed", "Failed"
+
+    class PaymentOption(models.TextChoices):
+        FULL = "full", "Full"
+        DEPOSIT = "deposit", "Deposit"
+        OFFLINE = "offline", "Offline"
+
+    booking = models.ForeignKey(
+        Booking, related_name="payments", on_delete=models.CASCADE
+    )
+    payment_option = models.CharField(
+        max_length=15, choices=PaymentOption.choices, default=PaymentOption.OFFLINE
+    )
+    payment_status = models.CharField(
+        max_length=15, choices=PaymentStatus.choices, default=PaymentStatus.NOT_REQUIRED
+    )
+    order_id = models.UUIDField(null=True, blank=True, unique=True)
+    public_id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+
+    amount = models.DecimalField(
+        max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal("0.01"))]
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        return f"Booking: {self.booking}. Payment status: {self.payment_status} ({self.payment_option})"
