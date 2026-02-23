@@ -17,7 +17,7 @@ const ItemHandler = memo(
                 </div>
                 <div className={style.item_image}>
                     <img
-                        src='/images/14.jpg'
+                        src={`${import.meta.env.VITE_BACKEND_API_URL}${item.imageUrl}`}
                         alt={item.name || 'Банные принадлежности'}
                         height={30}
                         width={30}
@@ -31,7 +31,7 @@ const ItemHandler = memo(
                             maxValue={maxCount}
                             decrease={onDecrement}
                             increase={onIncrement}
-                            fontColor='red'
+                            fontColor='black'
                         />
                     </div>
                 </div>

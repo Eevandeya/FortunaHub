@@ -3,25 +3,24 @@ import styles from './gallery_slider.module.css';
 import slider_styles from '../slider.module.css';
 import useCenterActiveSlide from '@hooks/useCenterActiveSlide.js';
 import Button from '../../button/Button.jsx';
-
-const images = [
-    '/images/1.jpg',
-    '/images/2.jpg',
-    '/images/3.jpg',
-    '/images/4.jpg',
-];
+import { useGetGalleryImagesQuery } from '../../../../../api/galleryApi.js';
 
 const GallerySlider = () => {
-    const [targetsRef, rootRef, activeIndex] =
-        useCenterActiveSlide('0px -45% 0px -45%');
+    const { data: images } = useGetGalleryImagesQuery();
+    const [targetsRef, rootRef, activeIndex] = useCenterActiveSlide(
+        '0px -45% 0px -45%',
+        images
+    );
 
     return (
         // eslint-disable-next-line camelcase
         <ul className={slider_styles.parallax_slider} ref={rootRef}>
-            {images.map((image, index) => {
+            {images?.slice(0, 6)?.map((image, index) => {
+                const { display_name: displayName, image: imageUrl } = image;
+
                 return (
                     <li
-                        key={image}
+                        key={`${imageUrl}-gallery`}
                         className={`${styles.gallery_el} ${index === activeIndex ? styles.closest_el : ''}`}
                         ref={(el) => {
                             if (el) {
@@ -29,11 +28,11 @@ const GallerySlider = () => {
                             }
                         }}>
                         <img
-                            src={image}
+                            src={`${import.meta.env.VITE_BACKEND_API_URL}${imageUrl}`}
                             className={`${styles.image} ${index === activeIndex ? styles.closest_image : ''}`}
                             width='600'
                             height='400'
-                            alt='Изображение в галерее'
+                            alt={`Изображение: ${displayName}`}
                         />
                     </li>
                 );

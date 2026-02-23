@@ -1,16 +1,18 @@
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@root.consts/navigation.js';
 import MainWindowSlider from '../components/common/slider/MainWindowSlider.jsx';
 import YandexStaticMap from '../components/features/staticMap/YandexStaticMap.jsx';
-import Button from '../components/common/button/Button.jsx';
 import GoToButton from '../components/common/button/GoToButton.jsx';
 import GallerySlider from '../components/common/slider/GallerySlider/GallerySlider.jsx';
 import ProductSlider from '../components/common/slider/ProductSlider/ProductSlider.jsx';
 import useScrollOnRoute from '../hooks/useScrollOnRoute.js';
+import { useGetGalleryImagesQuery } from '../../api/galleryApi.js';
 
 function Homepage() {
     const navigate = useNavigate();
     useScrollOnRoute();
+
+    const { data: images } = useGetGalleryImagesQuery();
 
     return (
         <>
@@ -23,7 +25,10 @@ function Homepage() {
                         <h2>Баня на свежем воздухе</h2>
                         <section className='homepage-description-block'>
                             <div className='image-container'>
-                                <img alt='Фото бани' src='/images/17.jpg' />
+                                <img
+                                    alt={images && images[1].display_name}
+                                    src={`${import.meta.env.VITE_BACKEND_API_URL}${images && images[1].image}`}
+                                />
                             </div>
                             <div className='description-container'>
                                 <div className='description-block'>

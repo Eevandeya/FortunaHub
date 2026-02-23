@@ -28,6 +28,8 @@ const ProductReservation = (props) => {
                 name: item.display_name,
                 quantity: bookedItemsObj?.[item.slug] ?? 0,
                 slug: item.slug,
+                desc: item.description,
+                imageUrl: item.image,
                 itemType: item.itemType,
                 unitPrice: item.unitPrice,
                 isAvailable() {

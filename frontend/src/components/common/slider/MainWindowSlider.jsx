@@ -1,19 +1,14 @@
 import { useEffect, useState } from 'react';
 import styles from './slider.module.css';
-
-const images = [
-    '/images/1.jpg',
-    '/images/2.jpg',
-    '/images/3.jpg',
-    '/images/4.jpg',
-];
+import { useGetGalleryImagesQuery } from '../../../../api/galleryApi.js';
 
 const MainWindowSlider = () => {
     const [activeIndex, setActiveIndex] = useState(0);
     const [pause, setPause] = useState(false);
+    const { data: images } = useGetGalleryImagesQuery();
 
     useEffect(() => {
-        if (pause) return;
+        if (pause || !images) return;
         const interval = setTimeout(() => {
             setActiveIndex((index) => {
                 return (index + 1) % images.length;
@@ -38,23 +33,31 @@ const MainWindowSlider = () => {
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 </p>
             </span>
-            {images.map((src, i) => (
-                <img
-                    key={src}
-                    src={src}
-                    className={`${styles.image} ${i === activeIndex ? styles.active : ''} `}
-                    alt='Изображение бани'
-                />
-            ))}
+            {images?.map((image, i) => {
+                const { display_name: displayName, image: imageUrl } = image;
+
+                return (
+                    <img
+                        key={`${imageUrl}-main`}
+                        src={`${import.meta.env.VITE_BACKEND_API_URL}${imageUrl}`}
+                        className={`${styles.image} ${i === activeIndex ? styles.active : ''} `}
+                        alt={`Изображение: ${displayName}`}
+                    />
+                );
+            })}
 
             <div className={styles.image_control}>
-                {images.map((key, i) => (
-                    <button
-                        key={key}
-                        onClick={() => changeSlide(i)}
-                        className={`${styles.image_button} ${i === activeIndex ? styles.active : ''}`}
-                    />
-                ))}
+                {images?.map((image, i) => {
+                    const { image: imageUrl } = image;
+
+                    return (
+                        <button
+                            key={`${imageUrl}-button`}
+                            onClick={() => changeSlide(i)}
+                            className={`${styles.image_button} ${i === activeIndex ? styles.active : ''}`}
+                        />
+                    );
+                })}
             </div>
         </article>
     );
