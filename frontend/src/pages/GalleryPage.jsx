@@ -1,4 +1,4 @@
-import { useGetGalleryImagesQuery } from '../../api/galleryApi.js';
+import { useGetGalleryImagesQuery } from '@root.api/galleryApi.js';
 
 const GalleryPage = () => {
     const { data: images } = useGetGalleryImagesQuery();

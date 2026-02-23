@@ -1,6 +1,6 @@
 import { useGetPricingQuery } from '@root.api/pricingApi.js';
 import { useSelector } from 'react-redux';
-import { selectPricingData } from '@store/pricingSelector.js';
+import { selectPricingData } from '@store/selectors/pricingSelectors.js';
 
 const PricingLayout = ({ children }) => {
     //eslint-disable-next-line

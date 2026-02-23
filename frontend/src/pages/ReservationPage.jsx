@@ -1,8 +1,8 @@
 import ReservationForm from '@components.features/customerBooking/ReservationForm.jsx';
 import PaymentModal from '@components.features/payment/PaymentModal.jsx';
 import { useSelector } from 'react-redux';
-import { selectStatus, selectStatusMessage } from '../store/bookingSlice.js';
-import Notification from '../components/common/displayInfo/notification/Notification.jsx';
+import { selectStatus, selectStatusMessage } from '@store/bookingSlice.js';
+import Notification from '@components.common/displayInfo/notification/Notification.jsx';
 import { useState } from 'react';
 
 const ReservationPage = () => {

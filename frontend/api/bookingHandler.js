@@ -1,5 +1,5 @@
 import baseApi from './api.js';
-import { setBookingStatus } from '../src/store/bookingSlice.js';
+import { setBookingStatus } from '@store/bookingSlice.js';
 
 /**
  * Booking API extension with mutation endpoints for booking operations.
@@ -89,5 +89,7 @@ const bookingApi = baseApi.injectEndpoints({
         }),
     }),
 });
+
+export default bookingApi;
 
 export const { useSetBookingMutation } = bookingApi;

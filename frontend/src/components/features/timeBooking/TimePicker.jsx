@@ -21,7 +21,7 @@ const checkConditions = ({ minBookingTime, start, end }) => {
 
 export function TimePicker({ date, ...other }) {
     const [availableTime, loading] = useAvailableTimes(date);
-    const [bookTimeSlot, config, setIsBooking, isBooking] = useTimeSlot();
+    const [bookTimeSlot, config] = useTimeSlot();
     const [borderTime, setBorderTime] = useState({ start: null, end: null });
     const [now, setNow] = useState(Date.now());
 
@@ -177,20 +177,13 @@ export function TimePicker({ date, ...other }) {
                     date,
                     availableTime
                 );
-                if (operationProgress.success) {
+                if (operationProgress.type === 'success') {
                     setBorderTime({ start: null, end: null });
                 }
             }
         },
         [availableTime, bookTimeSlot, date, parsedTimeSlots]
     );
-
-    useEffect(() => {
-        if (isBooking) {
-            setIsBooking(false);
-            setBorderTime({ start: null, end: null });
-        }
-    }, [isBooking]);
 
     return (
         <section className={styles.time_selector}>

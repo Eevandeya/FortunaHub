@@ -3,7 +3,7 @@ import { useGetBookingPriceQuery } from '@root.api/bookingPriceHandler.js';
 import { PRICE_CALCULATION_NOTIFICATION } from '@root.consts/notificationTypes.js';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useSelector } from 'react-redux';
-import { selectTotalPrice } from '@store/bookingSelectors.js';
+import { selectTotalPrice } from '@store/selectors/pricingSelectors.js';
 import TimeUtils from '@root.utils/timeUtils.js';
 import { ROUTES } from '@root.consts/navigation.js';
 
@@ -20,7 +20,8 @@ export const useBookingPrice = (bookingData, currentLocation) => {
         // eslint-disable-next-line camelcase
         const [start_datetime, end_datetime] = TimeUtils.concatenateDateTime(
             dateTime.time,
-            dateTime.date
+            dateTime.date,
+            'HH:mm:ss'
         );
         // eslint-disable-next-line camelcase
         if (!start_datetime || !end_datetime || !items?.length) {
@@ -34,7 +35,7 @@ export const useBookingPrice = (bookingData, currentLocation) => {
 
     const finalPrice = useMemo(() => {
         if (!data?.total) return currentPrice;
-        return queryParams && currentPrice !== data.total
+        return queryParams && currentPrice !== +data.total
             ? data.total
             : currentPrice;
     }, [currentPrice, data?.total, currentLocation]);
@@ -48,7 +49,7 @@ export const useBookingPrice = (bookingData, currentLocation) => {
         if (!data) return;
 
         setNotification(
-            currentPrice !== data.total
+            currentPrice !== +data.total
                 ? PRICE_CALCULATION_NOTIFICATION.ERROR
                 : PRICE_CALCULATION_NOTIFICATION.SUCCESS
         );
