@@ -1,10 +1,11 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { TimePicker } from '@components.features/timeBooking/TimePicker.jsx';
 import DateSelector from '@components.features/timeBooking/DatePicker.jsx';
-import { ErrorBookingContext } from '../context/Context.js';
+import { ErrorBookingContext } from '@context/Context.js';
 import { useDispatch } from 'react-redux';
 import { format, startOfDay } from 'date-fns';
-import { setDate } from '../store/dateTimeSlice.js';
+import { setDate } from '@store/dateTimeSlice.js';
+import useScrollOnError from '@hooks/useScrollOnError.js';
 
 const TimeBookingPage = () => {
     const [calendarDate, setCalendarDate] = useState(new Date());
@@ -13,26 +14,7 @@ const TimeBookingPage = () => {
     const timeSlotsRef = useRef();
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        if (!invalidStep.error || invalidStep.error.pageId !== 'time') return;
-
-        let el;
-        switch (invalidStep.error.place) {
-            case 'date':
-                el = dateRef.current;
-                break;
-            case 'timeSlots':
-                el = timeSlotsRef.current;
-
-                break;
-            default:
-                return;
-        }
-        requestAnimationFrame(() => {
-            const rect = el.getBoundingClientRect();
-            window.scrollBy({ top: rect.bottom, behavior: 'smooth' });
-        });
-    }, [invalidStep]);
+    useScrollOnError({ date: dateRef, timeSlots: timeSlotsRef }, invalidStep);
 
     return (
         <>
