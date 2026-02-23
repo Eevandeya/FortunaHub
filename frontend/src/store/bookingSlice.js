@@ -1,16 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { CONTACT_METHODS } from '../../consts/contactMethods.js';
 
 const bookingSlice = createSlice({
     name: 'booking',
     initialState: {
-        order: {
-            customer: { nickname: '', phoneNumber: '' },
-            items: [],
-            timeSlot: { start: '', end: '' },
-            visitorsCount: 0,
-            preferredContactMethod: CONTACT_METHODS[0],
-        },
         status: {
             current: 'idle',
             statusMessage: '',
@@ -19,49 +11,11 @@ const bookingSlice = createSlice({
         },
     },
     selectors: {
-        selectVisitorsCount: (state) => state.order.visitorsCount,
-        selectContactMethod: (state) => state.order.preferredContactMethod,
         selectStatus: (state) => state.status.current,
         selectStatusMessage: (state) => state.status.statusMessage,
         selectAttempts: (state) => state.status.attempts,
-        selectCustomerData: (state) => ({
-            customer: state.order.customer,
-            visitors: state.order.visitorsCount,
-            contactMethod: state.order.preferredContactMethod,
-        }),
     },
     reducers: {
-        setCustomerInfo(state, action) {
-            const customerData = action.payload.customer;
-            state.order.customer = { ...state.order.customer, ...customerData };
-        },
-        addBookingItems(state, action) {
-            state.order.items = action.payload.items;
-        },
-        removeBookingItem(state, action) {
-            state.order.items = state.order.items?.filter(
-                (item) => item.slug !== action.payload.slug
-            );
-        },
-        setTimeSlot(state, action) {
-            state.order.timeSlot = action.payload.timeSlot;
-        },
-        setVisitorsCount(state, action) {
-            state.order.visitorsCount = action.payload.visitorsCount;
-        },
-        setPreferredContactMethod(state, action) {
-            state.order.preferredContactMethod =
-                action.payload.preferredContactMethod;
-        },
-        resetBookings(state) {
-            state.order = {
-                customer: { nickname: '', phoneNumber: '' },
-                items: [],
-                timeSlot: { start: '', end: '' },
-                visitorsCount: 0,
-                preferredContactMethod: CONTACT_METHODS[0],
-            };
-        },
         setBookingStatusState(state, action) {
             state.status.current = action.payload.status;
         },
@@ -80,25 +34,9 @@ const bookingSlice = createSlice({
     },
 });
 
-export const {
-    setCustomerInfo,
-    addBookingItems,
-    removeBookingItem,
-    setTimeSlot,
-    setVisitorsCount,
-    setPreferredContactMethod,
-    resetBookings,
-    setBookingStatus,
-    setBookingStatusState,
-    resetBookingStatus,
-} = bookingSlice.actions;
+export const { setBookingStatus, setBookingStatusState, resetBookingStatus } =
+    bookingSlice.actions;
 
-export const {
-    selectStatus,
-    selectAttempts,
-    selectStatusMessage,
-    selectCustomerData,
-    selectVisitorsCount,
-    selectContactMethod,
-} = bookingSlice.selectors;
+export const { selectStatus, selectAttempts, selectStatusMessage } =
+    bookingSlice.selectors;
 export default bookingSlice.reducer;

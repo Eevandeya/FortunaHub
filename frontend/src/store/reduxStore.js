@@ -2,20 +2,21 @@ import { configureStore } from '@reduxjs/toolkit';
 import bookingReducer from '@store/bookingSlice.js';
 import itemsReducer from '@store/itemsSlice.js';
 import baseApi from '@root.api/api.js';
+import userReducer from '@store/userSlice.js';
 import { rememberEnhancer, rememberReducer } from 'redux-remember';
 import dateTimeReducer from '@store/dateTimeSlice.js';
-import { setupListeners } from '@reduxjs/toolkit/query/react';
 
-const rememberedKeys = ['booking', 'items', 'datetime'];
+const rememberedKeys = ['booking', 'items', 'datetime', 'user'];
 const reducers = {
-    booking: bookingReducer,
     items: itemsReducer,
+    booking: bookingReducer,
     datetime: dateTimeReducer,
+    user: userReducer,
     [baseApi.reducerPath]: baseApi.reducer,
 };
 const reducer = rememberReducer(reducers);
 
-const store = configureStore({
+export default configureStore({
     reducer: reducer,
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({}).concat(baseApi.middleware),
@@ -24,7 +25,3 @@ const store = configureStore({
             rememberEnhancer(window.localStorage, rememberedKeys)
         ),
 });
-
-setupListeners(store.dispatch);
-
-export default store;
