@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom';
 import { ROUTES } from '../../../../consts/navigation.js';
 import useScrollNavigate from '../../../hooks/useScrollNavigate.js';
 import { HashNavigationLink } from '../../common/link/HashNavigationLink.jsx';
+import { useGetSaunaConfigQuery } from '../../../../api/saunaConfig.js';
 
 const Basement = () => {
     const scroll = useScrollNavigate();
+    const config = useGetSaunaConfigQuery();
 
     return (
         <footer className={styles.footer_navbar}>
@@ -34,7 +36,8 @@ const Basement = () => {
                         <HashNavigationLink onClick={() => scroll('/', 'map')}>
                             Адрес: город, улица, номер дома
                             <br />
-                            Время работы: 00:00 — 08:00
+                            Время работы: {config.data?.opening_time}—
+                            {config.data?.closing_time}
                         </HashNavigationLink>
                     </div>
                     <div className={styles.text_block}>

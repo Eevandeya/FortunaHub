@@ -15,7 +15,7 @@ const GallerySlider = () => {
     return (
         // eslint-disable-next-line camelcase
         <ul className={slider_styles.parallax_slider} ref={rootRef}>
-            {images?.slice(0, 6)?.map((image, index) => {
+            {images?.map((image, index) => {
                 const { display_name: displayName, image: imageUrl } = image;
 
                 return (
