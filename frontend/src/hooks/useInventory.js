@@ -1,10 +1,8 @@
 import { useCallback, useEffect } from 'react';
 import { useErrorHandler } from '@hooks/useErrorHandler.js';
-import { addBookingItems, removeBookingItem } from '@store/bookingSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGetItemsQuantityQuery } from '@root.api/rentingItemsApi.js';
-import { addItems, removeItem } from '@store/itemsSlice.js';
-import { selectItems } from '@store/itemsSlice.js';
+import { addItems, removeItem, selectItems } from '@store/itemsSlice.js';
 
 export const useInventory = () => {
     const {
@@ -30,7 +28,6 @@ export const useInventory = () => {
             for (const item of items) {
                 if (!item.quantity) {
                     dispatch(removeItem({ slug: item.slug }));
-                    dispatch(removeBookingItem({ slug: item.slug }));
                 }
             }
         },
@@ -51,12 +48,7 @@ export const useInventory = () => {
                 ) {
                     throw new Error('Incorrect value');
                 }
-                const bookingSelectItems = items
-                    .filter((item) => item.quantity)
-                    .map((item) => ({
-                        quantity: item.quantity,
-                        slug: item.slug,
-                    }));
+
                 const selectItems = items
                     .filter((item) => item.quantity)
                     .map((item) => ({
@@ -65,7 +57,6 @@ export const useInventory = () => {
                         displayName: item.name,
                         unitPrice: item.unitPrice,
                     }));
-                dispatch(addBookingItems({ items: bookingSelectItems }));
                 dispatch(addItems({ items: selectItems }));
             } catch (error) {
                 handleHookError(error, 'useInventory', { action: 'reserve' });

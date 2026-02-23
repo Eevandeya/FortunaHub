@@ -12,8 +12,9 @@ import Input from 'react-phone-number-input/input';
 import Button from '../../common/button/Button.jsx';
 import {
     selectContactMethod,
+    selectUserInfo,
     selectVisitorsCount,
-} from '../../../store/bookingSlice.js';
+} from '../../../store/userSlice.js';
 
 const ReservationForm = ({ setShowNotification }) => {
     const visitorsCount = useSelector(selectVisitorsCount);
@@ -22,7 +23,7 @@ const ReservationForm = ({ setShowNotification }) => {
     const [contactMethod, setContactMethod] = useState(preferredContactMethod);
     const { handleError } = useErrorHandler();
     const { nickname: bookingNickname, phoneNumber: bookingPhoneNumber } =
-        useSelector((state) => state.booking.order.customer);
+        useSelector(selectUserInfo);
     const {
         register,
         handleSubmit,
