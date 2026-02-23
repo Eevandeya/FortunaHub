@@ -55,3 +55,9 @@ body:has(.modal_background.modal_active) {
         max-width: 90vw;
     }
 }
+
+@media (max-width: 480px) {
+    .modal_background > .modal_window {
+        height: 90vh;
+    }
+}

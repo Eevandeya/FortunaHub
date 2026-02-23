@@ -90,16 +90,18 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    max-width: var(--container-width);
+    width: 100vw;
+    max-width: 100%;
+    background: linear-gradient(to left, #333a33, #1b1f1b);
 }
 
 .homepage-description {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: linear-gradient(to left, #333a33, #1b1f1b);
     padding-inline: 7.5rem;
     padding-block: 3rem;
+    max-width: var(--container-width);
 }
 
 .homepage-description-block {
@@ -149,7 +151,6 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-    max-width: 100%;
     overflow-x: clip;
     background: linear-gradient(to right, #232323, #111111);
     padding-block: 3rem;
@@ -161,11 +162,10 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-    max-width: 100%;
     overflow-x: clip;
-    background: linear-gradient(to left, #333a33, #1b1f1b);
     padding-block: 3rem;
     gap: 2rem;
+    max-width: var(--container-width);
 }
 
 .btn-combine-left {
@@ -250,10 +250,15 @@
     order: 1;
 }
 
-.homepage-map {
+.map-container {
+    width: 100%;
     min-height: 200px;
     grid-area: map;
     grid-column: 1 / span 2;
+    background: linear-gradient(to left, #232323, #111111);
+}
+
+.homepage-map {
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -261,9 +266,8 @@
     padding-block: 3rem;
     width: 100%;
     max-width: var(--container-width);
-    margin-inline: auto;
-    background: linear-gradient(to left, #232323, #111111);
     gap: 2rem;
+    margin-inline: auto;
 }
 
 .homepage-map > .homepage-map-block {
