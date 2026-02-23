@@ -3,7 +3,7 @@ import baseApi from './api.js';
 export const galleryApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
         getGalleryImages: build.query({
-            query: () => 'sauna-gallery',
+            query: () => 'sauna-gallery/',
             providesTags: ['Gallery'],
         }),
     }),
