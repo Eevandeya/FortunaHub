@@ -36,7 +36,7 @@ export const useBookingPrice = (bookingData, currentLocation) => {
     const finalPrice = useMemo(() => {
         if (!data?.total) return currentPrice;
         return queryParams && currentPrice !== +data.total
-            ? data.total
+            ? +data.total
             : currentPrice;
     }, [currentPrice, data?.total, currentLocation]);
 

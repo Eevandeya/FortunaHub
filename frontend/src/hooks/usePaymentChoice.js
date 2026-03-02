@@ -34,7 +34,7 @@ const usePaymentChoice = () => {
             resetData();
             setLoading(false);
         }, 3000);
-    }, [status]);
+    }, [loading, status]);
 
     return [status, loading, pay];
 };

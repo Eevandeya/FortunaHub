@@ -24,5 +24,5 @@ const itemsSlice = createSlice({
 });
 
 export const { addItems, removeItem, resetItems } = itemsSlice.actions;
-export const { selectItems, selectBookingItems } = itemsSlice.selectors;
+export const { selectItems, selectItem } = itemsSlice.selectors;
 export default itemsSlice.reducer;

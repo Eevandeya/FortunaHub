@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react';
 import TimeUtils from '@root.utils/timeUtils.js';
-import { format } from 'date-fns';
+import { format, isMatch } from 'date-fns';
 import { useErrorHandler } from '@hooks/useErrorHandler.js';
 import { useDispatch } from 'react-redux';
 import { useGetSaunaConfigQuery } from '@root.api/saunaConfig.js';
@@ -16,7 +16,15 @@ export function useAvailableTimes(selectedDate) {
         isLoading,
         error,
     } = useGetAvailableTimesQuery(
-        selectedDate ? { date: format(selectedDate, 'yyyy-MM-dd') } : skipToken,
+        selectedDate
+            ? {
+                  date:
+                      typeof selectedDate === 'string' &&
+                      isMatch(selectedDate, 'yyyy-MM-dd')
+                          ? selectedDate
+                          : format(selectedDate, 'yyyy-MM-dd'),
+              }
+            : skipToken,
         { pollingInterval: 300_000 }
     );
 
@@ -74,8 +82,8 @@ export function useTimeSlot() {
 
             dispatch(
                 setTime({
-                    start: format(start, 'HH:mm:ss', selectedDate),
-                    end: format(end, 'HH:mm:ss', selectedDate),
+                    start: format(start, 'HH:mm:ss'),
+                    end: format(end, 'HH:mm:ss'),
                 })
             );
 
