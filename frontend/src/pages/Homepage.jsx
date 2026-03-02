@@ -1,12 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@root.consts/navigation.js';
-import MainWindowSlider from '../components/common/slider/MainWindowSlider.jsx';
-import YandexStaticMap from '../components/features/staticMap/YandexStaticMap.jsx';
-import GoToButton from '../components/common/button/GoToButton.jsx';
-import GallerySlider from '../components/common/slider/GallerySlider/GallerySlider.jsx';
-import ProductSlider from '../components/common/slider/ProductSlider/ProductSlider.jsx';
-import useScrollOnRoute from '../hooks/useScrollOnRoute.js';
-import { useGetGalleryImagesQuery } from '../../api/galleryApi.js';
+import MainWindowSlider from '@components.common/slider/MainWindowSlider.jsx';
+import YandexStaticMap from '@components.features/staticMap/YandexStaticMap.jsx';
+import GoToButton from '@components.common/button/GoToButton.jsx';
+import GallerySlider from '@components.common/slider/GallerySlider/GallerySlider.jsx';
+import ProductSlider from '@components.common/slider/ProductSlider/ProductSlider.jsx';
+import useScrollOnRoute from '@hooks/useScrollOnRoute.js';
+import { useGetGalleryImagesQuery } from '@root.api/galleryApi.js';
 
 function Homepage() {
     const navigate = useNavigate();
@@ -92,35 +92,37 @@ function Homepage() {
                         <ProductSlider />
                     </div>
                 </div>
-                <div className='homepage-map' id='map'>
-                    <h2>Мы на карте</h2>
-                    <section className='homepage-map-block'>
-                        <div className='content-container'>
-                            <img
-                                src='/images/bath_entrance.png'
-                                alt='Вход в баню'
-                            />
-                            <div className='map-text-block'>
-                                <h3>Сведения</h3>
-                                <h4>Lorem Ipsum Lorem Ipsum</h4>
-                                <h4>Lorem Ipsum</h4>
-                                <h4>Lorem Ipsum</h4>
-                            </div>
-                        </div>
-                        <div className='image-container'>
-                            <div className='image-1-1'>
-                                <YandexStaticMap
-                                    center='29.704511,60.190389'
-                                    size='450,450'
-                                    lang='ru_RU'
-                                    alt='Карта'
-                                    scale='1.5'
-                                    zoom='15'
-                                    points={['29.704511,60.190389,pm2rdm']}
+                <div className='map-container'>
+                    <div className='homepage-map' id='map'>
+                        <h2>Мы на карте</h2>
+                        <section className='homepage-map-block'>
+                            <div className='content-container'>
+                                <img
+                                    src='/images/bath_entrance.png'
+                                    alt='Вход в баню'
                                 />
+                                <div className='map-text-block'>
+                                    <h3>Сведения</h3>
+                                    <h4>Lorem Ipsum Lorem Ipsum</h4>
+                                    <h4>Lorem Ipsum</h4>
+                                    <h4>Lorem Ipsum</h4>
+                                </div>
                             </div>
-                        </div>
-                    </section>
+                            <div className='image-container'>
+                                <div className='image-1-1'>
+                                    <YandexStaticMap
+                                        center='29.704511,60.190389'
+                                        size='450,450'
+                                        lang='ru_RU'
+                                        alt='Карта'
+                                        scale='1.5'
+                                        zoom='15'
+                                        points={['29.704511,60.190389,pm2rdm']}
+                                    />
+                                </div>
+                            </div>
+                        </section>
+                    </div>
                 </div>
             </main>
         </>

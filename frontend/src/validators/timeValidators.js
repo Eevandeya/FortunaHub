@@ -25,14 +25,12 @@ export const checkTimeSelected = (data) => {
 
 export const checkTimeDeprecated = (data) => {
     try {
-        const checkTime = parse(
-            data.dateTime.time?.start,
-            'HH:mm:ss',
-            parse(data.dateTime.date, 'yyyy-MM-dd', new Date())
-        );
+        const checkTime = TimeUtils.getDateTimeFromState(data.dateTime.date, {
+            start: data.dateTime.time?.start,
+        });
         if (
             !TimeUtils.isBookingAvailable(
-                checkTime,
+                checkTime.start,
                 data.config?.data?.min_time_from_now_to_booking
             )
         ) {
@@ -51,19 +49,10 @@ export const checkTimeDeprecated = (data) => {
 
 export const checkTimeBooked = (data) => {
     try {
-        const parsedTime = {
-            start: parse(
-                data.dateTime.time?.start,
-                'HH:mm:ss',
-                parse(data.dateTime.date, 'yyyy-MM-dd', new Date())
-            ),
-            end: parse(
-                data.dateTime.time?.end,
-                'HH:mm:ss',
-                parse(data.dateTime.date, 'yyyy-MM-dd', new Date())
-            ),
-        };
-
+        const parsedTime = TimeUtils.getDateTimeFromState(
+            data.dateTime.date,
+            data.dateTime.time
+        );
         if (
             !TimeUtils.isTimeSlotAvailable(
                 data.freeSlots,

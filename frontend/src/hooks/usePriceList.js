@@ -1,7 +1,8 @@
 import { useInventory } from './useInventory.js';
 import { useSelector } from 'react-redux';
-import { selectPricePerHour } from '../store/pricingSelector.js';
+import { selectPricePerHour } from '@store/selectors/pricingSelectors.js';
 import { useCallback, useMemo } from 'react';
+import { ITEM_TYPE } from '@root.consts/constants.js';
 
 const usePriceList = () => {
     const [inventory, isLoading] = useInventory();
@@ -14,7 +15,7 @@ const usePriceList = () => {
         const inventoryPriceList = inventory.map((item) => ({
             name: item.display_name,
             price: item.unit_price,
-            type: item.item_type,
+            type: ITEM_TYPE[item.item_type],
         }));
         return inventoryPriceList;
     }, [inventory, isLoading]);

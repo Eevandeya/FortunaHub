@@ -1,34 +1,36 @@
 import { useDispatch, useSelector } from 'react-redux';
-import {
-    setBookingStatus,
-    setCustomerInfo,
-    setPreferredContactMethod,
-    setVisitorsCount,
-} from '@store/bookingSlice.js';
-
-import { useCallback, useMemo } from 'react';
+import { setBookingStatus } from '@store/bookingSlice.js';
+import { useCallback } from 'react';
 import { useErrorHandler } from '@hooks/useErrorHandler.js';
-import { useGetSaunaConfigQuery } from '../../api/saunaConfig.js';
+import { useGetSaunaConfigQuery } from '@root.api/saunaConfig.js';
 import useBookingValidation from './useBookingValidation.js';
-import { useSetBookingMutation } from '../../api/bookingHandler.js';
+import { useSetBookingMutation } from '@root.api/bookingHandler.js';
+import {
+    setPreferredContactMethod,
+    setUserInfo,
+    setVisitorsCount,
+} from '@store/userSlice.js';
+import { selectBookingItems } from '../store/selectors/itemsSelectors.js';
+import { selectBookingDateTime } from '../store/selectors/dateTimeSelectors.js';
 
 export const useReservation = (
     { preferredContactMethod, visitorsCount },
     formState
 ) => {
     const dispatch = useDispatch();
-    const { items, timeSlot } = useSelector((state) => state.booking.order);
+    const timeSlot = useSelector(selectBookingDateTime);
+    const items = useSelector(selectBookingItems);
     const { handleApiError } = useErrorHandler();
     const { data } = useGetSaunaConfigQuery();
     const { validationSteps: isFieldsValid } = useBookingValidation();
     const [reserve] = useSetBookingMutation();
-    const config = useMemo(() => {
+    const config = (() => {
         if (!data) return undefined;
         return { maxVisitors: data.max_visitors_count };
-    }, [data]);
+    })();
 
     const setCustomerData = (userData) => {
-        dispatch(setCustomerInfo({ customer: userData.customer }));
+        dispatch(setUserInfo({ customer: userData.customer }));
         dispatch(setVisitorsCount({ visitorsCount: userData.visitorsCount }));
         dispatch(
             setPreferredContactMethod({

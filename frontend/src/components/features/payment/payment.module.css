@@ -12,6 +12,7 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
+    gap: 0.5rem;
     align-items: center;
     padding: 1.25rem 1.5rem;
     border-radius: 16px;
@@ -33,7 +34,6 @@
     box-shadow:
         0 10px 25px rgba(79, 70, 229, 0.15),
         0 0 0 1px rgba(79, 70, 229, 0.3);
-    transform: translateY(-2px);
 }
 
 .payment_method_checkbox input {
@@ -85,5 +85,19 @@
 @media (max-width: 768px) {
     .payment_methods_container {
         grid-gap: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .payment_method {
+        gap: 0.25rem;
+        padding: 1rem 1rem;
+    }
+    .payment_methods_container {
+        grid-template-rows: none;
+        grid-auto-flow: row;
+        max-height: 90%;
+        grid-gap: 1rem;
+        overflow: auto;
     }
 }

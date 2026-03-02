@@ -1,20 +1,13 @@
 import ProductReservation from '@components.features/goodsBooking/ProductReservation.jsx';
-import { useContext, useEffect, useRef } from 'react';
-import { ErrorBookingContext } from '../context/Context.js';
+import { useContext, useRef } from 'react';
+import { ErrorBookingContext } from '@context/Context.js';
+import useScrollOnError from '@hooks/useScrollOnError.js';
 
 const GoodsBookingPage = () => {
     const { invalidStep } = useContext(ErrorBookingContext);
     const itemsRef = useRef();
 
-    useEffect(() => {
-        if (!invalidStep.error || invalidStep.error.pageId !== 'goods') return;
-
-        const el = itemsRef.current;
-        requestAnimationFrame(() => {
-            const rect = el.getBoundingClientRect();
-            window.scrollBy({ top: rect.bottom, behavior: 'smooth' });
-        });
-    }, [invalidStep]);
+    useScrollOnError({ itemCards: itemsRef }, invalidStep);
 
     return (
         <>

@@ -1,11 +1,11 @@
-import { ROUTES } from '../../consts/navigation.js';
+import { ROUTES } from '@root.consts/navigation.js';
 import { useContext } from 'react';
-import { ErrorBookingContext } from '../context/Context.js';
+import { ErrorBookingContext } from '@context/Context.js';
 import { useAvailableTimes } from './timeHandler.js';
 import { useSelector } from 'react-redux';
-import { selectDateTime } from '../store/dateTimeSlice.js';
-import { selectItems } from '../store/itemsSlice.js';
-import { useGetSaunaConfigQuery } from '../../api/saunaConfig.js';
+import { selectDateTime } from '@store/dateTimeSlice.js';
+import { selectItems } from '@store/itemsSlice.js';
+import { useGetSaunaConfigQuery } from '@root.api/saunaConfig.js';
 import { useInventory } from './useInventory.js';
 import {
     checkDateSelected,

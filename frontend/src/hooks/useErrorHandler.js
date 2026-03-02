@@ -1,4 +1,4 @@
-import { useErrorBoundary } from '../context/Context.js';
+import { useErrorBoundary } from '@context/Context.js';
 import { useCallback } from 'react';
 
 export const useErrorHandler = () => {

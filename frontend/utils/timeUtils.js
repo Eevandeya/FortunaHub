@@ -10,7 +10,6 @@ import {
     parse,
     setHours,
     setMinutes,
-    isMatch,
 } from 'date-fns';
 
 /**
@@ -173,40 +172,47 @@ class TimeUtils {
      *
      * @param {Object} time - selected time slots
      * @param {string} date - average date
+     * @param {string} timeFormat - format of time
+     * @param {string} dateFormat - format of date
      * @returns {string[]|*[]}
      * @description concatenate date with start and time slots with similar to Iso format
      */
-    static concatenateDateTime(time, date) {
+    static concatenateDateTime(
+        time,
+        date,
+        timeFormat = 'HH:mm',
+        dateFormat = 'yyyy-MM-dd'
+    ) {
         if (!time.start || !time.end || !date) {
             return [undefined, undefined];
         }
         try {
-            const formatDate = parse(date, 'yyyy-MM-dd', Date.now());
-            let startTime, endTime;
-            if (isMatch(time.start, 'HH:mm') && isMatch(time.end, 'HH:mm')) {
-                const format = 'HH:mm';
-                startTime = parse(time.start, format, formatDate);
-                endTime = parse(time.end, format, formatDate);
-            } else if (
-                isMatch(time.start, 'HH:mm:ss') &&
-                isMatch(time.end, 'HH:mm:ss')
-            ) {
-                const format = 'HH:mm:ss';
-                startTime = parse(time.start, format, formatDate);
-                endTime = parse(time.end, format, formatDate);
-            } else {
-                throw new Error('Invalid time format');
-            }
+            const formatDate = parse(date, dateFormat, Date.now());
+            const startTime = parse(time.start, timeFormat, formatDate);
+            const endTime = parse(time.end, timeFormat, formatDate);
             return this.formatToIso(this.setTimeBorders(startTime, endTime));
         } catch (error) {
             throw new Error(error.message);
         }
     }
 
-    static convertToTimeObj(times, date) {
+    /**
+     *
+     * @param {Array<{ start: string, end: string }>} times - Array of time ranges.
+     * @param {Date} date - Base date used to construct full DateTime values.
+     * @param {string} [timeFormat='HH:mm'] - Format of the input time strings.
+     *
+     * @returns {Object<string, Date>}
+     * An object where:
+     * - keys are formatted time strings
+     * - values are corresponding Date objects
+     *
+     * @description Converts an array of time ranges into an object of formatted time slots.
+     */
+    static convertToTimeObj(times, date, timeFormat = 'HH:mm') {
         const dateTimes = times.map((slot) => {
-            const parsedOpeningTime = parse(slot.start, 'HH:mm', date);
-            const parsedClosingTime = parse(slot.end, 'HH:mm', date);
+            const parsedOpeningTime = parse(slot.start, timeFormat, date);
+            const parsedClosingTime = parse(slot.end, timeFormat, date);
 
             const [checkedOpeningTime, checkedClosingTime] =
                 this.setTimeBorders(parsedOpeningTime, parsedClosingTime);
@@ -215,13 +221,40 @@ class TimeUtils {
 
         const timesList = dateTimes.reduce((acc, item) => {
             for (let temp = item.start; temp <= item.end; ) {
-                acc[format(temp, 'HH:mm')] = temp;
+                acc[format(temp, timeFormat)] = temp;
                 temp = addMinutes(temp, 30);
             }
             return acc;
         }, {});
 
         return timesList;
+    }
+
+    /**
+     *
+     * @param {string} date - Date string.
+     * @param {Object<string, string>} time - Object containing time strings.
+     * @param {string} [dateFormat='yyyy-MM-dd'] - Format of the date string.
+     * @param {string} [timeFormat='HH:mm:ss'] - Format of the time strings.
+     *
+     * @returns {Object<string, Date>}
+     * An object with the same keys as the input `time` object,
+     * but with values converted to Date instances.
+     *
+     * @description Converts date and time values from state (stored as strings)
+     */
+    static getDateTimeFromState(
+        date,
+        time,
+        dateFormat = 'yyyy-MM-dd',
+        timeFormat = 'HH:mm:ss'
+    ) {
+        const parsedDate = parse(date, dateFormat, new Date());
+        const parsedTime = {};
+        for (const tm in time) {
+            parsedTime[tm] = parse(time[tm], timeFormat, parsedDate);
+        }
+        return parsedTime;
     }
 }
 

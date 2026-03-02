@@ -1,4 +1,4 @@
-import usePriceList from '../hooks/usePriceList.js';
+import usePriceList from '@hooks/usePriceList.js';
 
 const PriceListPage = () => {
     const priceList = usePriceList();

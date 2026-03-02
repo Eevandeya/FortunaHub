@@ -1,5 +1,5 @@
 export const PRICE_CALCULATION_NOTIFICATION = {
-    IDLE: 'Приблизительная цена: ',
+    IDLE: 'Текущая цена: ',
     ERROR: 'Ошибка при расчете цены. Итоговая цена: ',
     SUCCESS: 'Итоговая цена: ',
 };

@@ -1,8 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import TimeUtils from '@root.utils/timeUtils.js';
-import { format } from 'date-fns';
+import { format, isMatch } from 'date-fns';
 import { useErrorHandler } from '@hooks/useErrorHandler.js';
-import { setTimeSlot } from '@store/bookingSlice.js';
 import { useDispatch } from 'react-redux';
 import { useGetSaunaConfigQuery } from '@root.api/saunaConfig.js';
 import { useGetAvailableTimesQuery } from '@root.api/timeSlotsApi.js';
@@ -17,8 +16,16 @@ export function useAvailableTimes(selectedDate) {
         isLoading,
         error,
     } = useGetAvailableTimesQuery(
-        selectedDate ? { date: format(selectedDate, 'yyyy-MM-dd') } : skipToken,
-        { pollingInterval: 300_000, refetchOnFocus: true }
+        selectedDate
+            ? {
+                  date:
+                      typeof selectedDate === 'string' &&
+                      isMatch(selectedDate, 'yyyy-MM-dd')
+                          ? selectedDate
+                          : format(selectedDate, 'yyyy-MM-dd'),
+              }
+            : skipToken,
+        { pollingInterval: 300_000 }
     );
 
     useEffect(() => {
@@ -32,7 +39,6 @@ export function useAvailableTimes(selectedDate) {
 
 export function useTimeSlot() {
     const { handleHookError } = useErrorHandler();
-    const [isBooking, setIsBooking] = useState(false);
     const { data, isLoading } = useGetSaunaConfigQuery();
     const dispatch = useDispatch();
     const handleHookErrorRef = useRef(handleHookError);
@@ -59,7 +65,6 @@ export function useTimeSlot() {
             }
             const canBookingFromNow = TimeUtils.isBookingAvailable(
                 start,
-
                 config.minTimeForBooking
             );
 
@@ -75,23 +80,19 @@ export function useTimeSlot() {
                 throw new Error('Выбранное время уже занято');
             }
 
-            const [startISO, endISO] = TimeUtils.formatToIso([start, end]);
-            const timeSlot = { start: startISO, end: endISO };
-
-            dispatch(setTimeSlot({ timeSlot }));
             dispatch(
                 setTime({
-                    start: timeSlot.start.split('T')[1],
-                    end: timeSlot.end.split('T')[1],
+                    start: format(start, 'HH:mm:ss'),
+                    end: format(end, 'HH:mm:ss'),
                 })
             );
-            setIsBooking(true);
-            return { success: undefined };
+
+            return { type: 'success' };
         } catch (error) {
             handleHookErrorRef.current(error, 'useTimeSlot');
-            return { reject: undefined };
+            return { type: 'rejected' };
         }
     };
 
-    return [bookTimeSlot, config, setIsBooking, isBooking, isLoading];
+    return [bookTimeSlot, config, isLoading];
 }

@@ -1,20 +1,20 @@
-import { format } from 'date-fns';
 import InfoCard from '@components.common/displayInfo/infoCard/InfoCard.jsx';
 import { useSelector } from 'react-redux';
+import { selectDateTime } from '../../../store/dateTimeSlice.js';
 
 export const TimeInfoCard = () => {
-    const { date, time: timeSlot } = useSelector((state) => state.datetime);
+    const { date, time } = useSelector(selectDateTime);
 
     return (
         <InfoCard title='Время'>
             <ul>
                 <li key={1}>
-                    <p>Дата: {date && format(date, 'yyyy-MM-dd')}</p>
+                    <p>Дата: {date}</p>
                 </li>
                 <li key={2}>
                     <p>
                         Время:
-                        {timeSlot && timeSlot.start}—{timeSlot && timeSlot.end}
+                        {time && time.start}—{time && time.end}
                     </p>
                 </li>
             </ul>

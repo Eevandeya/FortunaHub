@@ -18,7 +18,7 @@ const ProductSlider = (products = []) => {
             /* eslint-disable-next-line camelcase */
             className={`${slider_styles.parallax_slider} ${styles.product_slider}`}
             ref={rootRef}>
-            {items?.slice(0, Math.max(6, items.length))?.map((item, i) => {
+            {items?.map((item, i) => {
                 const {
                     display_name: displayName,
                     description,

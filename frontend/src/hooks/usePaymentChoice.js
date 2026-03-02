@@ -1,16 +1,12 @@
-import {
-    resetBookings,
-    resetBookingStatus,
-    selectStatus,
-    setBookingStatus,
-} from '../store/bookingSlice.js';
-import { resetItems } from '../store/itemsSlice.js';
-import { resetDateTime } from '../store/dateTimeSlice.js';
+import { resetBookingStatus, selectStatus } from '@store/bookingSlice.js';
+import { resetItems } from '@store/itemsSlice.js';
+import { resetDateTime } from '@store/dateTimeSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@root.consts/navigation.js';
 import { useCallback, useState } from 'react';
 import { useErrorHandler } from './useErrorHandler.js';
+import { resetUser } from '@store/userSlice.js';
 
 const usePaymentChoice = () => {
     const dispatch = useDispatch();
@@ -20,27 +16,25 @@ const usePaymentChoice = () => {
     //eslint-disable-next-line
     const { handleApiError } = useErrorHandler();
 
-    const resetAllData = useCallback(() => {
-        dispatch(resetBookingStatus());
+    const resetData = () => {
         dispatch(resetDateTime());
         dispatch(resetItems());
-        dispatch(resetBookings());
-    }, [dispatch]);
+        dispatch(resetUser());
+        dispatch(resetBookingStatus());
+    };
 
     const pay = useCallback(() => {
         if (status !== 'draft' || loading) {
             return;
         }
-        const lastAttempt = new Date().toLocaleString();
-        dispatch(setBookingStatus({ lastAttempt, status: 'success' }));
 
         setLoading(true);
         setTimeout(() => {
             navigate(ROUTES.STATUS.SUCCESS);
-            resetAllData();
+            resetData();
             setLoading(false);
         }, 3000);
-    }, [status]);
+    }, [loading, status]);
 
     return [status, loading, pay];
 };
