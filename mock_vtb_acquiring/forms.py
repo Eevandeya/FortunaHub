@@ -4,7 +4,7 @@ from fastapi import Form
 from pydantic import BaseModel
 
 
-class PaymentData:
+class PaymentDataForm:
     def __init__(
         self,
         amount: int = Form(...),
@@ -24,3 +24,15 @@ class PaymentData:
 
 class PaymentStatus(BaseModel):
     status: str
+
+
+class PaymentStatusForm:
+    def __init__(
+        self,
+        userName: str = Form(...),
+        password: str = Form(...),
+        orderId: str = Form(...),
+    ) -> None:
+        self.userName = userName
+        self.password = password
+        self.orderId = orderId
