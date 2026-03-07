@@ -57,7 +57,7 @@ def set_payment_status(mdOrder: UUID, data: PaymentStatus = Body(...)) -> JSONRe
     if not order_data:
         raise HTTPException(status_code=404, detail="Order not found")
     if data.status not in [PENDING, PAID, FAILED]:
-        return {"error": "invalid status"}
+        return JSONResponse(content={"error": "invalid status"})
     order_data["payment_status"] = data.status
     db.save_order(order_id, **order_data)
     return JSONResponse(
