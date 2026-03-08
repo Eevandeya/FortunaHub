@@ -6,7 +6,7 @@ export const GoodsInfoCard = () => {
     const items = useSelector(selectItems);
 
     return (
-        <InfoCard title='Товары'>
+        <InfoCard title={<h3>Товары</h3>}>
             <ul>
                 {items?.map((item, index) => (
                     <li key={index}>

@@ -1,12 +1,12 @@
 import InfoCard from '@components.common/displayInfo/infoCard/InfoCard.jsx';
 import { useSelector } from 'react-redux';
-import { selectDateTime } from '../../../store/dateTimeSlice.js';
+import { selectDateTime } from '@store/dateTimeSlice.js';
 
 export const TimeInfoCard = () => {
     const { date, time } = useSelector(selectDateTime);
 
     return (
-        <InfoCard title='Время'>
+        <InfoCard title={<h3>Время</h3>}>
             <ul>
                 <li key={1}>
                     <p>Дата: {date}</p>

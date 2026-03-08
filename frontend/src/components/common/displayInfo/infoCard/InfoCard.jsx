@@ -5,11 +5,7 @@ export const InfoCard = ({ title, children }) => {
     return (
         <Card Component='article' className={styles.card_container}>
             <div className={styles.card_meta}>
-                {title && (
-                    <div className={styles.card_title}>
-                        <h3>{title}</h3>
-                    </div>
-                )}
+                {title && <div className={styles.card_title}>{title}</div>}
                 <div className={styles.card_content}>{children}</div>
             </div>
         </Card>
