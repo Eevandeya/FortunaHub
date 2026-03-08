@@ -128,6 +128,7 @@ LANGUAGE_CODE = "en-us"
 TIME_ZONE = "Europe/Moscow"
 
 CASH_CURRENCY_CODE = "RUB"
+CASH_CURRENCY_NUMBER = "643"  # ISO 4217
 
 USE_I18N = True
 
@@ -160,3 +161,17 @@ SPECTACULAR_SETTINGS = {
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
 }
+
+# Acquiring auth
+VTB_USERNAME = config("VTB_USERNAME")
+VTB_PASSWORD = config("VTB_PASSWORD")
+
+# Acquiring URLs
+VTB_ACQUIRING_BASE_URL = (
+    "http://127.0.0.1:8088/payment/rest/"  # TODO: Then replace with real acquiring
+)
+VTB_REGISTER_URL = VTB_ACQUIRING_BASE_URL + "register.do"
+VTB_STATUS_URL = VTB_ACQUIRING_BASE_URL + "getOrderStatusExtended.do"
+
+# Frontend URLs
+BOOKING_ORDER_URL = "http://127.0.0.1:5173/booking/order/{order_number}"  # TODO: Then replace with real url
