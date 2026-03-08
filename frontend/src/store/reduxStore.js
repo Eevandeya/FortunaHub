@@ -16,7 +16,7 @@ const reducers = {
 };
 const reducer = rememberReducer(reducers);
 
-export default configureStore({
+const store = configureStore({
     reducer: reducer,
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({}).concat(baseApi.middleware),
@@ -25,3 +25,5 @@ export default configureStore({
             rememberEnhancer(window.localStorage, rememberedKeys)
         ),
 });
+
+export default store;
