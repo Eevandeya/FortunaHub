@@ -182,7 +182,7 @@ class BookingPayment(models.Model):
         max_length=15, choices=PaymentStatus.choices, default=PaymentStatus.NOT_REQUIRED
     )
     order_id = models.UUIDField(null=True, blank=True, unique=True)
-    public_id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    order_number = models.UUIDField(primary_key=True, default=uuid4, editable=False)
 
     amount = models.DecimalField(
         max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal("0.01"))]
