@@ -1,5 +1,4 @@
 import baseApi from './api.js';
-import { setBookingStatus } from '@store/bookingSlice.js';
 
 /**
  * Booking API extension with mutation endpoints for booking operations.
@@ -19,66 +18,40 @@ const bookingApi = baseApi.injectEndpoints({
          * @method setBooking
          * @type {import('@reduxjs/toolkit/query').MutationDefinition}
          *
-         * @param {BookingRequestData} consumerData - Booking creation data
+         * @param {BookingRequestData} bookingData - Booking creation data
          * @returns {Promise<Booking>} Promise resolving to created booking
          */
         setBooking: build.mutation({
             /**
              * @name query
              * @type {Function}
-             * @param {BookingRequestData} consumerData - Input data for booking creation
+             * @param {BookingRequestData} bookingData - Input data for booking creation
              * @returns {Object} Fetch API configuration object
              * @description Constructs the HTTP request for booking creation
              */
-            query: (consumerData) => ({
+            query: (bookingData) => ({
                 url: 'bookings/create/',
                 method: 'POST',
                 body: {
                     customer: {
-                        nickname: consumerData.customer?.nickname,
+                        nickname: bookingData.customer?.nickname,
                         //eslint-disable-next-line camelcase
-                        phone_number: consumerData.customer?.phoneNumber,
+                        phone_number: bookingData.customer?.phoneNumber,
                     },
-                    items: consumerData.items,
+                    items: bookingData.items,
                     // eslint-disable-next-line camelcase
-                    start_datetime: consumerData.timeSlot?.start,
+                    start_datetime: bookingData.timeSlot?.start,
                     // eslint-disable-next-line camelcase
-                    end_datetime: consumerData.timeSlot?.end,
+                    end_datetime: bookingData.timeSlot?.end,
                     // eslint-disable-next-line camelcase
-                    visitors_count: consumerData.visitorsCount,
+                    visitors_count: bookingData.visitorsCount,
                     // eslint-disable-next-line camelcase
                     preferred_contact_method:
-                        consumerData.preferredContactMethod,
+                        bookingData.preferredContactMethod,
+                    // eslint-disable-next-line camelcase
+                    payment_option: bookingData.paymentMethod,
                 },
             }),
-            async onQueryStarted(consumerDate, { dispatch, queryFulfilled }) {
-                const lastAttempt = new Date().toLocaleString();
-                try {
-                    await queryFulfilled;
-
-                    dispatch(
-                        setBookingStatus({
-                            statusMessage: 'Данные отправлены успешно',
-                            lastAttempt,
-                            status: 'draft',
-                        })
-                    );
-                } catch (error) {
-                    const errs = [];
-                    for (const type of Object.values(error.error.data)) {
-                        for (const err of type) {
-                            errs.push(err.message);
-                        }
-                    }
-                    dispatch(
-                        setBookingStatus({
-                            statusMessage: errs.join('\n'),
-                            lastAttempt,
-                            status: 'error',
-                        })
-                    );
-                }
-            },
             /**
              * @name invalidatesTags
              * @type {Array<string>}
