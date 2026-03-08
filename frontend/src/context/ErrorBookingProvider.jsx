@@ -1,7 +1,8 @@
 import { ErrorBookingContext } from './Context.js';
 import { useState } from 'react';
+import { Outlet } from 'react-router-dom';
 
-const ErrorBookingProvider = ({ children }) => {
+const ErrorBookingProvider = () => {
     const [invalidStep, setInvalidStep] = useState({});
 
     const registerError = (errorPageObj) => {
@@ -15,7 +16,7 @@ const ErrorBookingProvider = ({ children }) => {
     return (
         <ErrorBookingContext.Provider
             value={{ invalidStep, registerError, clearErrors }}>
-            {children}
+            <Outlet />
         </ErrorBookingContext.Provider>
     );
 };

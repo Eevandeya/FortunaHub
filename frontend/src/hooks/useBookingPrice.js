@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { selectTotalPrice } from '@store/selectors/pricingSelectors.js';
 import TimeUtils from '@root.utils/timeUtils.js';
 import { ROUTES } from '@root.consts/navigation.js';
+import { useGetPricingQuery } from '@root.api/pricingApi.js';
 
 export const useBookingPrice = (bookingData, currentLocation) => {
     const currentPrice = useSelector(selectTotalPrice);
@@ -32,6 +33,7 @@ export const useBookingPrice = (bookingData, currentLocation) => {
     }, [currentLocation]);
 
     const { data } = useGetBookingPriceQuery(queryParams || skipToken);
+    const { data: pricingData } = useGetPricingQuery();
 
     const finalPrice = useMemo(() => {
         if (!data?.total) return currentPrice;
@@ -55,5 +57,5 @@ export const useBookingPrice = (bookingData, currentLocation) => {
         );
     }, [queryParams, data, currentPrice]);
 
-    return [finalPrice, notification];
+    return [finalPrice, notification, pricingData];
 };
