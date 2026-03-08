@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ВТБ_эквайринг (тест)</title>
+    <link rel="stylesheet" href="/static/payment.css">
+</head>
+<body>
+    <div class="page">
+        <header class="header">
+            <h1>БТВ_эквайринг (тест)</h1>
+            <div class="booking-price">
+                Сумма бронирования: <span>{{ booking_amount }} ₽</span>
+            </div>
+        </header>
+
+        <main class="main">
+            <section class="images-section">
+                <div class="image-slot">
+                    <img src="/static/images/btw.png" alt="Изображение 1">
+                </div>
+                <div class="image-slot">
+                    <img src="/static/images/qr.png" alt="Изображение 2">
+                </div>
+                <div class="image-slot">
+                    <img src="/static/images/spb.png" alt="Изображение 3">
+                </div>
+            </section>
+
+            <section class="actions-section">
+                <h2>Имитировать оплату:</h2>
+                <div class="buttons">
+                    <button class="payment-btn payment-btn--pending" onclick="setPaymentStatus('pending')">
+                        Ожидает оплату
+                    </button>
+
+                    <button class="payment-btn payment-btn--paid" onclick="setPaymentStatus('paid')">
+                        Оплата успешна
+                    </button>
+
+                    <button class="payment-btn payment-btn--failed" onclick="setPaymentStatus('failed')">
+                        Оплата отклонена
+                    </button>
+                </div>
+                <div id="status-message" class="status-message"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            Это тестовая страница эквайринга БТВ.
+        </footer>
+    </div>
+
+    <div id="payment-overlay" class="payment-overlay hidden">
+        <div class="payment-overlay__card">
+            <div class="payment-loader"></div>
+            <div class="payment-overlay__title">Обработка результата оплаты</div>
+            <div class="payment-overlay__subtitle">
+                Перенаправление через <span id="countdown-value">3</span> сек.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const orderId = "{{ order_id }}";
+        const redirectUrl = "{{ redirect_url }}";
+    </script>
+    <script src="/static/payment.js"></script>
+</body>
+</html>

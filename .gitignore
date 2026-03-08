@@ -2,6 +2,7 @@
 .idea
 .env
 backend/backend/media
+mock_vtb_acquiring/payment_db.json
 
 # Logs
 logs
