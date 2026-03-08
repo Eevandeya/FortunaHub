@@ -9,14 +9,14 @@ import { useSelector } from 'react-redux';
 import './form.css';
 import { isPossiblePhoneNumber } from 'react-phone-number-input';
 import Input from 'react-phone-number-input/input';
-import Button from '../../common/button/Button.jsx';
+import Button from '@components.common/button/Button.jsx';
 import {
     selectContactMethod,
     selectUserInfo,
     selectVisitorsCount,
-} from '../../../store/userSlice.js';
+} from '@store/userSlice.js';
 
-const ReservationForm = ({ setShowNotification }) => {
+const ReservationForm = ({ onPaymentOpen }) => {
     const visitorsCount = useSelector(selectVisitorsCount);
     const preferredContactMethod = useSelector(selectContactMethod);
     const [visitors, setVisitors] = useState(visitorsCount);
@@ -57,8 +57,10 @@ const ReservationForm = ({ setShowNotification }) => {
     };
 
     const bookingHandle = (data) => {
-        submit(data);
-        setShowNotification(true);
+        const status = submit(data);
+        if (status === 'valid') {
+            onPaymentOpen();
+        }
     };
 
     return (
