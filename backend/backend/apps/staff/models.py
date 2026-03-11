@@ -23,7 +23,6 @@ class Role(models.Model):
 
 
 class Staff(models.Model):
-    telegram_user_id = models.BigIntegerField(unique=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     roles = models.ManyToManyField(Role, related_name="staff")
@@ -38,3 +37,14 @@ class Staff(models.Model):
     def __str__(self) -> str:
         roles = ", ".join(role.display_name for role in self.roles.all())
         return f"{self.first_name} {self.last_name} - [{roles}]"
+
+
+class StaffContact(models.Model):
+    class Method(models.TextChoices):
+        TELEGRAM = "telegram", "Telegram"
+        VK = "vk", "VK"  # Shall we write bots for these services?)
+        MAX = "max", "Max"
+
+    staff = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name="contacts")
+    method = models.CharField(choices=Method)
+    external_id = models.CharField(blank=True, max_length=100)
