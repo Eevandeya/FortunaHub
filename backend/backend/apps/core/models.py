@@ -1,6 +1,7 @@
 import datetime as dt
 from decimal import Decimal
 
+from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils import timezone
@@ -34,13 +35,12 @@ class SaunaSettings(models.Model):
         return opening, closing
 
     def __str__(self) -> str:
-        return f"Config on {self.created.astimezone(timezone.get_default_timezone()).strftime('%d.%m.%Y %H:%M')}"
+        return f"Settings on {self.created.astimezone(timezone.get_default_timezone()).strftime('%d.%m.%Y %H:%M')}"
 
 
-class Pricing(models.Model):
-    name = models.CharField(
-        max_length=100, unique=True
-    )  # Make it a Slug type, raname "name" to "slug"? Add display_name field?
+class SaunaPricing(models.Model):
+    display_name = models.CharField(max_length=100)
+    slug = models.CharField(max_length=100, unique=True)
     description = models.CharField(max_length=255)
     updated = models.DateTimeField(auto_now=True)
     price = models.DecimalField(
@@ -50,19 +50,19 @@ class Pricing(models.Model):
     @classmethod
     def get_hourly_rent_price(cls) -> Decimal:
         try:
-            return cls.objects.get(name="hourly_rent").price
-        except cls.DoesNotExist:
-            raise MissingInitialDataError(cls, "hourly_rent") from None
+            return cls.objects.get(slug="hourly_rent").price
+        except cls.DoesNotExist as error:
+            raise MissingInitialDataError(cls, "hourly_rent") from error
 
     @classmethod
-    def get_prepayment_amount(cls) -> Decimal:
+    def get_prepayment_price(cls) -> Decimal:
         try:
-            return cls.objects.get(name="prepayment").price
-        except cls.DoesNotExist:
-            raise MissingInitialDataError(cls, "prepayment") from None
+            return cls.objects.get(slug="prepayment").price
+        except cls.DoesNotExist as error:
+            raise MissingInitialDataError(cls, "prepayment") from error
 
     def __str__(self) -> str:
-        return f"{self.name} {self.price} RUB"
+        return f"{self.slug} {self.price} {settings.CASH_CURRENCY_CODE}"
 
 
 class SaunaGallery(models.Model):

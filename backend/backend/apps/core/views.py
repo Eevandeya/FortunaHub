@@ -8,7 +8,7 @@ from backend.apps.core.docs import (
     get_sauna_config_schema,
     get_sauna_gallery_schema,
 )
-from backend.apps.core.models import Pricing, SaunaGallery, SaunaSettings
+from backend.apps.core.models import SaunaGallery, SaunaPricing, SaunaSettings
 from backend.apps.core.serializers import (
     PricingSerializer,
     SaunaConfigSerializer,
@@ -31,7 +31,7 @@ class PricingView(APIView):
 
     @get_pricing_schema
     def get(self, request: Request) -> Response:
-        query_set = Pricing.objects.all()  # TODO: Add Cache
+        query_set = SaunaPricing.objects.all()  # TODO: Add Cache
         serializer = PricingSerializer(query_set, many=True)
         return Response(serializer.data)
 

@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from decimal import ROUND_HALF_UP, Decimal
 from typing import Any
 
-from backend.apps.core.models import Pricing
+from backend.apps.core.models import SaunaPricing
 from backend.apps.inventory.models import InventoryItem
 
 
@@ -52,7 +52,7 @@ def get_booking_price(
       3. All monetary values are rounded to 2 decimal places using ROUND_HALF_UP
          to ensure financial accuracy.
     """
-    hourly_rent = Pricing.get_hourly_rent_price()
+    hourly_rent = SaunaPricing.get_hourly_rent_price()
 
     duration_time_delta = end_datetime - start_datetime
     if duration_time_delta <= dt.timedelta(0):
