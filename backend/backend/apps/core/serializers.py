@@ -3,7 +3,7 @@ import datetime
 from django.conf import settings
 from rest_framework import serializers
 
-from backend.apps.core.models import Pricing, SaunaConfig, SaunaGallery
+from backend.apps.core.models import Pricing, SaunaGallery, SaunaSettings
 
 TIME_FORMAT = "%H:%M"
 
@@ -13,7 +13,7 @@ class SaunaConfigSerializer(serializers.ModelSerializer):
     closing_time = serializers.TimeField(format=TIME_FORMAT)
 
     class Meta:
-        model = SaunaConfig
+        model = SaunaSettings
         exclude = ["id"]
 
     @staticmethod
@@ -23,14 +23,14 @@ class SaunaConfigSerializer(serializers.ModelSerializer):
         minutes = (total_seconds % 3600) // 60
         return f"{hours:02}:{minutes:02}"
 
-    def to_representation(self, instance: SaunaConfig) -> dict:
+    def to_representation(self, instance: SaunaSettings) -> dict:
         data = super().to_representation(instance)
 
         # Convert durations to string format HH:MM.
         # Because these fields are timedelta, we can't use strftime directly to format them to %H:%M,
         # so we need to convert them by hand.
         data["min_time_from_now_to_booking"] = self.format_duration(
-            instance.min_time_from_now_to_booking
+            instance.min_time_before_booking
         )
         data["min_booking_time"] = self.format_duration(instance.min_booking_time)
         data["min_time_between_bookings"] = self.format_duration(

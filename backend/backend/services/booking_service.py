@@ -9,7 +9,7 @@ from django.utils import timezone
 from requests import HTTPError, post
 
 from backend.apps.bookings.models import Booking
-from backend.apps.core.models import SaunaConfig
+from backend.apps.core.models import SaunaSettings
 
 
 @dataclass(frozen=True)
@@ -58,7 +58,7 @@ def get_free_booking_time(booking_date: dt.date) -> FreeSlots:
          by at least `min_time_between_bookings`.
       2. If the bathhouse closes after midnight, the closing time is treated as the next day's datetime.
     """
-    sauna_config = SaunaConfig.get()
+    sauna_config = SaunaSettings.get()
     opening, closing = sauna_config.get_opening_and_closing_dt(booking_date)
     next_time = opening
 

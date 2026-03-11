@@ -14,8 +14,9 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from backend.apps.bookings.validators import validate_time_step, validate_visitors_count
-from backend.apps.core.models import SaunaConfig
+from backend.apps.core.models import SaunaSettings
 from backend.apps.customers.models import Customer
+from backend.services.core_service import is_booking_within_open_hours
 
 
 class Booking(models.Model):
@@ -40,7 +41,7 @@ class Booking(models.Model):
         return value.astimezone(timezone.get_default_timezone())
 
     def is_booking_time_available(self) -> bool:
-        buffer_time = SaunaConfig.get().min_time_between_bookings
+        buffer_time = SaunaSettings.get().min_time_between_bookings
 
         return not (
             Booking.objects.filter(
@@ -53,7 +54,7 @@ class Booking(models.Model):
 
     def clean(self) -> None:
         super().clean()
-        sauna_config = SaunaConfig.get()
+        sauna_settings = SaunaSettings.get()
         now = timezone.now()
 
         errors = {}
@@ -82,39 +83,42 @@ class Booking(models.Model):
                 )
             )
 
-        elif self.start_datetime - now < sauna_config.min_time_from_now_to_booking:
+        elif self.start_datetime - now < sauna_settings.min_time_before_booking:
             errors.setdefault(NON_FIELD_ERRORS, []).append(
                 DjangoValidationError(
                     _(
-                        f"There must be at least {sauna_config.min_time_from_now_to_booking} "
+                        f"There must be at least {sauna_settings.min_time_before_booking} "
                         f"since the booking was created before the start of the booking."
                     ),
                     params={
                         "start_datetime": self.start_datetime,
                         "now": now,
-                        "min_time_from_now_to_booking": sauna_config.min_time_from_now_to_booking,
+                        "min_time_from_now_to_booking": sauna_settings.min_time_before_booking,
                     },
                     code="min_lead_time_not_met",
                 )
             )
 
-        if self.end_datetime - self.start_datetime < sauna_config.min_booking_time:
+        if self.end_datetime - self.start_datetime < sauna_settings.min_booking_time:
             errors.setdefault(NON_FIELD_ERRORS, []).append(
                 DjangoValidationError(
                     _(
-                        f"{sauna_config.min_booking_time} is the minimal booking duration."
+                        f"{sauna_settings.min_booking_time} is the minimal booking duration."
                     ),
                     code="min_booking_duration_not_met",
                     params={
                         "start_datetime": self.start_datetime,
                         "end_datetime": self.end_datetime,
-                        "min_booking_time": sauna_config.min_booking_time,
+                        "min_booking_time": sauna_settings.min_booking_time,
                     },
                 )
             )
 
-        if not sauna_config.is_booking_within_open_hours(
-            self.start_datetime, self.end_datetime
+        if not is_booking_within_open_hours(
+            sauna_settings.opening_time,
+            sauna_settings.closing_time,
+            self.start_datetime,
+            self.end_datetime,
         ):
             errors.setdefault(NON_FIELD_ERRORS, []).append(
                 DjangoValidationError(
@@ -123,8 +127,8 @@ class Booking(models.Model):
                     params={
                         "start_datetime": self.start_datetime,
                         "end_datetime": self.end_datetime,
-                        "opening_time": sauna_config.opening_time,
-                        "closing_time": sauna_config.closing_time,
+                        "opening_time": sauna_settings.opening_time,
+                        "closing_time": sauna_settings.closing_time,
                     },
                 )
             )
@@ -134,13 +138,13 @@ class Booking(models.Model):
                 DjangoValidationError(
                     _(
                         f"Bookings overlap with the existing one or there is not enough buffer in "
-                        f"{sauna_config.min_time_between_bookings} between bookings"
+                        f"{sauna_settings.min_time_between_bookings} between bookings"
                     ),
                     code="unavailable_booking_time",
                     params={
                         "start_datetime": self.start_datetime,
                         "end_datetime": self.end_datetime,
-                        "min_time_between_bookings": sauna_config.min_time_between_bookings,
+                        "min_time_between_bookings": sauna_settings.min_time_between_bookings,
                     },
                 )
             )

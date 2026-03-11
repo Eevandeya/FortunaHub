@@ -38,7 +38,6 @@ get_sauna_config_schema = extend_schema(
                         "min_time_from_now_to_booking": "02:30",
                         "min_booking_time": "02:00",
                         "min_time_between_bookings": "01:00",
-                        "check_30_min_multiplicity": True,
                         "created": "2025-08-05T21:11:22.133836+03:00",
                     },
                 ),

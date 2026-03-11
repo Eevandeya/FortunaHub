@@ -14,7 +14,6 @@ def create_default_sauna_config(apps: Apps, _: BaseDatabaseSchemaEditor) -> None
         min_time_from_now_to_booking=datetime.timedelta(hours=2, minutes=30),
         min_booking_time=datetime.timedelta(hours=2),
         min_time_between_bookings=datetime.timedelta(hours=1),
-        check_30_min_multiplicity=True,
     )
 
 
