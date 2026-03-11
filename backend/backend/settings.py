@@ -20,7 +20,6 @@ INSTALLED_APPS = [
     "backend.apps.customers",
     "backend.apps.core",
     "backend.apps.inventory",
-    "backend.apps.permissions",
     "backend.apps.staff",
     "django.contrib.admin",
     "django.contrib.auth",
