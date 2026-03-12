@@ -8,8 +8,8 @@ const bookingStatusApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
         getBookingStatus: build.query({
             query: (publicId) => ({
-                url: '/bookings/payment-status',
-                params: publicId,
+                url: '/bookings/payment-status/',
+                params: { publicId },
             }),
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
                 try {

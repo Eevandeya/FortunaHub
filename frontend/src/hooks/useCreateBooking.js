@@ -5,7 +5,7 @@ import { useErrorHandler } from './useErrorHandler.js';
 import { useSetBookingMutation } from '@root.api/bookingHandler.js';
 import { selectBookingData } from '@store/selectors/bookingSelectors.js';
 import { setBookingStatus } from '@store/bookingSlice.js';
-import { useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@root.consts/navigation.js';
 
 const useCreateBooking = () => {
@@ -18,33 +18,35 @@ const useCreateBooking = () => {
     //eslint-disable-next-line
     const { handleApiError } = useErrorHandler();
 
-    const sendBookingData = async (bookingData) => {
-        try {
-            return await reserve(bookingData).unwrap();
-        } catch (error) {
-            return new Error(error);
+    const submitBooking = async (bookingData) => {
+        return await reserve(bookingData).unwrap();
+    };
+
+    const handleBookingRedirect = (paymentMethod, response) => {
+        if (paymentMethod === 'offline') {
+            navigate(
+                generatePath(ROUTES.BOOKING.STATUS.UNPAID, {
+                    orderNumber: response.orderNumber,
+                })
+            );
+        } else {
+            window.location.assign(response['payment-url']);
         }
     };
 
-    const createBooking = useCallback(
+    const handleBookingSubmission = useCallback(
         async (paymentMethod) => {
-            if (status !== 'valid' || meta.isLoading) {
+            if (meta.isLoading) {
                 return;
             }
             try {
-                const response = await sendBookingData({
+                const response = await submitBooking({
                     ...bookingData,
                     paymentMethod,
                 });
-                if (paymentMethod === 'offline') {
-                    navigate(
-                        `${ROUTES.BOOKING.STATUS}/${response?.uuid}/manager`
-                    );
-                } else {
-                    window.location.assign(response['payment-url']);
-                }
+                handleBookingRedirect(paymentMethod, response);
             } catch (error) {
-                const errorMessage = error.message;
+                const errorMessage = error.data?.message;
                 const lastAttempt = new Date().toLocaleString();
                 const status = 'error';
                 dispatch(
@@ -59,7 +61,7 @@ const useCreateBooking = () => {
         [bookingData, meta.isLoading, status]
     );
 
-    return [status, meta.isLoading, createBooking];
+    return [status, meta.isLoading, handleBookingSubmission];
 };
 
 export default useCreateBooking;

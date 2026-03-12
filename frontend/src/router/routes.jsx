@@ -46,7 +46,7 @@ const routes = createRoutesFromElements([
                 errorElement={<FailureStatusPage />}
                 id='status'>
                 <Route index element={<SuccessStatusPage />} />
-                <Route path='manager' element={<ManagerContactStatusPage />} />
+                <Route path='unpaid' element={<ManagerContactStatusPage />} />
             </Route>
         </Route>
         <Route path='*' element={<NotFoundPage />} />

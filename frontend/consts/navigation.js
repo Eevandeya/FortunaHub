@@ -7,7 +7,10 @@ export const ROUTES = {
         TIME: '/booking/time',
         GOODS: '/booking/goods',
         RESERVATION: '/booking/reservation',
-        STATUS: { BASE: '/booking/status' },
+        STATUS: {
+            BASE: '/booking/status/:orderNumber',
+            UNPAID: '/booking/status/:orderNumber/unpaid',
+        },
     },
 };
 
