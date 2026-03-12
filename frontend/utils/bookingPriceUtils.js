@@ -58,14 +58,13 @@ class BookingPriceUtils {
                 case 'full':
                     return { ...method, price: totalPrice };
                 case 'deposit':
-                    if (!method) {
-                        return method.price;
-                    }
                     return {
                         ...method,
-                        price: +pricingData?.find(
-                            (data) => data.name === 'prepayment'
-                        )?.price,
+                        price: +(
+                            pricingData?.find(
+                                (data) => data.name === 'prepayment'
+                            )?.price ?? method.price
+                        ),
                     };
                 case 'offline':
                 default:

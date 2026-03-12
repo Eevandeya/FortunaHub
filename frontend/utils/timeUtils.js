@@ -73,12 +73,14 @@ class TimeUtils {
     static convertToMinutes({ value, format }) {
         if (
             typeof value === 'object' &&
-            value?.date &&
+            'time' in value &&
+            'date' in value &&
             typeof format === 'object' &&
-            format?.dateFormat
+            'timeFormat' in format &&
+            'dateFormat' in format
         ) {
-            const parsedDate = parse(value, format.dateFormat, new Date());
-            const parsedTime = parse(value, format.format, parsedDate);
+            const parsedDate = parse(value.date, format.dateFormat, new Date());
+            const parsedTime = parse(value.time, format.timeFormat, parsedDate);
             return Math.floor(getUnixTime(parsedTime) / 60);
         } else if (value instanceof Date) {
             return Math.floor(getUnixTime(value) / 60);

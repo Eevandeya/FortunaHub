@@ -14,11 +14,14 @@ const bookingStatusLoader = async ({ params }) => {
             )
             .unwrap();
 
-        return response?.data;
+        return response;
     } catch (error) {
         throw new Response(
-            JSON.stringify({ message: error.message, code: error.code }),
-            { status: error.status }
+            JSON.stringify({
+                message: error.data?.message,
+                code: error.data?.code,
+            }),
+            { status: 500 }
         );
     }
 };

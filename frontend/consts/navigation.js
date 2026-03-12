@@ -34,7 +34,7 @@ export const BOOKING_NAVIGATION = {
         label: 'Оформление брони',
     },
     status: {
-        path: ROUTES.BOOKING.STATUS,
+        path: ROUTES.BOOKING.STATUS.BASE,
         previous: null,
         next: null,
         label: 'Статус брони',

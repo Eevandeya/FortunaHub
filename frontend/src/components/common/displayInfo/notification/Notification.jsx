@@ -3,7 +3,7 @@ import Button from '@components.common/button/Button.jsx';
 import { createPortal } from 'react-dom';
 import { useEffect } from 'react';
 
-const Notification = ({ variant = 'info', message, onClose, ttl }) => {
+const Notification = ({ variant = 'info', message, onClose, ttl = 2000 }) => {
     useEffect(() => {
         if (!message) {
             return;
@@ -11,7 +11,7 @@ const Notification = ({ variant = 'info', message, onClose, ttl }) => {
         const timerId = setTimeout(onClose, ttl);
 
         return () => clearTimeout(timerId);
-    }, [message]);
+    }, [message, onClose, ttl]);
 
     return createPortal(
         message && (
