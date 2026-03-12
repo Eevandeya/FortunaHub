@@ -4,6 +4,7 @@ import {
     format,
     getHours,
     getMinutes,
+    getUnixTime,
     isAfter,
     isEqual,
     isWithinInterval,
@@ -44,13 +45,56 @@ class TimeUtils {
     }
 
     /**
+     * Converts a date/time value into minutes since Unix epoch.
+     *
+     * The method accepts several input formats:
+     * 1. A Date instance
+     * 2. A string representing date/time
+     * 3. An object containing separate date and time values
+     *
+     * @param {Object} params
+     * @param {Date|string|{date: string, time: string}} params.value
+     * Value to convert. Can be:
+     * - a Date object
+     * - a string containing date/time
+     * - an object with separate `date` and `time` fields
+     *
+     * @param {string|{dateFormat: string, timeFormat: string}} params.format
+     * Format description used for parsing the value.
+     * - If `value` is a string, this should be a date/time format string.
+     * - If `value` is an object, it should contain `dateFormat` and `timeFormat`.
+     *
+     * @returns {number}
+     * The number of minutes since Unix epoch.
+     *
+     * @throws {Error}
+     * Throws if the value cannot be parsed with the provided format.
+     */
+    static convertToMinutes({ value, format }) {
+        if (
+            typeof value === 'object' &&
+            value?.date &&
+            typeof format === 'object' &&
+            format?.dateFormat
+        ) {
+            const parsedDate = parse(value, format.dateFormat, new Date());
+            const parsedTime = parse(value, format.format, parsedDate);
+            return Math.floor(getUnixTime(parsedTime) / 60);
+        } else if (value instanceof Date) {
+            return Math.floor(getUnixTime(value) / 60);
+        } else {
+            const parsedDate = parse(value, format, new Date());
+            return Math.floor(getUnixTime(parsedDate) / 60);
+        }
+    }
+    /**
      * Converts a time string to minutes since midnight
      * @param {Object} params - Conversion parameters
      * @param {string} params.value - Time string to parse
      * @param {string} params.format - Time string format (e.g., 'HH:mm')
      * @returns {number|Error} Minutes since midnight or error if invalid format
      */
-    static convertToMinutes({ value, format }) {
+    static convertToMinutesSinceMidnight({ value, format }) {
         try {
             const normalDateValue = parse(value, format, new Date());
             return this.getMinutesSinceMidnight(normalDateValue);
@@ -73,7 +117,7 @@ class TimeUtils {
     ) {
         const now = Date.now();
 
-        const convertPreparationTime = this.convertToMinutes({
+        const convertPreparationTime = this.convertToMinutesSinceMidnight({
             value: minPreparationTime,
             format,
         });
