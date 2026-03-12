@@ -12,12 +12,14 @@ import { useBookingPrice } from '@hooks/useBookingPrice.js';
 import { selectItems } from '@store/itemsSlice.js';
 import { selectDateTime } from '@store/dateTimeSlice.js';
 import BookingPriceUtils from '@root.utils/bookingPriceUtils.js';
+import { useBookingNavigation } from '@hooks/useBookingNavigation.js';
 
 const PaymentModal = ({ isModalOpen, closeModal }) => {
     const [selectedMethod, setSelectedMethod] = useState(null);
     const [, loading, createBooking] = useCreateBooking();
     const dateTime = useSelector(selectDateTime);
     const items = useSelector(selectItems);
+    const navigation = useBookingNavigation();
     const [currentPrice, , pricingData] = useBookingPrice(
         { items, dateTime },
         navigation.path

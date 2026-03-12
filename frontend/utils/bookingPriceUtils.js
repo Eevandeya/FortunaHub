@@ -58,6 +58,9 @@ class BookingPriceUtils {
                 case 'full':
                     return { ...method, price: totalPrice };
                 case 'deposit':
+                    if (!method) {
+                        return method.price;
+                    }
                     return {
                         ...method,
                         price: +pricingData?.find(

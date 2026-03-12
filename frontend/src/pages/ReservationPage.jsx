@@ -19,7 +19,9 @@ const ReservationPage = () => {
                     <Notification
                         variant={bookingStatus}
                         message={statusMessage}
-                        onClose={() => dispatch(setBookingStatusMessage(''))}
+                        onClose={() =>
+                            dispatch(setBookingStatusMessage({ message: '' }))
+                        }
                         ttl={4000}
                     />
                     <ReservationForm onPaymentOpen={() => setShowModal(true)} />

@@ -14,6 +14,7 @@ const CopyButton = ({ copyData }) => {
                 onClick={handleCopy}
                 name='copy'
                 className={styles.copy_button}
+                aria-label='Copy to clipboard'
             />
         </span>
     );

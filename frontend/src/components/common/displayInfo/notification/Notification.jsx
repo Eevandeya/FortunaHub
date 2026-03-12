@@ -5,8 +5,13 @@ import { useEffect } from 'react';
 
 const Notification = ({ variant = 'info', message, onClose, ttl }) => {
     useEffect(() => {
-        setTimeout(onClose, ttl);
-    }, []);
+        if (!message) {
+            return;
+        }
+        const timerId = setTimeout(onClose, ttl);
+
+        return () => clearTimeout(timerId);
+    }, [message]);
 
     return createPortal(
         message && (

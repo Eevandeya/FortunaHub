@@ -27,6 +27,8 @@ const PaymentMethodCard = ({ method, checked, onSelect }) => {
                         checked={checked}
                         readOnly
                         tabIndex='-1'
+                        name='payment-method'
+                        value={method.id}
                     />
                 </span>
             </div>
