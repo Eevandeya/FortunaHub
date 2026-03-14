@@ -6,48 +6,48 @@ from drf_spectacular.utils import (
 )
 from rest_framework import serializers, status
 
-from backend.apps.inventory.serializers import InventoryItemSerializer
+from backend.apps.products.serializers import ProductSerializer
 
-INVENTORY_TAG = "Inventory"
+PRODUCT_TAG = "Product"
 
-InventoryItemListSerializer = inline_serializer(
-    name="InventoryItemList",
+ProductsListSerializer = inline_serializer(
+    name="ProductsList",
     fields={
-        "__root__": serializers.ListField(child=InventoryItemSerializer()),
+        "__root__": serializers.ListField(child=ProductSerializer()),
     },
 )
 
-get_inventory_schema = extend_schema(
-    summary="Get Inventory Items",
-    tags=[INVENTORY_TAG],
-    description="Retrieve a list of ALL inventory items.",
+get_products_schema = extend_schema(
+    summary="Get Products",
+    tags=[PRODUCT_TAG],
+    description="Retrieve a list of all products.",
     responses={
         status.HTTP_200_OK: OpenApiResponse(
-            response=InventoryItemListSerializer,
-            description="List of inventory items.",
+            response=ProductsListSerializer,
+            description="List of products.",
             examples=[
                 OpenApiExample(
-                    "Inventory items",
+                    "Products",
                     value=[
                         {
                             "currency": "RUB",
                             "display_name": "Халат",
                             "slug": "bathrobe",
                             "description": "Лучший халат для наших гостей! Отлично согревает!",
-                            "image": "/media/images/inventory_items/IMG_0001.jpeg",
+                            "image": "/media/images/products/IMG_0001.jpeg",
                             "quantity": 4,
-                            "item_type": "rented",
-                            "unit_price": "500.00",
+                            "product_type": "rented",
+                            "price": "500.00",
                         },
                         {
                             "currency": "RUB",
                             "display_name": "Веник",
                             "slug": "broom",
                             "description": "Приятный и хороший веник! Замечательный!",
-                            "image": "/media/images/inventory_items/IMG_0002.jpeg",
+                            "image": "/media/images/products/IMG_0002.jpeg",
                             "quantity": 10,
-                            "item_type": "rented",
-                            "unit_price": "1000.00",
+                            "product_type": "rented",
+                            "price": "1000.00",
                         },
                     ],
                 ),
