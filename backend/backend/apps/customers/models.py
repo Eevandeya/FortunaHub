@@ -13,3 +13,16 @@ class Customer(models.Model):
 
     def __str__(self) -> str:
         return self.nickname
+
+
+class CustomerContact(models.Model):
+    class Method(models.TextChoices):
+        TELEGRAM = "telegram", "Telegram"
+        VK = "vk", "VK"  # Shall we write bots for these services?)
+        MAX = "max", "Max"
+
+    customer = models.ForeignKey(
+        Customer, on_delete=models.CASCADE, related_name="contacts"
+    )
+    method = models.CharField(choices=Method)
+    external_id = models.CharField(blank=True, max_length=100)
