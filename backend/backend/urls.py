@@ -30,9 +30,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("backend.apps.core.urls", namespace="core")),
     path("api/bookings/", include("backend.apps.bookings.urls", namespace="bookings")),
-    path(
-        "api/inventory/", include("backend.apps.inventory.urls", namespace="inventory")
-    ),
+    path("api/products/", include("backend.apps.products.urls", namespace="products")),
 ]
 
 if DEBUG:
