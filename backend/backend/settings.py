@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     "backend.apps.bookings",
     "backend.apps.customers",
     "backend.apps.core",
+    "backend.apps.catalog",
     "backend.apps.inventory",
     "backend.apps.order",
     "backend.apps.staff",
