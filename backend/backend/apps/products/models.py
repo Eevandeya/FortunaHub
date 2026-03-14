@@ -12,13 +12,13 @@ class Product(models.Model):
     display_name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True, max_length=50)
     description = models.TextField(max_length=500)
-    image = models.ImageField(upload_to="images/inventory", null=True, blank=True)
+    image = models.ImageField(upload_to="images/products", null=True, blank=True)
     is_active = models.BooleanField(default=True)
     quantity = models.PositiveIntegerField(default=0)
     product_type = models.CharField(choices=ProductType.choices, max_length=10)
     updated = models.DateTimeField(auto_now=True)
 
-    unit_price = models.DecimalField(
+    price = models.DecimalField(
         max_digits=10,
         decimal_places=2,
         validators=[
