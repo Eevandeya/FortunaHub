@@ -6,7 +6,7 @@ from django.db.backends.base.schema import BaseDatabaseSchemaEditor
 
 
 def create_default_sauna_pricing(apps: Apps, _: BaseDatabaseSchemaEditor) -> None:
-    sauna_pricing_model = apps.get_model("core", "SaunaPricing")
+    sauna_pricing_model = apps.get_model("catalog", "SaunaPricing")
     defaults = [
         {
             "display_name": "Почасовая аренда",
@@ -24,8 +24,7 @@ def create_default_sauna_pricing(apps: Apps, _: BaseDatabaseSchemaEditor) -> Non
 
     for item in defaults:
         obj, created = sauna_pricing_model.objects.get_or_create(
-            slug=item.pop("slug"),
-            defaults=item
+            slug=item.pop("slug"), defaults=item
         )
         if not created:
             updated = False
@@ -39,7 +38,7 @@ def create_default_sauna_pricing(apps: Apps, _: BaseDatabaseSchemaEditor) -> Non
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("core", "0002_add_sauna_settings"),
+        ("catalog", "0001_initial"),
     ]
 
     operations = [

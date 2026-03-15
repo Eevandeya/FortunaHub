@@ -1,20 +1,20 @@
 from django.db.models.signals import post_delete, pre_save
 from django.dispatch import receiver
 
-from backend.apps.products.models import Product
+from backend.apps.catalog.models import InventoryItem
 
 
-@receiver(post_delete, sender=Product)
+@receiver(post_delete, sender=InventoryItem)
 def delete_image_on_delete(
-    sender: type[Product], instance: Product, **kwargs: object
+    sender: type[InventoryItem], instance: InventoryItem, **kwargs: object
 ) -> None:
     if instance.image:
         instance.image.delete(save=False)
 
 
-@receiver(pre_save, sender=Product)
+@receiver(pre_save, sender=InventoryItem)
 def delete_old_file_on_change(
-    sender: type[Product], instance: Product, **kwargs: object
+    sender: type[InventoryItem], instance: InventoryItem, **kwargs: object
 ) -> None:
     if not instance.pk:
         return
