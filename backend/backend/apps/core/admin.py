@@ -2,16 +2,11 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.safestring import SafeString
 
-from backend.apps.core.models import SaunaGallery, SaunaPricing, SaunaSettings
+from backend.apps.core.models import SaunaGallery, SaunaSettings
 
 
 @admin.register(SaunaSettings)
-class SaunaConfigAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(SaunaPricing)
-class PricingAdmin(admin.ModelAdmin):
+class SaunaSettingsAdmin(admin.ModelAdmin):
     pass
 
 

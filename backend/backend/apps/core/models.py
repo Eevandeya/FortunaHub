@@ -1,8 +1,5 @@
 import datetime as dt
-from decimal import Decimal
 
-from django.conf import settings
-from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils import timezone
 
@@ -36,33 +33,6 @@ class SaunaSettings(models.Model):
 
     def __str__(self) -> str:
         return f"Settings on {self.created.astimezone(timezone.get_default_timezone()).strftime('%d.%m.%Y %H:%M')}"
-
-
-class SaunaPricing(models.Model):
-    display_name = models.CharField(max_length=100)
-    slug = models.CharField(max_length=100, unique=True)
-    description = models.CharField(max_length=255)
-    updated = models.DateTimeField(auto_now=True)
-    price = models.DecimalField(
-        max_digits=10, decimal_places=2, validators=[MinValueValidator(0.01)]
-    )
-
-    @classmethod
-    def get_hourly_rent_price(cls) -> Decimal:
-        try:
-            return cls.objects.get(slug="hourly_rent").price
-        except cls.DoesNotExist as error:
-            raise MissingInitialDataError(cls, "hourly_rent") from error
-
-    @classmethod
-    def get_prepayment_price(cls) -> Decimal:
-        try:
-            return cls.objects.get(slug="prepayment").price
-        except cls.DoesNotExist as error:
-            raise MissingInitialDataError(cls, "prepayment") from error
-
-    def __str__(self) -> str:
-        return f"{self.slug} {self.price} {settings.CASH_CURRENCY_CODE}"
 
 
 class SaunaGallery(models.Model):
