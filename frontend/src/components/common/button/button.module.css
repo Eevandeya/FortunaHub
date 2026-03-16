@@ -146,6 +146,18 @@
     bottom: 4px;
 }
 
+.share_button {
+    background: transparent;
+    position: relative;
+}
+
+.share_button::before {
+    content: url('/icons/Arrow.svg');
+    width: 25px;
+    height: 25px;
+    position: absolute;
+}
+
 @media (hover: hover) {
     .transparent:hover {
         background-color: var(--color-ghost);
