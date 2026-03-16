@@ -28,9 +28,9 @@ from backend.settings import DEBUG, MEDIA_ROOT, MEDIA_URL, STATIC_ROOT, STATIC_U
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/", include("backend.apps.core.urls", namespace="core")),
+    path("api/core/", include("backend.apps.core.urls", namespace="core")),
     path("api/bookings/", include("backend.apps.bookings.urls", namespace="bookings")),
-    path("api/products/", include("backend.apps.products.urls", namespace="products")),
+    path("api/catalog/", include("backend.apps.catalog.urls", namespace="catalog")),
 ]
 
 if DEBUG:
