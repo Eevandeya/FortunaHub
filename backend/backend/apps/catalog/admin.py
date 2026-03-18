@@ -2,13 +2,13 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.safestring import SafeString
 
-from backend.apps.inventory.models import InventoryItem
+from backend.apps.catalog.models import InventoryItem, SaunaPricing
 
 
 @admin.register(InventoryItem)
 class InventoryItemAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("display_name",)}
-    list_display = ("id", "display_name", "unit_price", "is_active", "image_preview")
+    list_display = ("id", "display_name", "price", "is_active", "image_preview")
     list_editable = ("is_active",)
     list_display_links = ("display_name", "image_preview")
 
@@ -20,3 +20,8 @@ class InventoryItemAdmin(admin.ModelAdmin):
                 url=obj.image.url,
             )
         return SafeString("—")
+
+
+@admin.register(SaunaPricing)
+class SaunaPricingAdmin(admin.ModelAdmin):
+    prepopulated_fields = {"slug": ("display_name",)}

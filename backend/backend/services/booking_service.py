@@ -1,11 +1,15 @@
 import datetime as dt
 from collections.abc import Iterator
 from dataclasses import dataclass
+from decimal import Decimal
+from uuid import UUID
 
+from django.conf import settings
 from django.utils import timezone
+from requests import HTTPError, post
 
 from backend.apps.bookings.models import Booking
-from backend.apps.core.models import SaunaConfig
+from backend.apps.core.models import SaunaSettings
 
 
 @dataclass(frozen=True)
@@ -17,7 +21,7 @@ class TimeSlot:
         return self.end - self.start
 
 
-@dataclass(frozen=True)
+@dataclass
 class FreeSlots:
     date: dt.date
     free_slots: list[TimeSlot]
@@ -35,6 +39,16 @@ class FreeSlots:
         return iter(self.free_slots)
 
 
+@dataclass
+class PaymentRegister:
+    order_id: UUID
+    form_url: str
+
+
+class AcquiringError(Exception):
+    pass
+
+
 def get_free_booking_time(booking_date: dt.date) -> FreeSlots:
     """
     Returns a FreeSlots dataclass instance containing available time intervals
@@ -44,7 +58,7 @@ def get_free_booking_time(booking_date: dt.date) -> FreeSlots:
          by at least `min_time_between_bookings`.
       2. If the bathhouse closes after midnight, the closing time is treated as the next day's datetime.
     """
-    sauna_config = SaunaConfig.get()
+    sauna_config = SaunaSettings.get()
     opening, closing = sauna_config.get_opening_and_closing_dt(booking_date)
     next_time = opening
 
@@ -73,3 +87,25 @@ def get_free_booking_time(booking_date: dt.date) -> FreeSlots:
         free_slots.add(TimeSlot(start=next_time, end=closing))
 
     return free_slots
+
+
+def create_payment_link(amount: Decimal, order_number: UUID) -> PaymentRegister:
+    response = post(
+        url=settings.VTB_REGISTER_URL,
+        headers={"Content-Type": "application/x-www-form-urlencoded"},
+        data={
+            "amount": int(amount * 100),  # in kopecks
+            "currency": settings.CASH_CURRENCY_CODE,
+            "userName": settings.VTB_USERNAME,
+            "password": settings.VTB_PASSWORD,
+            "returnUrl": settings.BOOKING_ORDER_URL.format(order_number=order_number),
+            "orderNumber": order_number,
+        },
+    )
+    try:
+        response.raise_for_status()
+    except HTTPError as http_err:
+        raise AcquiringError("Fail to create payment link.") from http_err
+
+    data = response.json()
+    return PaymentRegister(order_id=UUID(data["orderId"]), form_url=data["formUrl"])
