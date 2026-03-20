@@ -14,11 +14,7 @@ const userSlice = createSlice({
         selectUserInfo: (state) => state.customer,
         selectVisitorsCount: (state) => state.visitorsCount,
         selectContactMethod: (state) => state.preferredContactMethod,
-        selectUserData: (state) => ({
-            customer: state.customer,
-            visitors: state.visitorsCount,
-            contactMethod: state.preferredContactMethod,
-        }),
+        selectUserData: (state) => state,
     },
     reducers: {
         setUserInfo(state, action) {

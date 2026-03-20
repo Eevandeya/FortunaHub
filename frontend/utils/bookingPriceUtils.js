@@ -42,6 +42,36 @@ class BookingPriceUtils {
         const basePrice = this.calculateRentDate(timeRange, pricePerHour);
         return itemsPrice + basePrice;
     }
+
+    /**
+     * Adds price to payment methods based on totalPrice.
+     * @param {Array<{id: string, title: string, description: string, price: number}>} paymentMethods
+     * @param {number} totalPrice
+     * @param pricingData
+     * @returns {Array} New array of payment methods with calculated prices
+     */
+    static getPaymentMethodsWithPrice(paymentMethods, totalPrice, pricingData) {
+        if (!totalPrice) return paymentMethods;
+
+        return paymentMethods.map((method) => {
+            switch (method.id) {
+                case 'full':
+                    return { ...method, price: totalPrice };
+                case 'deposit':
+                    return {
+                        ...method,
+                        price: +(
+                            pricingData?.find(
+                                (data) => data.name === 'prepayment'
+                            )?.price ?? method.price
+                        ),
+                    };
+                case 'offline':
+                default:
+                    return { ...method, price: 0 };
+            }
+        });
+    }
 }
 
 export default BookingPriceUtils;

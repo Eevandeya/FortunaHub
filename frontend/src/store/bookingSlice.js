@@ -19,6 +19,9 @@ const bookingSlice = createSlice({
         setBookingStatusState(state, action) {
             state.status.current = action.payload.status;
         },
+        setBookingStatusMessage(state, action) {
+            state.status.statusMessage = action.payload.message;
+        },
         setBookingStatus(state, action) {
             state.status.current = action.payload.status;
             state.status.attempts += 1;
@@ -34,8 +37,12 @@ const bookingSlice = createSlice({
     },
 });
 
-export const { setBookingStatus, setBookingStatusState, resetBookingStatus } =
-    bookingSlice.actions;
+export const {
+    setBookingStatus,
+    setBookingStatusState,
+    resetBookingStatus,
+    setBookingStatusMessage,
+} = bookingSlice.actions;
 
 export const { selectStatus, selectAttempts, selectStatusMessage } =
     bookingSlice.selectors;

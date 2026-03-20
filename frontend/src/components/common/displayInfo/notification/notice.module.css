@@ -1,23 +1,94 @@
 .notice {
-    position: relative;
+    position: fixed;
     top: 10%;
     left: 50%;
-    transform: translateX(-50%);
-    padding: 1rem 2rem;
-    border-radius: 24px;
-    outline-offset: -5px;
-    outline-width: 3px;
-    outline-style: solid;
+    transform: translateX(-50%) translateY(-10px);
+
+    min-width: 240px;
+    max-width: 50%;
+
+    padding: 14px 20px;
+    border-radius: 16px;
+
+    font-weight: 500;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    backdrop-filter: blur(6px);
+
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.08),
+        0 4px 10px rgba(0, 0, 0, 0.04);
+
+    opacity: 0;
+    animation: fadeIn 0.25s ease forwards;
+
     z-index: var(--layer-modal);
-    transition: opacity 0.5s ease;
 }
 
 .notice.success {
-    background-color: #84e16e;
-    outline-color: #54d838;
+    background: linear-gradient(135deg, #e9fce7, #d4f7cf);
+    color: #1e4620;
+    border: 1px solid rgba(84, 216, 56, 0.3);
 }
 
 .notice.error {
-    background-color: #ff3a3a;
-    outline-color: rgba(128, 0, 0, 0.15);
+    background: linear-gradient(135deg, #ffeaea, #ffd6d6);
+    color: #7a1c1c;
+    border: 1px solid rgba(255, 58, 58, 0.3);
+}
+
+.notice.info {
+    background: linear-gradient(135deg, #eaf2ff, #d9e7ff);
+    color: #1c3d7a;
+    border: 1px solid rgba(58, 123, 255, 0.3);
+}
+
+.close {
+    position: relative;
+    background: transparent;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+.close::before,
+.close::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 15px;
+    border-radius: 24px;
+    background-color: black;
+}
+
+.close::before {
+    transform: rotate(45deg);
+}
+
+.close::after {
+    transform: rotate(-45deg);
+}
+
+.close:hover {
+    opacity: 1;
+}
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .close::before,
+    .close::after {
+        width: 2px;
+        height: 15px;
+    }
 }

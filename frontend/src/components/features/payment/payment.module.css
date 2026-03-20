@@ -1,10 +1,16 @@
+.container {
+    display: grid;
+    grid-template-rows: 1fr auto auto;
+    max-height: 100%;
+}
+
 .payment_methods_container {
     display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
     width: 100%;
-    grid-template-rows: repeat(auto-fill, minmax(20%, 1fr));
-    grid-gap: 1.5rem;
     overflow-y: auto;
-    height: 100%;
+
     margin-block: 0.5rem;
 }
 
@@ -12,8 +18,8 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
-    gap: 0.5rem;
     align-items: center;
+    gap: 1rem;
     padding: 1.25rem 1.5rem;
     border-radius: 16px;
     border: 1px solid rgba(0, 0, 0, 0.08);
@@ -25,12 +31,39 @@
         transform 0.2s ease;
 }
 
+.payment_method_left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+}
+
+.payment_method_right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+}
+
+.payment_method_price {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #4f46e5;
+    white-space: nowrap;
+}
+
+.payment_method_checkbox input {
+    width: 20px;
+    height: 20px;
+    accent-color: #4f46e5;
+}
+
 .payment_method:hover {
     border-color: rgba(0, 0, 0, 0.15);
 }
 
 .payment_method.active {
-    border-color: #4f46e5; /* primary */
+    border-color: #4f46e5;
     box-shadow:
         0 10px 25px rgba(79, 70, 229, 0.15),
         0 0 0 1px rgba(79, 70, 229, 0.3);
@@ -63,7 +96,7 @@
 @media (orientation: landscape) {
     @media (768px <= width < 1024px) {
         .payment_methods_container {
-            grid-template-rows: none;
+            grid-template-columns: none;
             grid-auto-flow: row;
             max-height: 85%;
             grid-gap: 1.5rem;
@@ -73,7 +106,7 @@
 
     @media (width < 768px) {
         .payment_methods_container {
-            grid-template-rows: none;
+            grid-template-columns: none;
             grid-auto-flow: row;
             max-height: 90%;
             grid-gap: 1rem;
@@ -94,7 +127,7 @@
         padding: 1rem 1rem;
     }
     .payment_methods_container {
-        grid-template-rows: none;
+        grid-template-columns: none;
         grid-auto-flow: row;
         max-height: 90%;
         grid-gap: 1rem;

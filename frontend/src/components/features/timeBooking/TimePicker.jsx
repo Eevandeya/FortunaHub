@@ -9,7 +9,7 @@ import SelectButton from '../../common/button/SelectButton.jsx';
 
 const checkConditions = ({ minBookingTime, start, end }) => {
     const format = 'HH:mm';
-    const parsedMinBookingTime = TimeUtils.convertToMinutes({
+    const parsedMinBookingTime = TimeUtils.convertToMinutesSinceMidnight({
         value: minBookingTime,
         format,
     });
@@ -162,15 +162,16 @@ export function TimePicker({ date, ...other }) {
         (e) => {
             e.preventDefault();
             const minBookingTime = config.minBookingTime;
+            const [startSlot, endSlot] = TimeUtils.setTimeBorders(
+                parsedTimeSlots[borderTime.start],
+                parsedTimeSlots[borderTime.end]
+            );
             const canBooking = checkConditions({
                 minBookingTime,
-                ...borderTime,
+                start: startSlot,
+                end: endSlot,
             });
             if (canBooking) {
-                const [startSlot, endSlot] = TimeUtils.setTimeBorders(
-                    parsedTimeSlots[borderTime.start],
-                    parsedTimeSlots[borderTime.end]
-                );
                 const operationProgress = bookTimeSlot(
                     startSlot,
                     endSlot,

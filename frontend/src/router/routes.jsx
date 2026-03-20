@@ -6,13 +6,17 @@ import GoodsBookingPage from '@pages/GoodsBookingPage.jsx';
 import ReservationPage from '@pages/ReservationPage.jsx';
 import BookingLayout from '@components.layout/pagesLayout/BookingLayout.jsx';
 import { NotFoundPage } from '@pages/ErrorPage.jsx';
-import { SuccessStatusPage } from '@pages/StatusPage.jsx';
+import { SuccessStatusPage } from '@pages/SuccessBookingPage.jsx';
 import PricingLayout from '@components.layout/pagesLayout/PricingLayout.jsx';
 import MainLayout from '@components.layout/pagesLayout/MainLayout.jsx';
 import ErrorBookingProvider from '@context/ErrorBookingProvider.jsx';
 import PriceListPage from '@pages/PriceListPage.jsx';
 import GalleryPage from '@pages/GalleryPage.jsx';
 import DefaultLayout from '@components.layout/pagesLayout/DefaultLayout.jsx';
+import { FailureStatusPage } from '@pages/ErrorBookingPage.jsx';
+import bookingStatusLoader from './loaders/bookingStatusLoader.js';
+import StatusPage from '@pages/StatusPage.jsx';
+import { ManagerContactStatusPage } from '@pages/ManagerContactBookingPage.jsx';
 
 const routes = createRoutesFromElements([
     <Route path='/' element={<App />}>
@@ -23,24 +27,29 @@ const routes = createRoutesFromElements([
             <Route path='price' element={<PriceListPage />} />
             <Route path='gallery' element={<GalleryPage />} />
         </Route>
-        <Route
-            path='booking'
-            element={
-                <ErrorBookingProvider>
+        <Route path='booking' element={<ErrorBookingProvider />}>
+            <Route
+                element={
                     <PricingLayout>
                         <BookingLayout />
                     </PricingLayout>
-                </ErrorBookingProvider>
-            }>
-            <Route index element={<Navigate to='time' replace />} />
-            <Route path='time' element={<TimeBookingPage />} />
-            <Route path='goods' element={<GoodsBookingPage />} />
-            <Route path='reservation' element={<ReservationPage />} />
+                }>
+                <Route index element={<Navigate to='time' replace />} />
+                <Route path='time' element={<TimeBookingPage />} />
+                <Route path='goods' element={<GoodsBookingPage />} />
+                <Route path='reservation' element={<ReservationPage />} />
+            </Route>
+            <Route
+                path='status/:orderNumber'
+                element={<StatusPage />}
+                loader={bookingStatusLoader}
+                errorElement={<FailureStatusPage />}
+                id='status'>
+                <Route index element={<SuccessStatusPage />} />
+                <Route path='unpaid' element={<ManagerContactStatusPage />} />
+            </Route>
         </Route>
         <Route path='*' element={<NotFoundPage />} />
-        <Route path='status'>
-            <Route path='success' element={<SuccessStatusPage />} />
-        </Route>
     </Route>,
 ]);
 

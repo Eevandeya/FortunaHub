@@ -16,14 +16,22 @@ const PaymentMethodCard = ({ method, checked, onSelect }) => {
                 </p>
             </div>
 
-            <span className={styles.payment_method_checkbox}>
-                <input
-                    type='checkbox'
-                    checked={checked}
-                    readOnly
-                    tabIndex='-1'
-                />
-            </span>
+            <div className={styles.payment_method_right}>
+                <span className={styles.payment_method_price}>
+                    {method.price}
+                </span>
+
+                <span className={styles.payment_method_checkbox}>
+                    <input
+                        type='radio'
+                        checked={checked}
+                        readOnly
+                        tabIndex='-1'
+                        name='payment-method'
+                        value={method.id}
+                    />
+                </span>
+            </div>
         </Card>
     );
 };

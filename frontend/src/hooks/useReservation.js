@@ -1,29 +1,23 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setBookingStatus } from '@store/bookingSlice.js';
 import { useCallback } from 'react';
 import { useErrorHandler } from '@hooks/useErrorHandler.js';
 import { useGetSaunaConfigQuery } from '@root.api/saunaConfig.js';
 import useBookingValidation from './useBookingValidation.js';
-import { useSetBookingMutation } from '@root.api/bookingHandler.js';
 import {
     setPreferredContactMethod,
     setUserInfo,
     setVisitorsCount,
 } from '@store/userSlice.js';
-import { selectBookingItems } from '../store/selectors/itemsSelectors.js';
-import { selectBookingDateTime } from '../store/selectors/dateTimeSelectors.js';
 
 export const useReservation = (
     { preferredContactMethod, visitorsCount },
     formState
 ) => {
     const dispatch = useDispatch();
-    const timeSlot = useSelector(selectBookingDateTime);
-    const items = useSelector(selectBookingItems);
     const { handleApiError } = useErrorHandler();
     const { data } = useGetSaunaConfigQuery();
     const { validationSteps: isFieldsValid } = useBookingValidation();
-    const [reserve] = useSetBookingMutation();
     const config = (() => {
         if (!data) return undefined;
         return { maxVisitors: data.max_visitors_count };
@@ -39,14 +33,6 @@ export const useReservation = (
         );
     };
 
-    const sendBookingData = async (bookingData) => {
-        try {
-            return await reserve(bookingData);
-        } catch (error) {
-            return new Error(error);
-        }
-    };
-
     const submit = useCallback(
         (customer) => {
             if (
@@ -58,13 +44,11 @@ export const useReservation = (
                     preferredContactMethod,
                     visitorsCount,
                 });
-                sendBookingData({
-                    customer,
-                    items,
-                    timeSlot,
-                    preferredContactMethod,
-                    visitorsCount,
-                });
+
+                const lastAttempt = new Date().toLocaleString();
+                const status = 'valid';
+                dispatch(setBookingStatus({ lastAttempt, status }));
+                return status;
             } else {
                 const errorMessage =
                     'Ошибка оформления брони. Проверьте, правильно ли вы заполнили данные брони!';
@@ -83,8 +67,6 @@ export const useReservation = (
             formState.isValid,
             dispatch,
             visitorsCount,
-            items,
-            timeSlot,
             preferredContactMethod,
             handleApiError,
         ]

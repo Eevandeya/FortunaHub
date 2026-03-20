@@ -108,9 +108,62 @@
     border: solid 1px black;
 }
 
+.copy_wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.copy_button {
+    position: relative;
+    width: 12px;
+    height: 16px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.copy_button::before,
+.copy_button::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 3px;
+}
+
+.copy_button::before {
+    border: 2px solid white;
+}
+
+.copy_button::after {
+    border-right: 2px solid white;
+    border-top: 2px solid white;
+    left: 4px;
+    bottom: 4px;
+}
+
+.share_button {
+    background: transparent;
+    position: relative;
+}
+
+.share_button::before {
+    content: url('/icons/Arrow.svg');
+    width: 25px;
+    height: 25px;
+    position: absolute;
+}
+
 @media (hover: hover) {
     .transparent:hover {
         background-color: var(--color-ghost);
+    }
+    .copy_wrapper:hover .copy_button {
+        opacity: 1;
     }
 }
 
@@ -129,7 +182,6 @@
     }
 
     .go_to_button {
-        /*font-size: 14px;*/
         width: fit-content;
         padding-block: 4px;
         padding-inline: 10px;
